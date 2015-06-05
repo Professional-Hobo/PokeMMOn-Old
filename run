@@ -1,0 +1,7 @@
+tmux new-session -s pokemmon -n 'PokeMMOn' -d
+tmux send-keys -t 0 'nodemon' C-j
+tmux split-window -h
+tmux send-keys -t 1 'cd server; ./.a' C-j
+
+# comment out the line below if you don't want tmux to attach
+tmux attach -t pokemmon

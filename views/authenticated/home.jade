@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+  head
+    title PokeMMOn :: Home
+    link(rel='stylesheet', href='css/general.css')
+  body
+    div(align="center")
+      -if(messages)
+        div#note #{messages}
+      h1 Home
+      hr(width="50%")
+      h3
+        a(href="play") Play Game
+        |  | 
+        a(href="leaderboards") Leaderboards
+        |  | 
+        a(href="editor") Map Editor
+        |  | 
+        a(href="logout") Logout
+    script(src="js/favicon.min.js")

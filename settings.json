@@ -1,0 +1,29 @@
+{
+    "general": {
+        "name": "PokeMMOn",
+        "domain": "http://localhost",
+        "parent_domain": "localhost",
+        "version": "0.0.1"
+    },
+    "webserver": {
+        "port": "3000"
+    },
+    "game": {
+        "port": "8080"
+    },
+    "session": {
+        "key": "PokeMMON Session",
+        "secret": "CHANGE THIS TO SOMETHING SECRET",
+        "host": "localhost",
+        "prefix": "sess:",
+        "port": 6379
+    },
+    "db": {
+        "adapter": "sails-postgresql",
+        "host": "localhost",
+        "port": 5432,
+        "user": "",
+        "password": "",
+        "database": "pokemmon"
+    }
+}

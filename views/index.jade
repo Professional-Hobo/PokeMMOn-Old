@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+  head
+    title Index :: PokeMMOn
+    link(rel='stylesheet', href='css/general.css')
+  body
+    div(align="center")
+      -if(messages)
+        div#note #{messages}
+      h1 PokeMMOn
+      hr(width="50%")
+      h3
+        a(href="login") Login
+        |  | 
+        a(href="register") Register
+    script(src="js/favicon.min.js")

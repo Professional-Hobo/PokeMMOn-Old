@@ -1,0 +1,14 @@
+{
+    "flower": {
+        "frames": 4,
+        "interval": 250,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "x": 16,
+            "y": 16
+        }
+    }
+}

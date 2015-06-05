@@ -1,0 +1,47 @@
+doctype html
+html
+  head
+    title Pokemap
+    link(rel='stylesheet', href='css/editor/base.css', type='text/css')
+    script(src='js/editor/jquery.js')
+  body
+    .container
+      #export-pane.sidebar
+        .header
+          ul.tab-group
+            a(href='#')
+              li(data-tab='draw') Draw
+            a(href='#export-pane')
+              li(data-tab='export') Load
+        .tab-container
+          #draw.tab
+            .section
+              h5 Tileset
+              #tileset-container.tileset-container
+                #selector.selector
+                canvas#tileset.tileset(width='256', height='31952')
+          #export.tab
+            .section
+              h5 PNG Image
+              img#map-image.map-image-repview
+              a#download-png(href='', target='_blank')
+                button.button-download Download as PNG
+            .section
+              h5 PokeMap Array (PMA)
+              textarea#pokemap-array
+              a#download-txt(href='', target='_blank')
+                button.button-download Download as TXT
+      .builder
+        .toolbar
+          .grid
+            .wrap.width
+              input#width(type='number', value='40')
+            .wrap.height
+              input#height(type='number', value='30')
+          .grid -
+          .grid -
+        .canvas-container
+          canvas#map-canvas.map(width='640', height='480')
+    script(src='js/editor/map-builder.js')
+    script(src='js/editor/ui.js')
+    script(src="js/favicon.min.js")

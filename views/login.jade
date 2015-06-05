@@ -1,0 +1,22 @@
+doctype html
+html(lang="en")
+  head
+    title Login :: PokeMMOn
+    link(rel='stylesheet', href='css/general.css')
+  body
+    div(align="center")
+      -if(messages)
+        div#note #{messages}
+      h1 Login
+      hr(width="50%")
+      h3
+        a(href="/") Homepage
+        |  | 
+        a(href="register") Register
+      form(action="", method="POST")
+        input(type="text", name="username", placeholder="username", autofocus)
+        br
+        input(type="password", name="password", placeholder="password")
+        br
+        input(type="submit", value="Login")
+    script(src="js/favicon.min.js")

@@ -1,0 +1,17 @@
+{
+    "male_1": {
+        "name": "male_1",
+        "offset_x": 0,
+        "offset_y": -4
+    },
+    "female_1": {
+        "name": "female_1",
+        "offset_x": 0,
+        "offset_y": -4
+    },
+    "man_1": {
+        "name": "man_1",
+        "offset_x": 0,
+        "offset_y": -4
+    }
+}
