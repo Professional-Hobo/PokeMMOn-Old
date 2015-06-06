@@ -1,10 +1,10 @@
 {
-  "name": "PokeMMON",
+  "name": "PokeMMOn",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "debug": "DEBUG=new:* ./bin/www"
+    "debug": "DEBUG=PokeMMOn:* ./bin/www"
   },
   "dependencies": {
     "bcrypt-nodejs": "~0.0.3",

@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('new:server');
+var debug = require('debug')('PokeMMOn:server');
 var http = require('http');
 var settings = require('../settings.json');
 
