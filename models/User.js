@@ -47,12 +47,8 @@ var User = Waterline.Collection.extend({
     },
 
     beforeCreate: function(values, cb) {
-        // Salt and hash password
-        bcrypt.hash(values.password, 12, function(err, hash) {
-            if (err) console.log(err);
-            values.password = hash;
-            cb();
-        });
+        values.password = bcrypt.hashSync(values.password);
+        cb();
     }
 });
 
