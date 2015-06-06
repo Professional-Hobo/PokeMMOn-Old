@@ -66,7 +66,7 @@ context.scale(1, 1);
 
 var background = document.createElement("img");
 //background.src = "http://keitharm.me/pokemmon/keith/client/assets/world/surface.png";
-background.src = "http://pokemmon.keitharm.me/assets/world/surface.png";
+background.src = "assets/world/surface.png";
 
 // Load
 socket.on('preData', function(data) {
