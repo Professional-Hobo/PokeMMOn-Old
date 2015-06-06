@@ -1,5 +1,5 @@
 var Waterline = require('waterline');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt-nodejs');
 
 var User = Waterline.Collection.extend({
 
