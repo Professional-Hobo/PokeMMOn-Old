@@ -3,6 +3,7 @@
         "name": "PokeMMOn",
         "domain": "http://localhost",
         "cookie_domain": "localhost",
+        "LAN": false,
         "version": "0.0.1"
     },
     "webserver": {
