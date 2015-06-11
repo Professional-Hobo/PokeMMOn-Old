@@ -17,12 +17,17 @@ var User = Waterline.Collection.extend({
             type: 'string'
         },
 
+        role: {
+            type: 'string',
+            defaultsTo: 'user'
+        },
+
         model: {
             type: 'string',
             defaultsTo: 'male_1'
         },
 
-        zown: {
+        zone: {
             type: 'string',
             defaultsTo: 'towny'
         },

@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+var express  = require('express');
+var router   = express.Router();
 var settings = require('../settings.json');
 
 // Index //
@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 // Play //
 router.get('/play', function(req, res, next) {
     if (req.session.loggedin) {
-        res.render('authenticated/play', { messages: req.flash('info'), server: settings.general.parent_domain + ":" + settings.game.port });
+        res.render('authenticated/play', { messages: req.flash('info'), server: settings.general.domain + ":" + settings.game.port });
     } else {
         req.flash('info', "You must be logged in in order to access this resource.");
         res.redirect('/login');
@@ -23,17 +23,31 @@ router.get('/play', function(req, res, next) {
 
 // Editor //
 router.get('/editor', function(req, res, next) {
-    if (req.session.loggedin) {
-        if (req.session.user.username == "keith") {
+    //if (req.session.loggedin) {
+    //    if (req.session.user.username == "keith") {
             res.render('editor/index', { messages: req.flash('info') });
-        } else {
-            req.flash('info', "You do not have the proper permissions to access this resource.");
-            res.redirect('/');
-        }
-    } else {
-        req.flash('info', "You must be logged in in order to access this resource.");
-        res.redirect('/login');
-    }
+    //    } else {
+    //        req.flash('info', "You do not have the proper permissions to access this resource.");
+    //        res.redirect('/');
+    //    }
+    //} else {
+    //    req.flash('info', "You must be logged in in order to access this resource.");
+    //    res.redirect('/login');
+    //}
+});
+
+router.get('/editor2', function(req, res, next) {
+    //if (req.session.loggedin) {
+    //    if (req.session.user.username == "keith") {
+            res.render('editor/new', { messages: req.flash('info') });
+    //    } else {
+    //        req.flash('info', "You do not have the proper permissions to access this resource.");
+    //        res.redirect('/');
+    //    }
+    //} else {
+    //    req.flash('info', "You must be logged in in order to access this resource.");
+    //    res.redirect('/login');
+    //}
 });
 
 // Login //

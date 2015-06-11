@@ -2,7 +2,7 @@
     "general": {
         "name": "PokeMMOn",
         "domain": "http://localhost",
-        "parent_domain": "localhost",
+        "cookie_domain": "localhost",
         "version": "0.0.1"
     },
     "webserver": {

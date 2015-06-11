@@ -39,7 +39,7 @@ app.use(session({
     secret: settings.session.secret,
     cookie: {
       path: '/',
-      domain: "." + settings.general.parent_domain
+      domain: "." + settings.general.cookie_domain
     },
     resave: false,
     saveUninitialized: false

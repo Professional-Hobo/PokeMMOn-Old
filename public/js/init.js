@@ -51,7 +51,7 @@ $(window).load(function() {
 });
 
 // Set up socket
-var socket = io('http://' + server);
+var socket = io(server);
 
 // Canvas
 var canvas = document.getElementById('game');
