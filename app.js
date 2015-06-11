@@ -39,6 +39,8 @@ app.use(session({
     secret: settings.session.secret,
     cookie: {
       path: '/',
+      
+      // Comment this line out if running on LAN and you are having trouble accessing session cookies
       domain: "." + settings.general.cookie_domain
     },
     resave: false,
