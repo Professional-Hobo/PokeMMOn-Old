@@ -7,10 +7,13 @@ Make sure you run ./setup.sh first in order to download assets and setup web/gam
 
 Database Setup
 ==============
-Comment out:
-    migrate: 'safe'
-in models/Users.js and models/World.js and then ./run
-after running successfully, terminate your server and uncomment the lines you just commented.
+Comment the following in models/Users.js and models/World.js and then ./run      
+
+```
+migrate: 'safe'      
+```
+
+After running successfully, terminate your server and uncomment the lines you just commented.
 
 Running
 =======
