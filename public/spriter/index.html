@@ -14,20 +14,15 @@
             <div class="header">
                 <ul class="tab-group">
                     <a href="#"><li data-tab="draw">Draw</li></a>
-                    <a href="#export-pane"><li data-tab="export">Export</li></a>
+                    <a href="#export-pane"><li data-tab="export">Load/Save</li></a>
                 </ul>
             </div>  
             <div class="tab-container">
                 <div class="tab" id="draw">
-                    <div class="section">
-                        <h5>Recent</h5>
-                        <ul class="recent-tiles" id="history">
-                            <li id="hist_0" data-index=0>0</li>
-                            <li id="hist_1" data-index=1>1</li>
-                            <li id="hist_2" data-index=2>2</li>
-                            <li id="hist_3" data-index=3>3</li>
-                            <li id="hist_4" data-index=4>4</li>
-                            <li id="hist_5" data-index=5>5</li>
+                    <div hiddenclass="section">
+                        <h5 hidden>Recent</h5>
+                        <ul hiden class="recent-tiles" id="history">
+                            <li hidden id="hist_0" data-index=0>0</li>
                         </ul>
                     </div>
                     <div class="section">
@@ -37,21 +32,18 @@
                             <canvas id="tileset" class="tileset" width=256 height=31952></canvas>
                         </div>
                     </div>
-                    <div class="section">
-                        <h5>Live Tiles</h5>
-                        <span class="placeholder">None</span>
-                    </div>
                 </div>
                 <div class="tab" id="export">
                     <div class="section">
-                        <h5>PNG Image</h5>
-                        <img class="map-image-repview" id="map-image">
-                        <a href="" id="download-png" target="_blank"><button class="button-download">Download as PNG</button></a>
+                        <h5>Load Map</h5>
+                        <form action='#' onsubmit="return false;">
+                            <input type='file' id='imgfile' />
+                            <input type='button' id='btnLoad' value='Load' onclick='loadImage();' />
+                        </form>
                     </div>
                     <div class="section">
-                        <h5>PokeMap Array (PMA)</h5>
-                        <textarea id="pokemap-array"></textarea>
-                        <a href="" id="download-txt" target="_blank"><button class="button-download">Download as TXT</button></a>
+                        <h5>Save Map</h5>
+                        <a href="" id="download-png" target="_blank"><button class="button-download">Download as PNG</button></a>
                     </div>
                 </div>
             </div>
@@ -70,7 +62,7 @@
                 <div class="grid">-</div>
             </div>
             <div class="canvas-container">
-                <canvas id="map-canvas" class="map" width="640" height="480"></canvas>
+                <canvas id="map-canvas" class="map" width="256" height="4096"></canvas>
             </div>
         </div>
     </div>

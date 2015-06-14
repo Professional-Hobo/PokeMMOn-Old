@@ -1,8 +1,8 @@
 // Default Parameters
 var grid        = 16;
 var brush       = [0,0];
-var mapWidth    = 40;
-var mapHeight   = 30;
+var mapWidth    = 16;
+var mapHeight   = 256;
 var mapSource   = "img/map_tile.png";
 var mapArray    = [];
 var brushHistory= [];
@@ -26,8 +26,12 @@ function drawImage(imgData, posX, posY, sizeW, sizeH){
     var sizeW = sizeW ? sizeW : grid;
     var sizeH = sizeH ? sizeH : grid;
     
-    img.onload = function(){ 
-        m.drawImage(img, imgData[0]*grid, imgData[1]*grid, grid, grid, posX, posY, sizeW, sizeH);  
+    img.onload = function() {
+        if (imgData == "clear") {
+            m.clearRect(posX, posY, sizeW, sizeH);
+        } else {
+            m.drawImage(img, imgData[0]*grid, imgData[1]*grid, grid, grid, posX, posY, sizeW, sizeH);  
+        }
     };
     img.src = mapSource;
 }
@@ -58,7 +62,7 @@ function newBlankMap(src, w, h){
         mapArray.push(newRow)
     }
 }
-newBlankMap(mapSource, mapWidth, mapHeight);
+//newBlankMap(mapSource, mapWidth, mapHeight);
 
 //
 // Redraw the map
@@ -255,17 +259,34 @@ function initiateDrawing(){
     var temp_x;
     var temp_y;
     var mousedown = 0;
+    var rightclick = 0;
+
+    map.oncontextmenu = function (e) {
+        e.preventDefault();
+    };
 
     map.addEventListener('mousedown', function(e){
-        mousedown = 1;
-        drawAtPoint(e, brush);
+        if (e.which == 1) {
+            mousedown = 1;
+            drawAtPoint(e, brush);
+        } else {
+            mousedown = 1;
+            rightclick = 1;
+            drawAtPoint(e, "clear");
+        }
     })
     map.addEventListener('mouseup', function(e){
         mousedown = 0;
+        rightclick = 0;
     })
     map.addEventListener('mousemove', function(e){
         if(mousedown){
-            drawAtPoint(e, brush);   
+            if (rightclick == 0) {
+                drawAtPoint(e, brush);   
+            } else {
+                // Transparent
+                drawAtPoint(e, "clear");
+            }
         }
     })
 
@@ -306,3 +327,30 @@ function updatePokemapArray(textID){
     var textID = document.getElementById(textID);
     textID.innerHTML = JSON.stringify(mapArray)
 }
+
+function loadImage() {
+        var input, file, fr, img;
+
+        input = document.getElementById('imgfile');
+        if (input) {
+            file = input.files[0];
+            fr = new FileReader();
+            fr.onload = createImage;
+            fr.readAsDataURL(file);
+        }
+
+        function createImage() {
+            img = new Image();
+            img.onload = imageLoaded;
+            img.src = fr.result;
+        }
+
+        function imageLoaded() {
+            var map = document.getElementById('map-canvas');
+            var m   = map.getContext('2d');
+            //map.width = img.width;
+            //map.height = img.height;
+            m.clearRect(0, 0, map.width, map.height);
+            m.drawImage(img,0,0);
+        }
+    }

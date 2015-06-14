@@ -56,6 +56,9 @@ body {
       width: 50%;
       float: left;
       box-sizing: border-box; }
+  .sidebar#export-pane {
+    position: fixed;
+  }
   .sidebar#export-pane:target .tab-container {
     transform: translateX(-50%); }
   .sidebar#export-pane:target .header li[data-tab="draw"] {
