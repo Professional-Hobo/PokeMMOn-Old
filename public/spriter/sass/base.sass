@@ -1,0 +1,199 @@
+// Colors
+$pink: #E010A3
+$blue: #4A90E2
+
+body
+    margin: 0
+    padding: 0
+    font-family: sans-serif
+    background: #151818
+    color: #f0f0f0
+    
+.container
+    display: flex
+    flex-direction: row
+    flex-wrap: no-wrap
+    height: 100%
+    width: 100%
+    position: absolute
+        
+.sidebar
+    background: #1B2122
+    flex: 0 0 276px
+    align-self: stretch
+    overflow: hidden
+    overflow-y: auto
+    padding-top: 50px
+    .header
+        position: absolute
+        top: 0
+        z-index: 50
+    .header ul
+        list-style-type: none
+        margin: 0
+        padding: 0
+        background-image: linear-gradient(-180deg, #1A2021 0%, #161C1D 100%)
+        li
+            line-height: 50px
+            display: inline-block
+            width: 135px
+            text-align: center
+            text-transform: uppercase
+            font-size: 12px
+            opacity: .5
+            cursor: pointer
+            transition: all .15s ease
+            color: #fff
+            &:hover
+                opacity: .75
+            &[data-tab="draw"]
+                opacity: 1
+                box-shadow: 0 -2px 0 $blue inset
+    .tileset
+        background-image: url(../img/grid.png)
+    .tab-container
+        position: relative
+        width: 200%
+        overflow: hidden
+        transition: all .5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 
+        .tab
+            width: 50%
+            float: left
+            box-sizing: border-box
+    &#export-pane:target
+        .tab-container
+            transform: translateX(-50%)
+        .header li[data-tab="draw"]
+            opacity: .5
+            box-shadow: none
+        .header li[data-tab="export"]
+            opacity: 1
+            box-shadow: 0 -2px 0 $blue inset
+    .section
+        padding: 10px
+        border-bottom: 1px solid rgba(255,255,255,0.1)
+        h5
+            margin: 10px 0
+            padding: 0
+            font-size: 12px
+            font-weight: 300
+        .recent-tiles
+            list-style-type: none
+            margin: 0
+            padding: 0
+            li
+                position: relative
+                display: inline-block
+                width: 32px
+                height: 32px
+                margin: 0 8px 5px 0
+                text-align: center
+                line-height: 90px
+                font-size: 10px
+                color: #999
+                background-image: url(../img/grid.png)
+                &:last-child
+                    margin-right: 0
+                &:first-child
+                    outline: 2px solid $pink
+        .tileset-container
+            width: 256px
+            height: 500px
+            overflow: auto
+            position: relative
+            .selector
+                position: absolute
+                top: 0
+                padding: 0
+                width: 32px
+                height: 32px
+                outline: 2px solid $pink
+                transition: all .2s ease-out
+        .placeholder
+            text-align: center
+            opacity: 0.5
+            padding: 20px 0
+            width: 100%
+            display: inline-block
+        .map-image-repview
+            width: 100%
+        button[class*="button-"]
+            background: $blue
+            border: none
+            color: #fff
+            padding: 10px 0
+            width: 100%
+            outline: none
+            cursor: pointer
+            transition: opacity .1s ease
+            &:hover
+                opacity: .9
+        textarea
+            border: 1px solid rgba(255,255,255,0.15)
+            background: none
+            width: 100%
+            padding: 10px
+            height: 200px
+            box-sizing: border-box
+            color: rgba(255,255,255,0.5)
+            font-family: monospace
+            &:focus
+                border: 1px solid $blue
+                outline: none
+.builder
+    flex: 1 0 auto
+    align-self: stretch  
+    display: flex
+    flex-direction: column
+    .toolbar
+        flex: 0 0 50px
+        background-image: linear-gradient(-180deg, #373A3C 0%, #2E3232 100%)
+        .grid
+            // outline: 1px solid $pink
+            width: 33%
+            display: inline-block
+            box-sizing: border-box
+            padding: 0 10px
+            text-align: center
+            height: 50px
+            line-height: 50px
+            &:first-child
+                text-align: left
+            &:last-child
+                text-align: right
+            .wrap
+                display: inline-block
+                position: relative
+                &:before
+                    font-size: 10px
+                    top: 1px
+                    left: 10px
+                    position: absolute
+                &.width:before
+                    content: "W"
+                &.height:before
+                    content: "H"
+            input[type="number"]
+                width: 80px
+                padding: 5px 0 5px 30px
+                background: rgba(0,0,0,0.25)
+                border: 1px solid rgba(255,255,255,0.15)
+                color: #fff
+                outline: none
+                position: relative
+                box-sizing: border-box
+                text-align: right
+                &:focus
+                    border-color: $blue
+    .canvas-container
+        flex: 1 0 100%
+        overflow: auto
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-content: center
+        align-items: center
+        .map
+            flex: 0 0 auto
+            background-image: url(../img/grid.png)
+            cursor: pointer

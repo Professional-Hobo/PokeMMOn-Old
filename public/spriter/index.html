@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Pokemap</title>
+        
+        <link rel="stylesheet" href="css/base.css" type="text/css" />
+        <script src="js/jquery.js"></script>
+    </head>
+    <body>
+    
+    <div class="container">
+        <div class="sidebar" id="export-pane">
+            <div class="header">
+                <ul class="tab-group">
+                    <a href="#"><li data-tab="draw">Draw</li></a>
+                    <a href="#export-pane"><li data-tab="export">Export</li></a>
+                </ul>
+            </div>  
+            <div class="tab-container">
+                <div class="tab" id="draw">
+                    <div class="section">
+                        <h5>Recent</h5>
+                        <ul class="recent-tiles" id="history">
+                            <li id="hist_0" data-index=0>0</li>
+                            <li id="hist_1" data-index=1>1</li>
+                            <li id="hist_2" data-index=2>2</li>
+                            <li id="hist_3" data-index=3>3</li>
+                            <li id="hist_4" data-index=4>4</li>
+                            <li id="hist_5" data-index=5>5</li>
+                        </ul>
+                    </div>
+                    <div class="section">
+                        <h5>Tileset</h5>
+                        <div class="tileset-container" id="tileset-container">
+                            <div id="selector" class="selector"></div>
+                            <canvas id="tileset" class="tileset" width=256 height=31952></canvas>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h5>Live Tiles</h5>
+                        <span class="placeholder">None</span>
+                    </div>
+                </div>
+                <div class="tab" id="export">
+                    <div class="section">
+                        <h5>PNG Image</h5>
+                        <img class="map-image-repview" id="map-image">
+                        <a href="" id="download-png" target="_blank"><button class="button-download">Download as PNG</button></a>
+                    </div>
+                    <div class="section">
+                        <h5>PokeMap Array (PMA)</h5>
+                        <textarea id="pokemap-array"></textarea>
+                        <a href="" id="download-txt" target="_blank"><button class="button-download">Download as TXT</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="builder">
+            <div class="toolbar">
+                <div class="grid">
+                    <div class="wrap width">
+                        <input type="number" id="width" value="40"/>
+                    </div>
+                    <div class="wrap height">
+                        <input type="number" id="height" value="30"/>
+                    </div>
+                </div>
+                <div class="grid">-</div>
+                <div class="grid">-</div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="map-canvas" class="map" width="640" height="480"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/map-builder.js"></script>
+    <script src="js/ui.js"></script>
+    </body>
+</html>
