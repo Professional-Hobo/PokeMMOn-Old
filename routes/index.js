@@ -103,7 +103,7 @@ router.get('/register', function(req, res, next) {
 router.post('/register', function(req, res, next) {
     if (!req.session.loggedin) {
         req.app.models.user.create(req.body, function(err, model) {
-            if(err) return res.json({ err: err }, 500);
+            if(err) return res.status(500).json({ err: err });
 
             req.session.loggedin = true;
             req.session.user = model;
