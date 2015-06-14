@@ -33,19 +33,24 @@ app.set('view engine', 'jade');
 
 // Session store
 app.use(cookieParser);
-app.use(session({
+
+var sessionSettings = {
     key: settings.session.key,
     store: new redisStore(),
     secret: settings.session.secret,
     cookie: {
       path: '/',
-      
-      // Comment this line out if running on LAN and you are having trouble accessing session cookies
       domain: "." + settings.general.cookie_domain
     },
     resave: false,
     saveUninitialized: false
-}));
+};
+
+if (settings.general.LAN) {
+    delete sessionSettings.cookie.domain;
+}
+
+app.use(session(sessionSettings));
 
 // Flash messages
 app.use(flash());
