@@ -4,8 +4,6 @@ var brush       = [0,0];
 var mapWidth    = 40;
 var mapHeight   = 30;
 var mapSource   = "img/editor/map_tile.png";
-var mapArray    = [];
-var brushHistory= [];
 var tileSelectX = 0;
 var tileSelectY = 0;
 var tileSelectW = 1;
@@ -39,7 +37,7 @@ function drawImage(imgData, posX, posY, sizeW, sizeH){
 // w.......Map's Width
 // h.......Map's Height
 //
-var map = document.getElementById('map-canvas');
+var map = document.getElementById('map');
 var m   = map.getContext('2d');
 
 function newBlankMap(src, w, h){
@@ -150,7 +148,25 @@ function resizeMap(dir, i){
 var tilesetCanvas = document.getElementById('tileset');
 var t = tilesetCanvas.getContext('2d');
 
-function initiateTileset(){
+function initiateTileset(type) {
+    var img = "2_column_tileset.png";
+    var sets = {
+        "all": "2_column_tileset.png",
+        "buildings": "buildings.png",
+        "paths": "paths.png"
+    };
+    $('#tileset-container').animate({ scrollTop: 0}, 'fast');
+    drawTileSelector(0, 0);
+    brush = [0, 0];
+    tileSelectW = 1;
+    tileSelectH = 1;
+    drawTileSelector(tileSelectX, tileSelectY);
+
+    if (type !== undefined) {
+        img = sets[type];
+        drawTileset("img/editor/" + img);
+        t.clearRect(0, 0, tilesetCanvas.width, tilesetCanvas.height)
+    }
 
     // Draw the tileset to the canvas
     function drawTileset(src){
@@ -161,7 +177,7 @@ function initiateTileset(){
         }
         tilesetImg.src=src;
     }
-    drawTileset("img/editor/map_tile@2x.png"); 
+    drawTileset("img/editor/" + img); 
 
     // Add event listeners
     var tilesetMouseDown = 0;
@@ -174,15 +190,14 @@ function initiateTileset(){
     })
 
     function selectTile(e){
-        var mouse_x = Math.floor(e.offsetX/(grid*2));
-        var mouse_y = Math.floor(e.offsetY/(grid*2));
+        var mouse_x = Math.floor(e.offsetX/(grid));
+        var mouse_y = Math.floor(e.offsetY/(grid));
 
         // Draw the rectangle
         drawTileSelector(mouse_x, mouse_y)
 
         brush = [mouse_x, mouse_y];
         
-        updateBrushHistory(brush);
         console.log("Brush: ("+brush[0]+","+brush[1]+")");
     }
 }
@@ -197,13 +212,13 @@ function moveTileSelector(x, y){
     tileSelectX = x
     tileSelectY = y
     
-    selector.style.left = tileSelectX*(grid*2)+"px";
-    selector.style.top = tileSelectY*(grid*2)+"px";
+    selector.style.left = tileSelectX*(grid)+"px";
+    selector.style.top = tileSelectY*(grid)+"px";
 }
 function drawTileSelector(x, y){
     var selector = document.getElementById('selector');
-        selector.style.width  = tileSelectW*(grid*2)+'px';
-        selector.style.height = tileSelectH*(grid*2)+'px';
+        selector.style.width  = tileSelectW*(grid)+'px';
+        selector.style.height = tileSelectH*(grid)+'px';
         
         moveTileSelector(x, y)
 }
@@ -218,33 +233,10 @@ function resizeTileSelector(inc){
     console.log(tileSelectH*grid)
     
     var selector = document.getElementById('selector');
-        selector.style.width = tileSelectW*(grid*2)+'px'
-        selector.style.height = tileSelectH*(grid*2)+'px'
+        selector.style.width = tileSelectW*(grid)+'px'
+        selector.style.height = tileSelectH*(grid)+'px'
     */
 }
-
-//
-// Update the brush history
-//
-// Adds your brush to the brush history array 
-//
-function updateBrushHistory(currBrush){
-    
-    brushHistory.unshift(currBrush);
-    brushHistory.splice(6, 1); 
-    
-    for(var i in brushHistory){
-        var elem = document.getElementById('hist_'+i);
-        var hist = brushHistory[i];
-        var histx = hist[0]*grid*2;
-        var histy = hist[1]*grid*2;
-        
-        elem.style.backgroundImage = "url(img/editor/map_tile@2x.png), url(img/editor/grid.png)";
-        elem.style.backgroundPosition = "-"+histx+"px -"+histy+"px";
-    }
-}
-// Add the brush to the history to start
-updateBrushHistory(brush)
 
 //
 // [WIP] Allows you to draw on the map.
@@ -283,26 +275,14 @@ function initiateDrawing(){
             temp_x = mouse_x;
             temp_y = mouse_y;
         }
-        // Update the PokeMap Image
-        updatePreviewPNG('map-image');
-        updatePokemapArray('pokemap-array');
     }
 }
 initiateDrawing();
 
-// 
-// Update the preview image
-//
-function updatePreviewPNG(imgID){
-    var img = map.toDataURL("image/png");
-    document.getElementById(imgID).src = img;
+function hide() {
+    $('#tileset-container').css('overflow-y', 'hidden');
 }
-updatePreviewPNG('map-image');
 
-//
-// Update the PokeMap Array textarea
-//
-function updatePokemapArray(textID){
-    var textID = document.getElementById(textID);
-    textID.innerHTML = JSON.stringify(mapArray)
+function show() {
+    $('#tileset-container').css('overflow-y', 'scroll');
 }

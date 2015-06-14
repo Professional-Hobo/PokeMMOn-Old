@@ -1,0 +1,3 @@
+$(function() {
+    pokemap = new PokeMap();
+});

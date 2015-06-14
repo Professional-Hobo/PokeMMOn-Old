@@ -1,0 +1,63 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title PokeMMOn Map Editor
+    // Bootstrap core CSS
+    link(href='css/bootstrap.css', rel='stylesheet')
+    // Custom styles for this template
+    link(href='css/dashboard.css', rel='stylesheet')
+    link(href='css/editor.css', rel='stylesheet')
+  body
+    nav.navbar.navbar-inverse.navbar-fixed-top
+      .container-fluid
+        .navbar-header
+          a.navbar-brand(href='#') PokeMMOn Map Editor
+        #navbar.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-left
+            li
+              a(href='', onClick='pokemap.clearMap(); return false;') New
+            li
+              a(href='#') Import
+            li
+              a(href='#') Export
+            li
+              a(href='#') Settings
+    .container-fluid
+      .row
+        .col-sm-3.col-md-2.sidebar
+          .tab-container
+          #draw.tab
+            .section
+              button(onClick="initiateTileset('all')")#small All 
+              button(onClick="initiateTileset('buildings')")#small Buildings 
+              button(onClick="initiateTileset('paths')")#small Paths
+              #tileset-container.tileset-container
+                #selector.selector
+                canvas#tileset.tileset(width='256', height='256')
+          #export.tab
+            .section
+              h5 PNG Image
+              img#map-image.map-image-repview
+              a#download-png(href='', target='_blank')
+                button.button-download Download as PNG
+            .section
+              h5 PokeMap Array (PMA)
+              textarea#pokemap-array
+              a#download-txt(href='', target='_blank')
+                button.button-download Download as TXT)
+        .mapContainer
+          canvas#map
+    #footer
+    //
+      Bootstrap core JavaScript
+      ==================================================
+      Placed at the end of the document so the pages load faster
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
+    script(src='js/editor/bootstrap.js')
+    //script(src='js/editor/map-builder.js')
+    //script(src='js/editor/ui.js')
+    script(src='js/editor/Tile.js')
+    script(src='js/editor/PokeMap.js')
+    script(src='js/editor/init.js')

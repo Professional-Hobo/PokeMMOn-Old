@@ -5,6 +5,10 @@ body {
   background: #151818;
   color: #f0f0f0; }
 
+#small {
+  font-size: 10pt;
+}
+
 .container {
   display: flex;
   flex-direction: row;
@@ -46,7 +50,8 @@ body {
         opacity: 1;
         box-shadow: 0 -2px 0 #4A90E2 inset; }
   .sidebar .tileset {
-    background-image: url(../../img/editor/grid.png); }
+    background-image: url(../../img/editor/grid.png);
+  }
   .sidebar .tab-container {
     position: relative;
     width: 200%;
@@ -79,8 +84,8 @@ body {
       .sidebar .section .recent-tiles li {
         position: relative;
         display: inline-block;
-        width: 32px;
-        height: 32px;
+        width: 16px;
+        height: 16px;
         margin: 0 8px 5px 0;
         text-align: center;
         line-height: 90px;
@@ -92,16 +97,18 @@ body {
         .sidebar .section .recent-tiles li:first-child {
           outline: 2px solid #E010A3; }
     .sidebar .section .tileset-container {
-      width: 256px;
+      width: 128;
       height: 500px;
-      overflow: auto;
-      position: relative; }
+      margin-left: -30px;
+      right: -30px;
+      overflow-y: scroll;
+      position: relative;}
       .sidebar .section .tileset-container .selector {
         position: absolute;
         top: 0;
         padding: 0;
-        width: 32px;
-        height: 32px;
+        width: 16px;
+        height: 16px;
         outline: 2px solid #E010A3;
         transition: all 0.2s ease-out; }
     .sidebar .section .placeholder {
