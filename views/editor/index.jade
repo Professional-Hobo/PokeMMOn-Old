@@ -13,17 +13,24 @@ html
         script(src='js/editor/bootstrap.min.js')
     body
         .container
-            #export-pane.sidebar
+            .sidebar
                 .header
                     .dropdown
                         button(data-toggle='dropdown', aria-expanded='true').dropdown-toggle Menu - 
-                            span.mode Map Editor
+                            span.mode File
                             span.caret
                         ul.dropdown-menu
                             li(data-tab='file')
-                                a(href='#export-pane') File
-                            li(data-tab='draw')
-                                a(href='#') Map Editor
+                                a(href='#file') File
+                            li(data-tab='map')
+                                a(href='#map') Map Editor
+                            li(data-tab='warp')
+                                a(href='#warp') Warp Editor
+                            li(data-tab='npc')
+                                a(href='#npc') NPC Editor
+                            li(data-tab='event')
+                                a(href='#event') Event Editor
+
                 //
                     ul.tab-group
                         a(href='#')
@@ -31,7 +38,18 @@ html
                         a(href='#export-pane')
                             li(data-tab='file') File
                 .tab-container
-                    #draw.tab
+                    #file.tab
+                        .section
+                            h5 PNG Image
+                            img#map-image.map-image-repview
+                            a#download-png(href='', target='_blank')
+                                button.button-download Download as PNG
+                        .section
+                            h5 PokeMap Array (PMA)
+                            textarea#pokemap-array
+                            a#download-txt(href='', target='_blank')
+                                button.button-download Download as TXT
+                    #map.tab
                         .section
                             h5 Recent
                             ul#history.recent-tiles
@@ -54,17 +72,15 @@ html
                             #tileset-container.tileset-container
                                 #selector.selector
                                 canvas#tileset.tileset(width='256', height='8016')
-                    #file.tab
+                    #warp.tab
                         .section
-                            h5 PNG Image
-                            img#map-image.map-image-repview
-                            a#download-png(href='', target='_blank')
-                                button.button-download Download as PNG
+                            h5 Placeholder
+                    #npc.tab
                         .section
-                            h5 PokeMap Array (PMA)
-                            textarea#pokemap-array
-                            a#download-txt(href='', target='_blank')
-                                button.button-download Download as TXT
+                            h5 Placeholder
+                    #event.tab
+                        .section
+                            h5 Placeholder
             .builder
                 //
                     .toolbar
