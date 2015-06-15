@@ -1,0 +1,20 @@
+.mapContainer {
+    padding-left: 18%;
+    padding-bottom: 30px;
+}
+
+#map {
+    margin: 50px;
+    background-image: url("../img/editor/grid.png");
+}
+
+#footer {
+    padding-left: 18%;
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    height:30px;
+    width:100%;
+    background:#151818;
+    color: white;
+}
