@@ -1,4 +1,13 @@
 $(function() {
+    //
+    // Update Menu with current mode
+    //
+    if(window.location.hash) {
+        $('.dropdown-toggle .mode').text($('a[href='+window.location.hash+']').text());
+    }
+    $('body').on('click', '.header .dropdown .dropdown-menu > *', function(e) {
+        $('.dropdown-toggle .mode').text($(this).text());
+    });
     
     //
     // Update the history when clicking on 0-5
@@ -59,19 +68,19 @@ $(function() {
             show();
         // Up Arrow
         } else if (e.keyCode == 38){
-            e.preventDefault();
+           e.preventDefault();
            resizeTileSelector([0, -1])
         // Down Arrow
         } else if (e.keyCode == 40){
-            e.preventDefault();
+           e.preventDefault();
            resizeTileSelector([0, 1])
         // Left Arrow
         } else if (e.keyCode == 37){
-            e.preventDefault();
+           e.preventDefault();
            resizeTileSelector([-1, 0])
         // Right Arrow
         } else if (e.keyCode == 39){
-            e.preventDefault();
+           e.preventDefault();
            resizeTileSelector([1, 0])
         }
     })

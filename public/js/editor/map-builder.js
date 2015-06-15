@@ -37,7 +37,7 @@ function drawImage(imgData, posX, posY, sizeW, sizeH){
 // w.......Map's Width
 // h.......Map's Height
 //
-var map = document.getElementById('map');
+var map = document.getElementById('map-canvas');
 var m   = map.getContext('2d');
 
 function newBlankMap(src, w, h){
@@ -279,6 +279,7 @@ function initiateDrawing(){
 }
 initiateDrawing();
 
+/*
 function hide() {
     $('#tileset-container').css('overflow-y', 'hidden');
 }
@@ -286,3 +287,4 @@ function hide() {
 function show() {
     $('#tileset-container').css('overflow-y', 'scroll');
 }
+*/
