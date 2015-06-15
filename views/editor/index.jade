@@ -1,46 +1,99 @@
 doctype html
 html
-  head
-    title Pokemap
-    link(rel='stylesheet', href='css/editor/base.css', type='text/css')
-    script(src='js/editor/jquery.js')
-  body
-    .container
-      #export-pane.sidebar
-        .header
-          ul.tab-group
-            a(href='#')
-              li(data-tab='draw', onClick="show()") Draw
-            a(href='#export-pane')
-              li(data-tab='export', onClick="hide()") Options
-        .tab-container
-          #draw.tab
-            .section
-              button(onClick="initiateTileset('all')")#small All 
-              button(onClick="initiateTileset('buildings')")#small Buildings 
-              button(onClick="initiateTileset('paths')")#small Paths
-              #tileset-container.tileset-container
-                #selector.selector
-                canvas#tileset.tileset(width='256', height='8016')
-          #export.tab
-            .section
-              h5 PNG Image
-              img#map-image.map-image-repview
-              a#download-png(href='', target='_blank')
-                button.button-download Download as PNG
-            .section
-              h5 PokeMap Array (PMA)
-              textarea#pokemap-array
-              a#download-txt(href='', target='_blank')
-                button.button-download Download as TXT
-      .builder
-        .toolbar
-          .grid S M O P
-          .grid -
-          .grid -
-        .canvas-container
-          canvas#map-canvas.map(width='400', height='400')
-    script(src='js/editor/map-builder.js')
-    script(src='js/editor/ui.js')
-    script(src="js/editor/PokeMap.js")
-    script(src="js/favicon.min.js")
+    head
+        title World Editor
+
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+
+        link(rel='stylesheet', href='css/editor/bootstrap.min.css', type='text/css')
+        link(rel='stylesheet', href='css/editor/base.css', type='text/css')
+
+        script(src='js/editor/jquery.js')
+        script(src='js/editor/bootstrap.min.js')
+    body
+        .container
+            .sidebar
+                .header
+                    .dropdown
+                        button(data-toggle='dropdown', aria-expanded='true').dropdown-toggle Menu - 
+                            span.mode File
+                            span.caret
+                        ul.dropdown-menu
+                            li(data-tab='file')
+                                a(href='#file') File
+                            li(data-tab='map')
+                                a(href='#map') Map Editor
+                            li(data-tab='warp')
+                                a(href='#warp') Warp Editor
+                            li(data-tab='npc')
+                                a(href='#npc') NPC Editor
+                            li(data-tab='event')
+                                a(href='#event') Event Editor
+
+                //
+                    ul.tab-group
+                        a(href='#')
+                            li(data-tab='draw') Draw
+                        a(href='#export-pane')
+                            li(data-tab='file') File
+                .tab-container
+                    #file.tab
+                        .section
+                            h5 PNG Image
+                            img#map-image.map-image-repview
+                            a#download-png(href='', target='_blank')
+                                button.button-download Download as PNG
+                        .section
+                            h5 PokeMap Array (PMA)
+                            textarea#pokemap-array
+                            a#download-txt(href='', target='_blank')
+                                button.button-download Download as TXT
+                    #map.tab
+                        .section
+                            h5 Recent
+                            ul#history.recent-tiles
+                                li#hist_0(data-index=0)
+                                li#hist_1(data-index=1)
+                                li#hist_2(data-index=2)
+                                li#hist_3(data-index=3)
+                                li#hist_4(data-index=4)
+                                li#hist_5(data-index=5)
+                        .section
+                            h5 Tileset
+                            //
+                                button(onClick="initiateTileset('all')")#small All 
+                                button(onClick="initiateTileset('buildings')")#small Buildings 
+                                button(onClick="initiateTileset('paths')")#small Paths
+                            select
+                                option(value='all') All
+                                option(value='buildings') Buildings
+                                option(value='paths') Paths
+                            #tileset-container.tileset-container
+                                #selector.selector
+                                canvas#tileset.tileset(width='256', height='8016')
+                    #warp.tab
+                        .section
+                            h5 Placeholder
+                    #npc.tab
+                        .section
+                            h5 Placeholder
+                    #event.tab
+                        .section
+                            h5 Placeholder
+            .builder
+                //
+                    .toolbar
+                        .grid test1
+                        .grid test2
+                        .grid test3
+                .canvas-container
+                    canvas#map-canvas.map(width='400', height='400')
+        script(src='js/editor/map-builder.js')
+        script(src='js/editor/ui.js')
+
+    //
+        script(src='js/editor/Tile.js')
+        script(src='js/editor/PokeMap.js')
+        script(src='js/editor/init.js')
+
