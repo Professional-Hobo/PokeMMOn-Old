@@ -37,7 +37,7 @@ function drawImage(imgData, posX, posY, sizeW, sizeH){
 // w.......Map's Width
 // h.......Map's Height
 //
-var map = document.getElementById('map-canvas');
+var map = document.getElementById('map');
 var m   = map.getContext('2d');
 
 function newBlankMap(src, w, h){

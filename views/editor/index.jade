@@ -22,14 +22,14 @@ html
                         ul.dropdown-menu
                             li(data-tab='file')
                                 a(href='#file') File
-                            li(data-tab='map')
-                                a(href='#map') Map Editor
-                            li(data-tab='warp')
-                                a(href='#warp') Warp Editor
-                            li(data-tab='npc')
-                                a(href='#npc') NPC Editor
-                            li(data-tab='event')
-                                a(href='#event') Event Editor
+                            li(data-tab='mapEditor')
+                                a(href='#mapEditor') Map Editor
+                            li(data-tab='warpEditor')
+                                a(href='#warpEditor') Warp Editor
+                            li(data-tab='npcEditor')
+                                a(href='#npcEditor') NPC Editor
+                            li(data-tab='eventEditor')
+                                a(href='#eventEditor') Event Editor
                 .tab-container
                     #file.tab
                         .section
@@ -42,7 +42,7 @@ html
                             textarea#pokemap-array
                             a#download-txt(href='', target='_blank')
                                 button.button-download Download as TXT
-                    #map.tab
+                    #mapEditor.tab
                         .section
                             h5 Recent
                             ul#history.recent-tiles
@@ -101,13 +101,13 @@ html
                                 li#hist_4(data-index=4)
                                 li#hist_5(data-index=5)
                                 li#hist_5(data-index=5)
-                    #warp.tab
+                    #warpEditor.tab
                         .section
                             h5 Placeholder
-                    #npc.tab
+                    #npcEditor.tab
                         .section
                             h5 Placeholder
-                    #event.tab
+                    #eventEditor.tab
                         .section
                             h5 Placeholder
             .builder
