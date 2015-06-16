@@ -8,8 +8,8 @@ var PokeMap = function() {
   this.img     = new Image();
   this.img.src = "/img/editor/2_column_tileset.png";
 
-  this.map     = $('#map-canvas');
-  this.ctx     = $('#map-canvas')[0].getContext('2d');
+  this.map     = $('#map');
+  this.ctx     = $('#map')[0].getContext('2d');
 
   this.tiles = new Array(this.height);
   for (var i = 0; i < this.tiles.length; i++) {
