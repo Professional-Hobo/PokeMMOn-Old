@@ -30,13 +30,6 @@ html
                                 a(href='#npc') NPC Editor
                             li(data-tab='event')
                                 a(href='#event') Event Editor
-
-                //
-                    ul.tab-group
-                        a(href='#')
-                            li(data-tab='draw') Draw
-                        a(href='#export-pane')
-                            li(data-tab='file') File
                 .tab-container
                     #file.tab
                         .section
@@ -72,6 +65,42 @@ html
                             #tileset-container.tileset-container
                                 #selector.selector
                                 canvas#tileset.tileset(width='256', height='8016')
+                        .section
+                            h5 Recent
+                            ul#history.recent-tiles
+                                li#hist_0(data-index=0)
+                                li#hist_1(data-index=1)
+                                li#hist_2(data-index=2)
+                                li#hist_3(data-index=3)
+                                li#hist_4(data-index=4)
+                                li#hist_5(data-index=5)
+                        .section
+                            h5 Recent
+                            ul#history.recent-tiles
+                                li#hist_0(data-index=0)
+                                li#hist_1(data-index=1)
+                                li#hist_2(data-index=2)
+                                li#hist_3(data-index=3)
+                                li#hist_4(data-index=4)
+                                li#hist_5(data-index=5)
+                        .section
+                            h5 Recent
+                            ul#history.recent-tiles
+                                li#hist_0(data-index=0)
+                                li#hist_1(data-index=1)
+                                li#hist_2(data-index=2)
+                                li#hist_3(data-index=3)
+                                li#hist_4(data-index=4)
+                         .section
+                            h5 Recent
+                            ul#history.recent-tiles
+                                li#hist_0(data-index=0)
+                                li#hist_1(data-index=1)
+                                li#hist_2(data-index=2)
+                                li#hist_3(data-index=3)
+                                li#hist_4(data-index=4)
+                                li#hist_5(data-index=5)
+                                li#hist_5(data-index=5)
                     #warp.tab
                         .section
                             h5 Placeholder
@@ -82,15 +111,9 @@ html
                         .section
                             h5 Placeholder
             .builder
-                //
-                    .toolbar
-                        .grid test1
-                        .grid test2
-                        .grid test3
-                .canvas-container
-                    canvas#map-canvas.map(width='400', height='400')
-        script(src='js/editor/map-builder.js')
+                canvas#map-canvas.map(width='400', height='400')
         script(src='js/editor/ui.js')
+        script(src='js/editor/map-builder.js')
 
     //
         script(src='js/editor/Tile.js')
