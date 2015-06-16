@@ -176,7 +176,7 @@ body {
     align-content: center;
     align-items: center; }
 
-    .builder .map {
+    .builder #map {
         flex: 0 0 auto;
         background-image: url(../../img/editor/grid.png);
         cursor: pointer; }
