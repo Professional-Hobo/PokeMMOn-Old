@@ -17,36 +17,61 @@ html(lang='en')
         #navbar.navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-left
             li
-              a(href='', onClick='pokemap.clearMap(); return false;') New
+              a(href='', onClick='pokemap.new(); pokemap.clear(); return false;') New
             li
               a(href='#') Import
             li
               a(href='#') Export
             li
               a(href='#') Settings
+            li
+              a(href='#', onClick='pokemap.random(); return false;') Random Map
+            li
+              a(href='#', onClick='pokemap.render(); return false;') Render Map
+            li
+              a(href='#', onClick='pokemap.random(); pokemap.render(); return false;') Do both of the things
     .container-fluid
       .row
         .col-sm-3.col-md-2.sidebar
           .tab-container
-          #draw.tab
-            .section
-              button(onClick="initiateTileset('all')")#small All 
-              button(onClick="initiateTileset('buildings')")#small Buildings 
-              button(onClick="initiateTileset('paths')")#small Paths
-              #tileset-container.tileset-container
-                #selector.selector
-                canvas#tileset.tileset(width='256', height='256')
-          #export.tab
-            .section
-              h5 PNG Image
-              img#map-image.map-image-repview
-              a#download-png(href='', target='_blank')
-                button.button-download Download as PNG
-            .section
-              h5 PokeMap Array (PMA)
-              textarea#pokemap-array
-              a#download-txt(href='', target='_blank')
-                button.button-download Download as TXT)
+            button(onClick='pokemap.random(); pokemap.render(); return false;') Render Random Map
+            br
+            br
+            | up
+            br
+            button(onClick='pokemap.resize("up", 10); return false;') 10
+            button(onClick='pokemap.resize("up", 5); return false;') 5
+            button(onClick='pokemap.resize("up", 1); return false;') 1
+            button(onClick='pokemap.resize("up", -1); return false;') -1
+            button(onClick='pokemap.resize("up", -5); return false;') -5
+            button(onClick='pokemap.resize("up", -10); return false;') -10
+            br
+            | right
+            br
+            button(onClick='pokemap.resize("right", 10); return false;') 10
+            button(onClick='pokemap.resize("right", 5); return false;') 5
+            button(onClick='pokemap.resize("right", 1); return false;') 1
+            button(onClick='pokemap.resize("right", -1); return false;') -1
+            button(onClick='pokemap.resize("right", -5); return false;') -5
+            button(onClick='pokemap.resize("right", -10); return false;') -10
+            br
+            | down
+            br
+            button(onClick='pokemap.resize("down", 10); return false;') 10
+            button(onClick='pokemap.resize("down", 5); return false;') 5
+            button(onClick='pokemap.resize("down", 1); return false;') 1
+            button(onClick='pokemap.resize("down", -1); return false;') -1
+            button(onClick='pokemap.resize("down", -5); return false;') -5
+            button(onClick='pokemap.resize("down", -10); return false;') -10
+            br
+            | left
+            br
+            button(onClick='pokemap.resize("left", 10); return false;') 10
+            button(onClick='pokemap.resize("left", 5); return false;') 5
+            button(onClick='pokemap.resize("left", 1); return false;') 1
+            button(onClick='pokemap.resize("left", -1); return false;') -1
+            button(onClick='pokemap.resize("left", -5); return false;') -5
+            button(onClick='pokemap.resize("left", -10); return false;') -10
         .mapContainer
           canvas#map
     #footer
