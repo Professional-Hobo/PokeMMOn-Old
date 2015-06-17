@@ -5,6 +5,23 @@ body {
     background: #151818;
     color: #f0f0f0; }
 
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px; }
+
+::-webkit-scrollbar-track {
+    background: #ddd;
+    border-radius: 10px; }
+
+::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 10px; }
+
+::-webkit-scrollbar-track, ::-webkit-scrollbar, ::-webkit-scrollbar-thumb {
+    opacity: 0.3; }
+::-webkit-scrollbar-track:hover, ::-webkit-scrollbar:hover, ::-webkit-scrollbar-thumb:hover {
+    opacity: 1; }
+ 
 #small {
   font-size: 10pt; }
 

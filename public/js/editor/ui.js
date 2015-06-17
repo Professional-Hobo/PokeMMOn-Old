@@ -19,7 +19,7 @@ $(function() {
         $('.dropdown-toggle .mode').text($(this).text());
         e.preventDefault();
     });
-    
+
     //
     // Update the history when clicking on 0-5
     //
