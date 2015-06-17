@@ -49,7 +49,7 @@ PokeMap.prototype = {
 
     // Now draw all the tiles
     for (var h = 0; h < this.height; h++) {
-      //console.log("Rendering map: " + Math.ceil(h/this.height*100) + "%");
+      console.log("Rendering map: " + Math.ceil(h/this.height*100) + "%");
       for (var w = 0; w < this.width; w++) {
         this.drawTile(this.tiles[h][w], w, h);
       }
@@ -61,7 +61,7 @@ PokeMap.prototype = {
   randomMap: function() {
 
     for (var h = 0; h < this.height; h++) {
-      //console.log("Generating random map: " + Math.ceil(h/this.height*100) + "%");
+      console.log("Generating random map: " + Math.ceil(h/this.height*100) + "%");
       for (var w = 0; w < this.width; w++) {
 
         // Create tile with 3 random layers

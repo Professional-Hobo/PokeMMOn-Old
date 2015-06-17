@@ -24,6 +24,12 @@ html(lang='en')
               a(href='#') Export
             li
               a(href='#') Settings
+            li
+              a(href='#', onClick='pokemap.randomMap(); return false;') Random Map
+            li
+              a(href='#', onClick='pokemap.renderMap(); return false;') Render Map
+            li
+              a(href='#', onClick='pokemap.randomMap(); pokemap.renderMap(); return false;') Do both of the things
     .container-fluid
       .row
         .col-sm-3.col-md-2.sidebar
