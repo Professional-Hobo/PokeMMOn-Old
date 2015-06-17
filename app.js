@@ -17,6 +17,7 @@ var redisStore   = require('connect-redis')(session);
 
 // Routes
 var index = require('./routes/index');
+var editor = require('./routes/editor');
 
 // Waterline
 var Waterline_init = require("./models/index");
@@ -57,8 +58,8 @@ app.use(flash());
 
 app.use(favicon(__dirname + '/public/img/favicon.png'));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '64mb'}));
+app.use(bodyParser.urlencoded({ limit: '64mb', extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
@@ -68,6 +69,7 @@ app.use(function(req, res, next) {
 
 // Routes
 app.use('/', index);
+app.use('/editor', editor);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
