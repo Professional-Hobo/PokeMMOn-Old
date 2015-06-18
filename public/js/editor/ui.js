@@ -45,22 +45,13 @@ $(function() {
     window.addEventListener('keydown', function(e) {
         // 0-9
         if(e.which >= 48 && e.which <= 57) {
-            if(modes.length >= e.which - 48) {
-                modes[(e.which - 49) % modes.length].click();
+            if(modes.length >= e.which - 49) {
+                modes[(e.which - 49)].click();
+            } else {
+                modes[modes.length-1].click();
             }
-        }
-        
-/*        // 1
-        if (e.which == 49) {
-            initiateTileset('all');
-        // 2
-        } else if (e.which == 50) {
-            initiateTileset('buildings')
-        // 3
-        } else if (e.which == 51) {
-            initiateTileset('paths')
         // W
-        }*/ else if(e.which == 87) {
+        } else if(e.which == 87) {
             brush[1] -= brush[1] > 0 ? 1 : 0
             drawTileSelector(brush[0], brush[1])
         // S
