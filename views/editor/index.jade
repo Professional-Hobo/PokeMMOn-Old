@@ -33,15 +33,25 @@ html
                 .tab-container
                     #file.tab
                         .section
-                            h5 PNG Image
-                            img#map-image.map-image-repview
-                            a#download-png(href='', target='_blank')
-                                button.button-download Download as PNG
-                        .section
-                            h5 PokeMap Array (PMA)
-                            textarea#pokemap-array
-                            a#download-txt(href='', target='_blank')
-                                button.button-download Download as TXT
+                            h5 World Editor
+                            select#worlds(disabled)
+                                option Loading Worlds...
+                            br
+                            button.blue#newWorld New
+                            | 
+                            button.green(disabled)#saveWorld Save
+                            | 
+                            button.red(disabled)#deleteWorld Delete
+                        .section(style="display: none;")#newWorldSection
+                            form(action="editor/world")
+                                input(placeholder="New world name")#newWorldInput
+                                | 
+                                button(onClick="return false", disabled)#newWorldSave Save
+                        .section(style="display: none; text-align: center")#deleteWorldSection
+                                p#deleteWorldText
+                                button.red#deleteWorldNo No
+                                | 
+                                button.green#deleteWorldYes Yes
                     #mapEditor.tab
                         .section
                             h5 Recent

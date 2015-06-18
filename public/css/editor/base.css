@@ -154,18 +154,39 @@ body {
         .sidebar .section .map-image-repview {
           width: 100%; }
 
-        .sidebar .section button[class*="button-"] {
-            background: #4A90E2;
+        .sidebar .section button {
             border: none;
+            border-radius: 3px;
             color: #fff;
-            padding: 10px 0;
-            width: 100%;
+            padding: 5px 5px;
             outline: none;
             cursor: pointer;
             transition: opacity 0.1s ease; }
 
-            .sidebar .section button[class*="button-"]:hover {
-                opacity: 0.9; }
+        .sidebar .section button:disabled {
+            opacity: .25;
+            transition: none;
+            cursor: default;
+        }
+
+        .sidebar .section button:hover:enabled {
+            opacity: 0.9; }
+
+        .blue {
+            background: #337ab7;
+        }
+
+        .green {
+            background: #5cb85c;
+        }
+
+        .red {
+            background: #d9534f;
+        }
+
+        .yellow {
+            background: #E2CD1D;
+        }
 
         .sidebar .section textarea {
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -198,3 +219,6 @@ body {
         background-image: url(../../img/editor/grid.png);
         cursor: pointer; }
 
+#newWorldInput {
+    color: #000;
+}
