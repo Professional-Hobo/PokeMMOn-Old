@@ -40,61 +40,70 @@ $(function() {
     //
     // Listen for keycodes
     //
+    var modes = $('.header li[data-tab] a').toArray().map(function(e) {return $(e)});
+
     window.addEventListener('keydown', function(e) {
-        // 1
-        if (e.keyCode == 49) {
+        // 0-9
+        if(e.which >= 48 && e.which <= 57) {
+            if(modes.length >= e.which - 48) {
+                modes[(e.which - 49) % modes.length].click();
+            }
+        }
+        
+/*        // 1
+        if (e.which == 49) {
             initiateTileset('all');
         // 2
-        } else if (e.keyCode == 50) {
+        } else if (e.which == 50) {
             initiateTileset('buildings')
         // 3
-        } else if (e.keyCode == 51) {
+        } else if (e.which == 51) {
             initiateTileset('paths')
         // W
-        } else if(e.keyCode == 87) {
+        }*/ else if(e.which == 87) {
             brush[1] -= brush[1] > 0 ? 1 : 0
             drawTileSelector(brush[0], brush[1])
         // S
-        } else if (e.keyCode == 83) {
+        } else if (e.which == 83) {
             brush[1] += brush[1] < 997 ? 1 : 0
             drawTileSelector(brush[0], brush[1])
             if(brush[1] > 15){
                 // Scroll function
             }
         // D
-        } else if (e.keyCode == 68){
+        } else if (e.which == 68){
             brush[0] += brush[0] < 15 ? 1 : -15
             drawTileSelector(brush[0], brush[1])
         // A
-        } else if (e.keyCode == 65){
+        } else if (e.which == 65){
             brush[0] -= brush[0] > 0 ? 1 : -15
             drawTileSelector(brush[0], brush[1])
         // E
-        } else if (e.keyCode == 69) {
+        } else if (e.which == 69) {
             window.location = '#export-pane';
             hide();
         // Q
-        } else if (e.keyCode == 81) {
+        } else if (e.which == 81) {
             window.location = '#';
             show();
         // Up Arrow
-        } else if (e.keyCode == 38){
+        } else if (e.which == 38){
            e.preventDefault();
            resizeTileSelector([0, -1])
         // Down Arrow
-        } else if (e.keyCode == 40){
+        } else if (e.which == 40){
            e.preventDefault();
            resizeTileSelector([0, 1])
         // Left Arrow
-        } else if (e.keyCode == 37){
+        } else if (e.which == 37){
            e.preventDefault();
            resizeTileSelector([-1, 0])
         // Right Arrow
-        } else if (e.keyCode == 39){
+        } else if (e.which == 39){
            e.preventDefault();
            resizeTileSelector([1, 0])
         }
-    })
+    });
     
     //
     // Download Buttons
