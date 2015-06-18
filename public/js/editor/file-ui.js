@@ -12,6 +12,13 @@ $(function() {
             $("#deleteWorld").prop("disabled", true);
         } else {
             $("#deleteWorld").prop("disabled", false);
+
+            // Load in map data
+            $.get("editor/world/" + $("#worlds").val(), function(data) {
+                console.log(data);
+            }).fail(function() {
+                console.log("Error retrieving data");
+            });
         }
     });
 
