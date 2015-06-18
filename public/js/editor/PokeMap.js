@@ -66,7 +66,6 @@ PokeMap.prototype = {
         this.drawTile(this.tiles[h][w], w, h);
       }
     }
-
   },
 
   // Resizes the map and updates the positions
@@ -84,7 +83,6 @@ PokeMap.prototype = {
         // This prevents getting into the negatives
         amount = amount > this.height ? this.height : amount;
 
-        // Remove rows
         for (var i = 0; i < amount; i++) {
           direction == "up" ? this.tiles.shift() : this.tiles.pop();
         }
@@ -93,9 +91,8 @@ PokeMap.prototype = {
         this.height -= amount;
 
       // Adding rows
-      } else if (amount > 0) {
+      } else if (amount > 0 && this.height+amount <= 1024) {
         amount = Math.abs(amount);
-
 
         for (var i = 0; i < amount; i++) {
           // add pokemap-width number of new tiles.
@@ -108,9 +105,6 @@ PokeMap.prototype = {
 
         // Update height of pokemap object
         this.height += amount;
-
-      } else {
-        console.log("What are you doing SON!?");
       }
 
     } else if (direction == "right" || direction == "left") {
@@ -133,7 +127,7 @@ PokeMap.prototype = {
         this.width -= amount;
 
       // Adding cols
-      } else if (amount > 0) {
+      } else if (amount > 0 && this.width+amount <= 1024) {
         amount = Math.abs(amount);
 
         Object.keys(this.tiles).forEach(function(index) {
@@ -144,13 +138,7 @@ PokeMap.prototype = {
 
         // Update width of pokemap object
         this.width += amount;
-
-      } else {
-        console.log("What are you doing SON!?");
       }
-
-    } else {
-      console.log("What are you doing SON!?");
     }
 
     // Update the attributes of the canvas tag
@@ -159,6 +147,9 @@ PokeMap.prototype = {
 
     // Render new resized map
     this.render();
+
+    // Update dimensions viewer
+    $("#dim").html("Current map dim: " + this.width + "x" + this.height);
   },
 
   // Generate random map with random tiles

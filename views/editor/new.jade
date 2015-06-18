@@ -5,10 +5,10 @@ html(lang='en')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     title PokeMMOn Map Editor
     // Bootstrap core CSS
-    link(href='css/bootstrap.css', rel='stylesheet')
+    link(href='/css/bootstrap.css', rel='stylesheet')
     // Custom styles for this template
-    link(href='css/dashboard.css', rel='stylesheet')
-    link(href='css/editor.css', rel='stylesheet')
+    link(href='/css/dashboard.css', rel='stylesheet')
+    link(href='/css/editor.css', rel='stylesheet')
   body
     nav.navbar.navbar-inverse.navbar-fixed-top
       .container-fluid
@@ -37,41 +37,43 @@ html(lang='en')
             button(onClick='pokemap.random(); pokemap.render(); return false;') Render Random Map
             br
             br
+            #dim Current map dim: 0x0
+            br
             | up
             br
-            button(onClick='pokemap.resize("up", 10); return false;') 10
+            button(onClick='pokemap.resize("up", 25); return false;') 25
             button(onClick='pokemap.resize("up", 5); return false;') 5
             button(onClick='pokemap.resize("up", 1); return false;') 1
             button(onClick='pokemap.resize("up", -1); return false;') -1
             button(onClick='pokemap.resize("up", -5); return false;') -5
-            button(onClick='pokemap.resize("up", -10); return false;') -10
+            button(onClick='pokemap.resize("up", -25); return false;') -25
             br
             | right
             br
-            button(onClick='pokemap.resize("right", 10); return false;') 10
+            button(onClick='pokemap.resize("right", 25); return false;') 25
             button(onClick='pokemap.resize("right", 5); return false;') 5
             button(onClick='pokemap.resize("right", 1); return false;') 1
             button(onClick='pokemap.resize("right", -1); return false;') -1
             button(onClick='pokemap.resize("right", -5); return false;') -5
-            button(onClick='pokemap.resize("right", -10); return false;') -10
+            button(onClick='pokemap.resize("right", -25); return false;') -25
             br
             | down
             br
-            button(onClick='pokemap.resize("down", 10); return false;') 10
+            button(onClick='pokemap.resize("down", 25); return false;') 25
             button(onClick='pokemap.resize("down", 5); return false;') 5
             button(onClick='pokemap.resize("down", 1); return false;') 1
             button(onClick='pokemap.resize("down", -1); return false;') -1
             button(onClick='pokemap.resize("down", -5); return false;') -5
-            button(onClick='pokemap.resize("down", -10); return false;') -10
+            button(onClick='pokemap.resize("down", -25); return false;') -25
             br
             | left
             br
-            button(onClick='pokemap.resize("left", 10); return false;') 10
+            button(onClick='pokemap.resize("left", 25); return false;') 25
             button(onClick='pokemap.resize("left", 5); return false;') 5
             button(onClick='pokemap.resize("left", 1); return false;') 1
             button(onClick='pokemap.resize("left", -1); return false;') -1
             button(onClick='pokemap.resize("left", -5); return false;') -5
-            button(onClick='pokemap.resize("left", -10); return false;') -10
+            button(onClick='pokemap.resize("left", -25); return false;') -25
         .mapContainer
           canvas#map
     #footer
@@ -80,9 +82,9 @@ html(lang='en')
       ==================================================
       Placed at the end of the document so the pages load faster
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
-    script(src='js/editor/bootstrap.js')
-    //script(src='js/editor/map-builder.js')
-    //script(src='js/editor/ui.js')
-    script(src='js/editor/Tile.js')
-    script(src='js/editor/PokeMap.js')
-    script(src='js/editor/init.js')
+    script(src='/js/editor/bootstrap.js')
+    //script(src='/js/editor/map-builder.js')
+    //script(src='/js/editor/ui.js')
+    script(src='/js/editor/Tile.js')
+    script(src='/js/editor/PokeMap.js')
+    script(src='/js/editor/init.js')
