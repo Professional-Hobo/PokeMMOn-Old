@@ -22,14 +22,6 @@ $(function() {
         } else if (e.which == 65){
             brush[0] -= brush[0] > 0 ? 1 : -15
             drawTileSelector(brush[0], brush[1])
-        // E
-        } else if (e.which == 69) {
-            window.location = '#export-pane';
-            hide();
-        // Q
-        } else if (e.which == 81) {
-            window.location = '#';
-            show();
         // Up Arrow
         } else if (e.which == 38){
            e.preventDefault();
