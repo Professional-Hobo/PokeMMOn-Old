@@ -80,7 +80,7 @@ $(function() {
         });
     });
 
-    // Wait for user's input 250 ms before querying for valid name
+    // Wait for user's input 50 ms before querying for valid name
     $('#newWorldInput').keyup(function() {
         clearTimeout(newWorldTimer);
         newWorldTimer = setTimeout(queryNewWorld, 50);
@@ -92,10 +92,11 @@ $(function() {
 
     function queryNewWorld() {
         var worldName = $("#newWorldInput").val();
+        var pattern = new RegExp("^[a-zA-Z0-9_ ]*$");
 
         if (worldName != "") {
             $.get("editor/world/", function(data) {
-                if (data.indexOf(worldName) != -1) {
+                if (data.indexOf(worldName) != -1 || !pattern.test(worldName)) {
                     $("#newWorldSave").addClass("red").removeClass("green").prop("disabled", true);
                 } else {
                     $("#newWorldSave").addClass("green").removeClass("red").prop("disabled", false);
