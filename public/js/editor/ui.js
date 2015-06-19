@@ -1,5 +1,7 @@
 $(function() {
     window.UI = new (function() {
+        var self = this;
+
         //
         // Adjust sidebar and sidebar tab widths
         //
@@ -38,68 +40,40 @@ $(function() {
         });
 
         //
-        // Enum used by notify function.
-        // Denotes what type of notification to make.
-        //
-        this.NOTIFY = Object.freeze({
-            SUCCESS: 1,
-            INFO: 2,
-            WARNING: 3,
-            DANGER: 4
-        });
-
-        //
         // Generates notification HTML
         //
-        $('body').prepend('<div id="notify"></div>');
-        var notifyBox = $('#notify').css({
-            position: 'absolute',
-            top: '-200px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: '999',
-            transition: 'all .5s ease'
-        }).addClass('alert');
-
-        notifyBox.on('click', function(e) {
-            $(this).slideUp();
-            e.preventDefault();
-        });
+        $('body').append('<div id="notify" class="modal fade">'
++                '<div class="modal-dialog">'
++                    '<div class="modal-content">'
++                        '<div class="modal-header">'
++                            '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
++                            '<h4 class="modal-title"></h4>'
++                        '</div>'
++                        '<div class="modal-body"></div>'
++                '</div>'
++            '</div>'
++        '</div>');
+        
+        var notifyBox = $('#notify').css('color', 'black');
+        var notifyTitle = $('#notify .modal-title');
+        var notifyBody = $('#notify .modal-body');
 
         //
-        // Activates alert message with message type and message contents
+        // Activates notification with relevant message
+        // @fade Time in milliseconds until notification fades
         //
-        this.notify = function notify(type, msg) {
-            // Reset the previous alert type
-            notifyBox.attr('class', 'alert');
-
-            switch(type) {
-                case this.NOTIFY.SUCCESS:
-                    notifyBox.addClass('alert-success');
-                    break;
-                case this.NOTIFY.INFO:
-                    notifyBox.addClass('alert-info');
-                    break;
-                case this.NOTIFY.WARNING:
-                    notifyBox.addClass('alert-warning');
-                    break;
-                case this.NOTIFY.DANGER:
-                    notifyBox.addClass('alert-danger');
-                    break;
-            }
-
+        this.notify = function notify(title, msg, fade) {
             // Load in message
-            notifyBox.text(msg);
+            notifyTitle.html(title);
+            notifyBody.html(msg);
             
             // Appear!
-            notifyBox.css('top', '200px');
+            notifyBox.modal('show');
 
             // Disappear again
             setTimeout(function() {
-                notifyBox.css({
-                    top: '-200px'
-                });
-            }, 1500);
+                notifyBox.modal('hide');
+            }, 5000);
         }
 
         //
@@ -140,15 +114,37 @@ $(function() {
             }
         });
 
-        $(document).ajaxSuccess(function(e, jqXHR) {
+        var failed = [];
+        var succeeded = [];
+
+        $(document).ajaxSuccess(function(e, jqXHR, settings) {
             loader.css('width', '100%');
+            succeeded.push(settings.url);
         });
 
         $(document).ajaxError(function(e, jqXHR, settings, err) {
-            //notify(, err);
+            failed.push(settings.url)
         });
 
-        $(document).ajaxComplete(function(e, jqXHR) {
+        $(document).ajaxStop(function() {
+            var msg = '';
+
+            if(succeeded.length) {
+                msg += 'Succeeded in loading:<br>' +
+                        '<ul><li>' + succeeded.join('</li><li>') + '</li></ul>';
+                succeeded = [];
+            }
+
+            if(failed.length) {
+                msg += 'Failed to load:<br>' +
+                        '<ul><li>' + failed.join('</li><li>') + '</li></ul>';
+                failed = [];
+            }
+
+            self.notify('AJAX Status', msg);
+        });
+
+        $(document).ajaxComplete(function() {
             loader.fadeOut(400, function(){
                 loader.width(0).show(0);
             });
