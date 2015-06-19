@@ -46,7 +46,9 @@ $(function() {
 +                '<div class="modal-dialog">'
 +                    '<div class="modal-content">'
 +                        '<div class="modal-header">'
-+                            '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
++                            '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
++                                '<span aria-hidden="true">&times;</span>'
++                            '</button>'
 +                            '<h4 class="modal-title"></h4>'
 +                        '</div>'
 +                        '<div class="modal-body"></div>'
@@ -57,27 +59,40 @@ $(function() {
         var notifyBox = $('#notify').css('color', 'black');
         var notifyTitle = $('#notify .modal-title');
         var notifyBody = $('#notify .modal-body');
+        var fadeEvent;
 
         //
         // Activates notification with relevant message
         // @fade Time in milliseconds until notification fades
         //
         this.notify = function notify(title, msg, fade) {
+            // Hide prev notification and clear prev hide event
+            clearTimeout(fadeEvent);
+            notifyBox.modal('hide');
+
             // Load in message
             notifyTitle.html(title);
             notifyBody.html(msg);
+
+            // Print out to console in case message
+            // disappears too fast
+            console.log('---------- Notification -----------');
+            console.log('Title: ' + title.replace(/(<([^>]+)>)/ig, ''));
+            console.log('Message: ' + msg.replace(/(<([^>]+)>)/ig, ''));
             
             // Appear!
             notifyBox.modal('show');
 
             // Disappear again
-            setTimeout(function() {
-                notifyBox.modal('hide');
-            }, 5000);
+            fadeEvent = setTimeout(function() {
+                if(notifyBox.is(':visible')) {
+                    notifyBox.modal('hide');
+                }
+            }, fade ? fade : 3500);
         }
 
         //
-        // Set up AJAX loading animations
+        // Set up AJAX loading animations and notifications
         //
         $('body').prepend('<div id="loader"></div>');
         var loader = $('#loader').css({
