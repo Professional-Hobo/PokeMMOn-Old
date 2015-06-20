@@ -2,6 +2,7 @@ var express  = require('express');
 var fs       = require('fs');
 var path     = require('path'); 
 var rimraf   = require('rimraf');
+var sizeOf   = require('image-size');
 var router   = express.Router();
 var settings = require('../settings.json');
 
@@ -111,7 +112,17 @@ router.route('/world/:name')
     });
 
 router.get('/sets/:name', function(req, res, next) {
+    var name = req.params.name;
 
+    fs.exists('public/img/editor/sets/' + name + '.png', function(exists) {
+        if (exists) {
+            console.log("Loaded tileset " + name + " successfully!");
+            var dim = sizeOf('public/img/editor/sets/' + name + '.png');
+            res.status(200).send({ width: dim.width, height: dim.height });
+        } else {
+            res.status(400).send({ msg: "Tileset " + name + " doesn't exist!" });
+        }
+    });
 });
 
 router.get('/sets', function(req, res, next) {

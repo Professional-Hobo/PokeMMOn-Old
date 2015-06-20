@@ -1,9 +1,14 @@
 var Tileset = function() {
   var self = this;
 
-  this.loadTilesets(function() {
-    self.set = "all";
-  });
+  this.width   = 0;
+  this.height  = 0;
+
+  this.tileset = $('#tileset');
+  this.ctx     = $('#tileset')[0].getContext('2d');
+
+  this.image   = new Image();
+
 };
 
 Tileset.prototype = {
@@ -27,5 +32,43 @@ Tileset.prototype = {
 
       typeof callback === 'function' && callback();
     });
+  },
+
+  fetchTilesetDim: function(callback) {
+    var self = this;
+    $.get("editor/sets/" + this.set, function(data) {
+
+      self.width = data.width;
+      self.height = data.height;
+
+      typeof callback === 'function' && callback();
+    });
+  },
+
+  drawTileset: function() {
+    this.ctx.drawImage(this.image, 0, 0);
+  },
+
+  changeTileset: function(set) {
+    var self = this;
+
+    this.clear();
+    this.set = set;
+    this.fetchTilesetDim(function() {
+      // Set width and height of tileset canvas
+      self.tileset.attr("width", self.width);
+      self.tileset.attr("height", self.height);
+
+      // Load in tileset image
+      self.image.src = "img/editor/sets/" + self.set + ".png";
+
+      self.image.onload = function() {
+        self.drawTileset();
+      }
+    });
+  },
+
+  clear: function() {
+    this.ctx.clearRect(0, 0, this.width, this.height)
   }
 };

@@ -109,7 +109,7 @@ html
                                 option Loading Tilesets...
                             #tileset-container.tileset-container
                                 #selector.selector
-                                canvas#tileset.tileset(width='256', height='8016')
+                                canvas#tileset.tileset(width='256')
                         .section
                             h5 Recent
                             ul#history.recent-tiles
@@ -157,6 +157,7 @@ html
                             h5 Placeholder
             .builder
                 canvas#map(width='400', height='400')
+        script(src='js/editor/jsondiffpatch.min.js')
         script(src='js/editor/ui.js')
         script(src='js/editor/Tileset.js')
 
