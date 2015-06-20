@@ -97,7 +97,7 @@ $(function() {
         }
 
         // Hides notification if you click anywhere
-        $(document).on('click', function() {
+        notifyBox.on('click', function() {
             if(notifyBox.isVisible()) {
                 notifyBox.modal('hide');
             }
@@ -175,11 +175,13 @@ $(function() {
 
         $(document).ajaxSuccess(function(e, jqXHR, settings) {
             loader.css('width', '100%');
-            succeeded.push(settings.url);
+            if(!settings.suppress)
+                succeeded.push(settings.url);
         });
 
         $(document).ajaxError(function(e, jqXHR, settings, err) {
-            failed.push(settings.url)
+            if(!settings.suppress)
+                failed.push(settings.url)
         });
 
         // AJAX requests are async, so this displays one message for them all
