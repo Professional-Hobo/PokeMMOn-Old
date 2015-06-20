@@ -14,11 +14,11 @@ $(function() {
             $("#deleteWorld").prop("disabled", false);
 
             // Load in map data
-            $.get("editor/world/" + $("#worlds").val(), function(data) {
+            $.ajax("editor/world/" + $("#worlds").val(), {global: false, success: function(data) {
                 console.log(data);
-            }).fail(function() {
+            }, fail: function() {
                 console.log("Error retrieving data");
-            });
+            }});
         }
     });
 
@@ -47,6 +47,7 @@ $(function() {
         $.ajax({
             url: 'editor/world/' + $("#worlds").val(),
             type: 'DELETE',
+            global: false,
             success: function(result) {
                 hideDeleteWorld();
                 updateWorldList(function() {
@@ -66,7 +67,7 @@ $(function() {
 
     $('#newWorldSave').click(function() {
         var name = $("#newWorldInput").val();
-        $.post("editor/world", {name: name, data: JSON.stringify({})}, function(data) {
+        $.ajax("editor/world", {method: "POST", data: {name: name, data: JSON.stringify({})}, global: false, success: function(data) {
             // success
             hideNewWorld();
 
@@ -75,9 +76,9 @@ $(function() {
                 $("#deleteWorld").prop("disabled", false);
             });
 
-        }).fail(function() {
+        }, fail: function() {
             // fail
-        });
+        }});
     });
 
     // Wait for user's input 50 ms before querying for valid name
@@ -95,20 +96,20 @@ $(function() {
         var pattern = new RegExp("^[a-zA-Z0-9_ ]*$");
 
         if (worldName != "") {
-            $.get("editor/world/", function(data) {
+            $.ajax('editor/world/', {global: false, success: function(data) {
                 if (data.indexOf(worldName) != -1 || !pattern.test(worldName)) {
                     $("#newWorldSave").addClass("red").removeClass("green").prop("disabled", true);
                 } else {
                     $("#newWorldSave").addClass("green").removeClass("red").prop("disabled", false);
                 }
-            });
+            }});
         } else {
             $("#newWorldSave").removeClass("green").removeClass("red").prop("disabled", true);
         }
     }
 
     function updateWorldList(callback) {
-        $.get("editor/world", function(data) {
+        $.ajax('editor/world/', {global: false, success: function(data) {
             worlds = data;
 
             // Update world select with world options
@@ -128,7 +129,7 @@ $(function() {
             $('#worlds').prop("disabled", false);
 
             typeof callback === 'function' && callback();
-        });
+        }});
     }
 
     function hideNewWorld() {
