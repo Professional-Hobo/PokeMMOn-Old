@@ -95,16 +95,7 @@ $(function() {
         // Set up AJAX loading animations and notifications
         //
         $('body').prepend('<div id="loader"></div>');
-        var loader = $('#loader').css({
-            position: 'fixed',
-            top: '0',
-            left: '0',
-            background: '#4A90E2',
-            height: '3px',
-            width: '0',
-            zIndex: '500',
-            transition: 'all .15s ease'
-        });
+        var loader = $('#loader');
 
         $.ajaxSetup({
             cache: true,
@@ -141,6 +132,7 @@ $(function() {
             failed.push(settings.url)
         });
 
+        // AJAX requests are async, so this displays one message for them all
         $(document).ajaxStop(function() {
             var msg = '';
 
