@@ -138,31 +138,35 @@ $(function() {
         var loader = $('#loader');
 
         $.ajaxSetup({
-            cache: true,
+            cache: true
+        });
+
+        $.ajax({
             xhr: function() {
                 var xhr = new window.XMLHttpRequest();
 
                 //Upload progress
-                xhr.upload.addEventListener("progress", function(evt) {
-                    if (evt.lengthComputable) {
-                        loader.width(evt.loaded/evt.total * 100 + '%');
+                xhr.upload.addEventListener("progress", function(e) {
+                    if (e.lengthComputable) {
+                        loader.width(e.loaded/e.total * 100 + '%');
                     }
                 });
 
                 //Download progress
-                xhr.addEventListener("progress", function(evt) {
-                    if (evt.lengthComputable) {
-                        loader.width(evt.loaded/evt.total * 100 + '%');
+                xhr.addEventListener("progress", function(e) {
+                    if (e.lengthComputable) {
+                        loader.width(e.loaded/e.total * 100 + '%');
                     }
                 });
 
                 return xhr;
-            },
-            complete: function() {
-                loader.fadeOut(400, function(){
-                    loader.width(0).show(0);
-                });
             }
+        });
+
+        $(document).ajaxComplete(function() {
+            loader.fadeOut(400, function(){
+                loader.width(0).show(0);
+            });
         });
 
         var failed = [];
