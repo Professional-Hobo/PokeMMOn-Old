@@ -200,7 +200,9 @@ $(function() {
                 failed = [];
             }
 
-            self.notify('AJAX Status', msg);
+            if(msg.length) {
+                self.notify('AJAX Status', msg);
+            }
         });
 
         //
