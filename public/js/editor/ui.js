@@ -46,7 +46,7 @@ $(function() {
 +                '<div class="modal-dialog">'
 +                    '<div class="modal-content">'
 +                        '<div class="modal-header">'
-+                            '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
++                            '<button type="button" class="close" data-dismiss="modal">'
 +                                '<span aria-hidden="true">&times;</span>'
 +                            '</button>'
 +                            '<h4 class="modal-title"></h4>'
@@ -198,7 +198,9 @@ $(function() {
         // Load in other UI modules. Other UI module filenames should follow a convention
         // where the filename is <href value of link for module>-ui.js
         //
-        modes.forEach(function(e) {$.getScript('/js/editor/'+e.attr('href').slice(1)+'-ui.js')});
+        $.get('editor/uis', function(data) {
+            data.forEach(function(e) {$.getScript(e)});
+        });
     })();
 });
 
