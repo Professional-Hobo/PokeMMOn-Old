@@ -8,6 +8,9 @@
     z-index: 500;
     transition: all .15s ease; }
 
+.modal-content {
+    cursor: pointer }
+
 .modal-title, .modal-body { 
     white-space: pre-wrap;      /* CSS3 */   
     white-space: -moz-pre-wrap; /* Firefox */    

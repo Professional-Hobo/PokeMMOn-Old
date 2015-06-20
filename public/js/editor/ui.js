@@ -96,8 +96,8 @@ $(function() {
             }
         }
 
-        // Hides notification if you click anywhere
-        notifyBox.on('click', function() {
+        // Hides notification if you click on the notification
+        $('#notify .modal-content').on('click', function() {
             if(notifyBox.isVisible()) {
                 notifyBox.modal('hide');
             }
