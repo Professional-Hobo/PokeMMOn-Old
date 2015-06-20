@@ -15,7 +15,7 @@ Tileset.prototype = {
   loadTilesets: function(callback) {
     var self = this;
 
-    $.get("editor/sets", function(data) {
+    $.ajax("editor/sets", {global: false, success: function(data) {
       self.sets = data;
 
       // Update world select with world options
@@ -31,18 +31,18 @@ Tileset.prototype = {
       $('#tilesets').prop("disabled", false);
 
       typeof callback === 'function' && callback();
-    });
+    }});
   },
 
   fetchTilesetDim: function(callback) {
     var self = this;
-    $.get("editor/sets/" + this.set, function(data) {
+    $.ajax("editor/sets/" + this.set, {global: false, success: function(data) {
 
       self.width = data.width;
       self.height = data.height;
 
       typeof callback === 'function' && callback();
-    });
+    }});
   },
 
   drawTileset: function() {
