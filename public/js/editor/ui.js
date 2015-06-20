@@ -42,7 +42,7 @@ $(function() {
         //
         // Generates notification HTML
         //
-        $('body').append('<div id="notify" class="modal fade">'
+        $('body').append('<div id="notify" class="modal fade" data-backdrop="">'
 +                '<div class="modal-dialog">'
 +                    '<div class="modal-content">'
 +                        '<div class="modal-header">'
@@ -56,10 +56,49 @@ $(function() {
 +            '</div>'
 +        '</div>');
         
+        var body = $('body');
         var notifyBox = $('#notify').css('color', 'black');
         var notifyTitle = $('#notify .modal-title');
         var notifyBody = $('#notify .modal-body');
         var fadeEvent;
+
+        // Utility function for modal
+        notifyBox.isVisible = function() {
+            return notifyBox.hasClass('in');
+        };
+
+        // bootstrap.min.js modal is bugged, so made my own
+        notifyBox.bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", 
+            function() {
+                if(!notifyBox.isVisible()) {
+                    notifyBox.hide();
+                }
+            });
+
+        notifyBox.modal = function(action) {
+            if(action == 'hide') {
+                notifyBox.removeClass('in');
+                body.removeClass('modal-open');
+            } else if(action == 'show') {
+                if(notifyBox.css('display') != 'none' && !notifyBox.isVisible()) {
+                    setTimeout(function() {
+                        notifyBox.modal('show')
+                    }, 25);
+                } else {
+                    notifyBox.show();
+                    notifyBox.css('display');   // Hack needed to trigger transition
+                    notifyBox.addClass('in');
+                    body.addClass('modal-open');
+                }
+            }
+        }
+
+        // Hides notification if you click anywhere
+        $(document).on('click', function() {
+            if(notifyBox.isVisible()) {
+                notifyBox.modal('hide');
+            }
+        });
 
         //
         // Activates notification with relevant message
@@ -85,9 +124,7 @@ $(function() {
 
             // Disappear again
             fadeEvent = setTimeout(function() {
-                if(notifyBox.is(':visible')) {
-                    notifyBox.modal('hide');
-                }
+                notifyBox.modal('hide');
             }, fade ? fade : 3500);
         }
 
