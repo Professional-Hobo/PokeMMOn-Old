@@ -157,6 +157,11 @@ $(function() {
                 });
 
                 return xhr;
+            },
+            complete: function() {
+                loader.fadeOut(400, function(){
+                    loader.width(0).show(0);
+                });
             }
         });
 
@@ -189,12 +194,6 @@ $(function() {
             }
 
             self.notify('AJAX Status', msg);
-        });
-
-        $(document).ajaxComplete(function() {
-            loader.fadeOut(400, function(){
-                loader.width(0).show(0);
-            });
         });
 
         //
