@@ -142,6 +142,7 @@ $(function() {
         });
 
         $.ajax({
+            global: false,
             xhr: function() {
                 var xhr = new window.XMLHttpRequest();
 
@@ -203,8 +204,16 @@ $(function() {
         //
         // Load in other UI modules
         //
-        $.get('editor/uis', function(data) {
-            data.forEach(function(e) {$.getScript(e)});
+        $.ajax('editor/uis', {
+            global: false,
+            success: function(data) {
+                data.forEach(function(e) {
+                    $.ajax(e, {
+                        global: false,
+                        dataType: 'script'
+                    });
+                });
+            }
         });
     })();
 });
