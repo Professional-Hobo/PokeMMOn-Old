@@ -6,7 +6,8 @@ var PokeMap = function() {
   this.width   = 10;
   this.height  = 10;
   this.img     = new Image();
-  this.img.src = "/img/editor/2_column_tileset.png";
+  this.img.src = "/img/editor/sets/all.png";
+  this.history = [];
 
   this.map     = $('#map');
   this.ctx     = $('#map')[0].getContext('2d');

@@ -3,49 +3,43 @@ $(function() {
     // Add map mode keyboard shortcuts
     //
     window.addEventListener('keydown', function(e) {
-        // W
-        if(e.which == 87) {
-            brush[1] -= brush[1] > 0 ? 1 : 0
-            drawTileSelector(brush[0], brush[1])
-        // S
-        } else if (e.which == 83) {
-            brush[1] += brush[1] < 997 ? 1 : 0
-            drawTileSelector(brush[0], brush[1])
-            if(brush[1] > 15){
-                // Scroll function
+        if (!$("input").is(":focus")) {
+            // W
+            if(e.which == 87) {
+                brush[1] -= brush[1] > 0 ? 1 : 0
+                drawTileSelector(brush[0], brush[1])
+            // S
+            } else if (e.which == 83) {
+                brush[1] += brush[1] < 997 ? 1 : 0
+                drawTileSelector(brush[0], brush[1])
+                if(brush[1] > 15){
+                    // Scroll function
+                }
+            // D
+            } else if (e.which == 68){
+                brush[0] += brush[0] < 15 ? 1 : -15
+                drawTileSelector(brush[0], brush[1])
+            // A
+            } else if (e.which == 65){
+                brush[0] -= brush[0] > 0 ? 1 : -15
+                drawTileSelector(brush[0], brush[1])
+            // Up Arrow
+            } else if (e.which == 38){
+               e.preventDefault();
+               resizeTileSelector([0, -1])
+            // Down Arrow
+            } else if (e.which == 40){
+               e.preventDefault();
+               resizeTileSelector([0, 1])
+            // Left Arrow
+            } else if (e.which == 37){
+               e.preventDefault();
+               resizeTileSelector([-1, 0])
+            // Right Arrow
+            } else if (e.which == 39){
+               e.preventDefault();
+               resizeTileSelector([1, 0])
             }
-        // D
-        } else if (e.which == 68){
-            brush[0] += brush[0] < 15 ? 1 : -15
-            drawTileSelector(brush[0], brush[1])
-        // A
-        } else if (e.which == 65){
-            brush[0] -= brush[0] > 0 ? 1 : -15
-            drawTileSelector(brush[0], brush[1])
-        // E
-        } else if (e.which == 69) {
-            window.location = '#export-pane';
-            hide();
-        // Q
-        } else if (e.which == 81) {
-            window.location = '#';
-            show();
-        // Up Arrow
-        } else if (e.which == 38){
-           e.preventDefault();
-           resizeTileSelector([0, -1])
-        // Down Arrow
-        } else if (e.which == 40){
-           e.preventDefault();
-           resizeTileSelector([0, 1])
-        // Left Arrow
-        } else if (e.which == 37){
-           e.preventDefault();
-           resizeTileSelector([-1, 0])
-        // Right Arrow
-        } else if (e.which == 39){
-           e.preventDefault();
-           resizeTileSelector([1, 0])
         }
     });
 
@@ -62,8 +56,18 @@ $(function() {
         brush = [brushx, brushy]
         updateBrushHistory(brush)
     }
+
     $('#history li').click(function(){
         clientUpdateHistory(this.dataset.index)
     });
 
+    // Load all tilesets and make default all
+    tileset.loadTilesets(function() {
+        tileset.changeTileset("all");
+    });
+
+    // Update tileset on tileset selector change
+    $("#tilesets").change(function() {
+        tileset.changeTileset($("#tilesets").val());
+    });
 });

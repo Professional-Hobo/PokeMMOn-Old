@@ -30,7 +30,7 @@ $(function() {
         var modes = $('.header li[data-tab] a').toArray().map(function(e) {return $(e)});
 
         window.addEventListener('keydown', function(e) {
-            if(e.which >= 48 && e.which <= 57) {
+            if(e.which >= 48 && e.which <= 57 && !$("input").is(":focus")) {
                 if(modes.length >= e.which - 49) {
                     modes[(e.which - 49)].click();
                 } else {

@@ -34,34 +34,83 @@ html
                 .tab-container
                     #file.tab
                         .section
-                            h5 PNG Image
-                            img#map-image.map-image-repview
-                            a#download-png(href='', target='_blank')
-                                button.button-download Download as PNG
-                        .section
-                            h5 PokeMap Array (PMA)
-                            textarea#pokemap-array
-                            a#download-txt(href='', target='_blank')
-                                button.button-download Download as TXT
+                            h5 World Selector
+                            select#worlds(disabled)
+                                option Loading Worlds...
+                            br
+                            button.blue#newWorld New
+                            | 
+                            button.red(disabled)#deleteWorld Delete
+                        .section(style="display: none;")#newWorldSection
+                            form(action="editor/world")
+                                input(placeholder="New world name")#newWorldInput
+                                | 
+                                button(onClick="return false", disabled)#newWorldSave Save
+                        .section(style="display: none; text-align: center")#deleteWorldSection
+                                p#deleteWorldText
+                                button.red#deleteWorldNo No
+                                | 
+                                button.green#deleteWorldYes Yes
+                        .section(style="display: none")#mapSection
+                            h5 Map Selector
+                            select#maps(disabled)
+                                option Loading Maps...
+                            br
+                            button.blue#newMap New
+                            | 
+                            button.yellow(disabled)#saveMap Copy
+                            | 
+                            button.red(disabled)#deleteMap Delete
                     #mapEditor.tab
                         .section
-                            h5 Recent
-                            ul#history.recent-tiles
-                                li#hist_0(data-index=0)
-                                li#hist_1(data-index=1)
-                                li#hist_2(data-index=2)
-                                li#hist_3(data-index=3)
-                                li#hist_4(data-index=4)
-                                li#hist_5(data-index=5)
+                            h5 Resize
+                            button(onClick='pokemap.random(); pokemap.render(); return false;') Render Random Map
+                            br
+                            br
+                            #dim Current map dim: 0x0
+                            br
+                            | up
+                            br
+                            button(onClick='pokemap.resize("up", 25); return false;') 25
+                            button(onClick='pokemap.resize("up", 5); return false;') 5
+                            button(onClick='pokemap.resize("up", 1); return false;') 1
+                            button(onClick='pokemap.resize("up", -1); return false;') -1
+                            button(onClick='pokemap.resize("up", -5); return false;') -5
+                            button(onClick='pokemap.resize("up", -25); return false;') -25
+                            br
+                            | right
+                            br
+                            button(onClick='pokemap.resize("right", 25); return false;') 25
+                            button(onClick='pokemap.resize("right", 5); return false;') 5
+                            button(onClick='pokemap.resize("right", 1); return false;') 1
+                            button(onClick='pokemap.resize("right", -1); return false;') -1
+                            button(onClick='pokemap.resize("right", -5); return false;') -5
+                            button(onClick='pokemap.resize("right", -25); return false;') -25
+                            br
+                            | down
+                            br
+                            button(onClick='pokemap.resize("down", 25); return false;') 25
+                            button(onClick='pokemap.resize("down", 5); return false;') 5
+                            button(onClick='pokemap.resize("down", 1); return false;') 1
+                            button(onClick='pokemap.resize("down", -1); return false;') -1
+                            button(onClick='pokemap.resize("down", -5); return false;') -5
+                            button(onClick='pokemap.resize("down", -25); return false;') -25
+                            br
+                            | left
+                            br
+                            button(onClick='pokemap.resize("left", 25); return false;') 25
+                            button(onClick='pokemap.resize("left", 5); return false;') 5
+                            button(onClick='pokemap.resize("left", 1); return false;') 1
+                            button(onClick='pokemap.resize("left", -1); return false;') -1
+                            button(onClick='pokemap.resize("left", -5); return false;') -5
+                            button(onClick='pokemap.resize("left", -25); return false;') -25
                         .section
                             h5 Tileset
-                            select
-                                option(value='all') All
-                                option(value='buildings') Buildings
-                                option(value='paths') Paths
+                            select#tilesets(disabled)
+                                option Loading Tilesets...
                             #tileset-container.tileset-container
                                 #selector.selector
-                                canvas#tileset.tileset(width='256', height='8016')
+                                canvas#tileset.tileset(width='256')
                         .section
                             h5 Recent
                             ul#history.recent-tiles
@@ -109,10 +158,10 @@ html
                             h5 Placeholder
             .builder
                 canvas#map(width='400', height='400')
+        script(src='js/editor/jsondiffpatch.min.js')
         script(src='js/editor/ui.js')
-        script(src='js/editor/map-builder.js')
+        script(src='js/editor/Tileset.js')
 
-    //
         script(src='js/editor/Tile.js')
         script(src='js/editor/PokeMap.js')
         script(src='js/editor/init.js')
