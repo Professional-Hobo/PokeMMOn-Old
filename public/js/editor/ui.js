@@ -75,16 +75,19 @@ $(function() {
                 }
             });
 
+        var hiding;
         notifyBox.modal = function(action) {
             if(action == 'hide') {
                 notifyBox.removeClass('in');
                 body.removeClass('modal-open');
             } else if(action == 'show') {
-                if(notifyBox.css('display') != 'none' && !notifyBox.isVisible()) {
-                    setTimeout(function() {
-                        notifyBox.modal('show')
+                // Checks if mid-close animation
+                if(notifyBox.css('display') != 'none' && !notifyBox.isVisible() && !hiding) {
+                    hiding = setTimeout(function() {
+                        notifyBox.modal('show');
                     }, 25);
                 } else {
+                    hiding = 0;
                     notifyBox.show();
                     notifyBox.css('display');   // Hack needed to trigger transition
                     notifyBox.addClass('in');
@@ -195,8 +198,7 @@ $(function() {
         });
 
         //
-        // Load in other UI modules. Other UI module filenames should follow a convention
-        // where the filename is <href value of link for module>-ui.js
+        // Load in other UI modules
         //
         $.get('editor/uis', function(data) {
             data.forEach(function(e) {$.getScript(e)});
