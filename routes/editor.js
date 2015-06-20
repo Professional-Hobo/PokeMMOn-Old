@@ -18,6 +18,33 @@ router.route('/world')
     .post(function(req, res) {
         var name = req.body.name;
         var data  = req.body.data;
+        data = {
+          "info": {
+            "created": Math.floor(new Date() / 1000),
+            "modified": Math.floor(new Date() / 1000),
+            "author": "",
+            "description": ""
+          },
+
+          "maps": {
+            "default": {
+              "info": {
+                "creation_date": Math.floor(new Date() / 1000),
+                "modification_date": Math.floor(new Date() / 1000),
+                "description": "",
+                "dimensions": {
+                  "width": 25,
+                  "height": 25
+                }
+              },
+              "tiles": [],
+              "npcs": [],
+              "events": [],
+              "warps": []
+            }
+          }
+        };
+
         var pattern = new RegExp("^[a-zA-Z0-9_ ]*$");
 
         if (name === undefined || data === undefined) {
@@ -30,7 +57,7 @@ router.route('/world')
                     res.status(400).send({ msg: name + " is an invalid name." });
                 } else {
                     fs.mkdir('worlds/' + name, "0755", function() {
-                        fs.writeFile("worlds/" + name + '/map.json', data, function (err) {
+                        fs.writeFile("worlds/" + name + '/map.json', JSON.stringify(data), function (err) {
                             if (err) {
                                 console.log(err);
                                 res.status(400).send({ msg: "An error was encountered while saving " + world + "!" });

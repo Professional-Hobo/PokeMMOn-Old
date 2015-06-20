@@ -3,8 +3,8 @@ var PokeMap = function() {
 
   this.scale   = 16;
   this.tile    = [0, 0];
-  this.width   = 10;
-  this.height  = 10;
+  this.width   = 25;
+  this.height  = 25;
   this.img     = new Image();
   this.img.src = "/img/editor/sets/all.png";
   this.history = [];

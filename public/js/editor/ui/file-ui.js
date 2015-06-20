@@ -1,6 +1,7 @@
 $(function() {
 
     var newWorldTimer;
+    window.world = {};
 
     // Fetch world list
     updateWorldList();
@@ -14,10 +15,32 @@ $(function() {
             $("#deleteWorld").prop("disabled", false);
 
             // Load in map data
-            $.ajax("editor/world/" + $("#worlds").val(), {global: false, success: function(data) {
-                console.log(data);
+            var world = $("#worlds").val();
+            $.ajax("editor/world/" + world, {global: true, suppress: true, success: function(data) {
+                window.world = data;
+                UI.notify("Loaded world successfully!", "World \"" + world + "\" was loaded successfully!", 500);
+
+                // Reveal map view
+                showMapSection(function() {
+
+                    // Load in available maps for editing
+                    $('#maps')
+                        .empty()
+                        .append($("<option></option>")
+                        .attr("value", "")
+                        .text("--- Select a map ---"));
+
+                    $.each(window.world.maps, function(key) {
+                        $('#maps')
+                            .append($("<option></option>")
+                            .attr("key", key)
+                            .text(key));
+                    });
+
+                    $('#maps').prop("disabled", false);
+                });
             }, fail: function() {
-                console.log("Error retrieving data");
+                UI.notify("Failed to load world", "World \"" + world + "\" failed to load!", 500);
             }});
         }
     });
@@ -25,7 +48,7 @@ $(function() {
     // Reveal new world input slide down
     $("#newWorld").click(function() {
         hideDeleteWorld();
-        $("#newWorldSection").slideDown("medium", function() {
+        showNewWorld(function() {
             $("#newWorldInput").focus();
         });
     })
@@ -34,7 +57,7 @@ $(function() {
     $("#deleteWorld").click(function() {
         hideNewWorld();
         $("#deleteWorldText").html("Are you sure you want to delete world " + $("#worlds").val() + "?");
-        $("#deleteWorldSection").slideDown("medium");
+        showDeleteWorld()
     })
 
     // Delete world no
@@ -49,7 +72,9 @@ $(function() {
             type: 'DELETE',
             global: false,
             success: function(result) {
+                UI.notify("Deleted world successfully!", "World \"" + $("#worlds").val() + "\" was deleted successfully!", 500);
                 hideDeleteWorld();
+                hideMapSection();
                 updateWorldList(function() {
                     $("#worlds").val("");
                     $("#deleteWorld").prop("disabled", true);
@@ -68,12 +93,37 @@ $(function() {
     $('#newWorldSave').click(function() {
         var name = $("#newWorldInput").val();
         $.ajax("editor/world", {method: "POST", data: {name: name, data: JSON.stringify({})}, global: false, success: function(data) {
-            // success
+            UI.notify("Created world successfully!", "World \"" + name + "\" was created successfully!", 500);
             hideNewWorld();
 
             updateWorldList(function() {
                 $("#worlds").val(name);
                 $("#deleteWorld").prop("disabled", false);
+
+                // Load in new world
+                $.ajax("editor/world/" + name, {global: true, suppress: true, success: function(data) {
+                    window.world = data;
+
+                    // Reveal map view
+                    showMapSection(function() {
+
+                        // Load in available maps for editing
+                        $('#maps')
+                            .empty()
+                            .append($("<option></option>")
+                            .attr("value", "")
+                            .text("--- Select a map ---"));
+
+                        $.each(window.world.maps, function(key) {
+                            $('#maps')
+                                .append($("<option></option>")
+                                .attr("key", key)
+                                .text(key));
+                        });
+
+                        $('#maps').prop("disabled", false);
+                    });
+                }});
             });
 
         }, fail: function() {
@@ -132,6 +182,12 @@ $(function() {
         }});
     }
 
+    function showNewWorld(callback) {
+         $("#newWorldSection").slideDown("medium", function() {
+            typeof callback === 'function' && callback();
+        });
+    }
+
     function hideNewWorld() {
         $("#newWorldSection").slideUp("medium", function() {
             $("#newWorldSave").removeClass("green").removeClass("red").prop("disabled", true);
@@ -139,9 +195,27 @@ $(function() {
         });
     }
 
+    function showDeleteWorld(callback) {
+        $("#deleteWorldSection").slideDown("medium", function() {
+            typeof callback === 'function' && callback();
+        });
+    }
+
     function hideDeleteWorld() {
         $("#deleteWorldSection").slideUp("medium", function() {
             $("#deleteWorldText").html("");
+        });
+    }
+
+    function showMapSection(callback) {
+        $("#mapSection").slideDown("medium", function() {
+            typeof callback === 'function' && callback();
+        });
+    }
+
+    function hideMapSection() {
+        $("#mapSection").slideUp("medium", function() {
+
         });
     }
 });
