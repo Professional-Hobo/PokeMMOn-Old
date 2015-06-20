@@ -1,5 +1,4 @@
 $(function() {
-    tileset = new Tileset();
     //
     // Add map mode keyboard shortcuts
     //
@@ -57,8 +56,18 @@ $(function() {
         brush = [brushx, brushy]
         updateBrushHistory(brush)
     }
+
     $('#history li').click(function(){
         clientUpdateHistory(this.dataset.index)
     });
 
+    // Load all tilesets and make default all
+    tileset.loadTilesets(function() {
+        tileset.changeTileset("all");
+    });
+
+    // Update tileset on tileset selector change
+    $("#tilesets").change(function() {
+        tileset.changeTileset($("#tilesets").val());
+    });
 });
