@@ -47,6 +47,7 @@ router.route('/world')
 
     .get(function(req, res) {
         fs.readdir('worlds', function(err, files) {
+            files.splice(files.indexOf("README.md"), 1);
             if (err) {
                 res.status(400).send({ msg: "An error occured while retrieving worlds list" });
             } else {
