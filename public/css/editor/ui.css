@@ -8,8 +8,14 @@
     z-index: 500;
     transition: all .15s ease; }
 
+.modal {
+    left:50%;
+    right: initial;
+    bottom: initial;
+    transform: translateX(-50%); }
+
 .modal-content {
-    cursor: pointer }
+    cursor: pointer; }
 
 .modal-title, .modal-body { 
     white-space: pre-wrap;      /* CSS3 */   
