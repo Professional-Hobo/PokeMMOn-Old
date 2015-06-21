@@ -68,6 +68,9 @@ $(function() {
 
     // Update tileset on tileset selector change
     $("#tilesets").change(function() {
+        // Scroll to top
+        $('#tileset-container').scrollTop(0);
+
         tileset.changeTileset($("#tilesets").val());
     });
 });
