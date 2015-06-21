@@ -40,6 +40,8 @@ html
                             br
                             button.blue#newWorld New
                             | 
+                            button.green#saveWorld(disabled) Save
+                            | 
                             button.red(disabled)#deleteWorld Delete
                         .section(style="display: none;")#newWorldSection
                             form(action="editor/world")
@@ -62,6 +64,7 @@ html
                             | 
                             button.red(disabled)#deleteMap Delete
                         .section(style="display: none;")#newMapSection
+                            form(action="")
                                 input(placeholder="New map name")#newMapInput
                                 | 
                                 button(onClick="return false", disabled)#newMapSave Save

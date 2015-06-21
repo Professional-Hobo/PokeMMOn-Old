@@ -1,6 +1,7 @@
 $(function() {
 
     var newWorldTimer;
+    var newMapTimer;
     window.world = {};
 
     // Fetch world list
@@ -14,8 +15,10 @@ $(function() {
 
         if ($("#worlds")[0].selectedIndex == 0) {
             $("#deleteWorld").prop("disabled", true);
+            $("#saveWorld").prop("disabled", true);
         } else {
             $("#deleteWorld").prop("disabled", false);
+            $("#saveWorld").prop("disabled", false);
 
             // Load in world data
             loadWorld();
@@ -26,8 +29,10 @@ $(function() {
     $("#maps").change(function() {
         if ($("#maps")[0].selectedIndex == 0) {
             $("#deleteMap").prop("disabled", true);
+            $("#saveWorld").prop("disabled", true);
         } else {
             $("#deleteMap").prop("disabled", false);
+            $("#saveWorld").prop("disabled", false);
 
             // Load in map data to Pokemap canvas
             var map = $("#maps").val();
@@ -76,7 +81,7 @@ $(function() {
             type: 'DELETE',
             global: false,
             success: function(result) {
-                UI.notify("Deleted world successfully!", "World \"" + $("#worlds").val() + "\" was deleted successfully!", 500);
+                UI.notify("Deleted world successfully!", "World \"" + $("#worlds").val() + "\" was deleted successfully!", 2500);
 
                 hideSection("deleteWorldSection", function() {
                     $("#deleteWorldText").html("");
@@ -86,6 +91,7 @@ $(function() {
                 updateWorldList(function() {
                     $("#worlds").val("");
                     $("#deleteWorld").prop("disabled", true);
+                    $("#saveWorld").prop("disabled", true);
                 });
             }
         });
@@ -115,22 +121,46 @@ $(function() {
         hideNewMap();
     });
 
+    // POST new world to server, update worlds list, and load in new world.
     $('#newWorldSave').click(function() {
         var name = $("#newWorldInput").val();
         $.ajax("editor/world", {method: "POST", data: {name: name, data: JSON.stringify({})}, global: false, success: function(data) {
-            UI.notify("Created world successfully!", "World \"" + name + "\" was created successfully!", 500);
+            UI.notify("Created world successfully!", "World \"" + name + "\" was created successfully!", 2500);
             hideNewWorld();
 
             updateWorldList(function() {
                 $("#worlds").val(name);
                 $("#deleteWorld").prop("disabled", false);
+                $("#saveWorld").prop("disabled", false);
 
                 // Load in world data
-                loadWorld();
+                loadWorld(true);
+                hideNewMap();
             });
 
         }, fail: function() {
             // fail
+        }});
+    });
+
+    // Only update the local world object. Save to server when Save button is pushed.
+    $('#newMapSave').click(function() {
+        var name = $("#newMapInput").val();
+
+        $.ajax('editor/world/default', {global: false, suppress: true, success: function(data) {
+            world.maps[name] = data;
+            UI.notify("Created map successfully!", "map \"" + name + "\" was created successfully!", 2500);
+            hideNewMap();
+
+            updateMapList(function() {
+                $("#deleteWorld").prop("disabled", false);
+                $("#saveWorld").prop("disabled", false);
+
+                $("#maps").val(name + " [W: " + window.world.maps[name].info.dimensions.width + ", H: " + window.world.maps[name].info.dimensions.height + "]");
+                hideNewMap();
+
+                $("#map").fadeIn();
+            });
         }});
     });
 
@@ -144,9 +174,19 @@ $(function() {
         clearTimeout(newWorldTimer);
     });
 
+    // Wait for user's input 50 ms before querying for valid name
+    $('#newMapInput').keyup(function() {
+        clearTimeout(newMapTimer);
+        newMapTimer = setTimeout(queryNewMap, 50);
+    });
+
+    $('#newWorldInput').keydown(function() {
+        clearTimeout(newMapTimer);
+    });
+
     function queryNewWorld() {
         var worldName = $("#newWorldInput").val();
-        var pattern = new RegExp("^[a-zA-Z0-9_ ]*$");
+        var pattern = new RegExp("^[-a-zA-Z0-9_ ]*$");
 
         if (worldName != "") {
             $.ajax('editor/world/', {global: false, success: function(data) {
@@ -158,6 +198,21 @@ $(function() {
             }});
         } else {
             $("#newWorldSave").removeClass("green").removeClass("red").prop("disabled", true);
+        }
+    }
+
+    function queryNewMap() {
+        var mapName = $("#newMapInput").val();
+        var pattern = new RegExp("^[-a-zA-Z0-9_ ]*$");
+
+        if (mapName != "") {
+            if (window.world.maps.hasOwnProperty(mapName) || !pattern.test(mapName)) {
+                $("#newMapSave").addClass("red").removeClass("green").prop("disabled", true);
+            } else {
+                $("#newMapSave").addClass("green").removeClass("red").prop("disabled", false);
+            }
+        } else {
+            $("#newMapSave").removeClass("green").removeClass("red").prop("disabled", true);
         }
     }
 
@@ -231,11 +286,14 @@ $(function() {
         });
     }
 
-    function loadWorld() {
+    function loadWorld(supress) {
         var world = $("#worlds").val();
         $.ajax("editor/world/" + world, {global: true, suppress: true, success: function(data) {
             window.world = data;
-            UI.notify("Loaded world successfully!", "World \"" + world + "\" was loaded successfully!", 500);
+
+            if (!supress) {
+                UI.notify("Loaded world successfully!", "World \"" + world + "\" was loaded successfully!", 2500);
+            }
 
             updateMapList(function() {
 
@@ -245,7 +303,7 @@ $(function() {
                 });
             });
         }, fail: function() {
-            UI.notify("Failed to load world", "World \"" + world + "\" failed to load!", 500);
+            UI.notify("Failed to load world", "World \"" + world + "\" failed to load!", 2500);
         }});
     }
 });

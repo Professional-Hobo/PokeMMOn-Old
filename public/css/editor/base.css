@@ -224,6 +224,6 @@ body {D
             background-image: url(../../img/editor/grid.png);
             cursor: pointer; }
 
-#newWorldInput {
+#newWorldInput, #newMapInput {
     color: #000; }
 

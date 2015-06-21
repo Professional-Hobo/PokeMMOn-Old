@@ -46,7 +46,7 @@ router.route('/world')
           }
         };
 
-        var pattern = new RegExp("^[a-zA-Z0-9_ ]*$");
+        var pattern = new RegExp("^[-a-zA-Z0-9_ ]*$");
 
         if (name === undefined || data === undefined) {
             res.status(400).send({ msg: "Missing name and/or data variables!" });
@@ -93,6 +93,26 @@ router.route('/world')
             }
         });
     });
+
+router.get('/world/default', function(req, res) {
+    var data = {
+      "info": {
+        "creation_date": Math.floor(new Date() / 1000),
+        "modification_date": Math.floor(new Date() / 1000),
+        "description": "",
+        "dimensions": {
+          "width": 25,
+          "height": 25
+        }
+      },
+      "tiles": [],
+      "npcs": [],
+      "events": [],
+      "warps": []
+    }
+
+    res.status(200).send(data);
+});
 
 router.route('/world/:name')
     .get(function(req, res) {
@@ -193,6 +213,27 @@ router.get('/uis', function(req, res, next) {
             res.status(200).send(files.map(function(ui) { return "/js/editor/ui/" + ui; }));
         }
     });
+});
+
+router.get('/world/default', function(req, res, next) {
+
+    var data = {
+      "info": {
+        "creation_date": Math.floor(new Date() / 1000),
+        "modification_date": Math.floor(new Date() / 1000),
+        "description": "",
+        "dimensions": {
+          "width": 25,
+          "height": 25
+        }
+      },
+      "tiles": [],
+      "npcs": [],
+      "events": [],
+      "warps": []
+    }
+
+    res.status(200).send(data);
 });
 
 module.exports = router;
