@@ -28,21 +28,21 @@ router.route('/world')
           },
 
           "maps": {
-            "default": {
-              "info": {
-                "creation_date": Math.floor(new Date() / 1000),
-                "modification_date": Math.floor(new Date() / 1000),
-                "description": "",
-                "dimensions": {
-                  "width": 25,
-                  "height": 25
-                }
-              },
-              "tiles": [],
-              "npcs": [],
-              "events": [],
-              "warps": []
-            }
+            // "default": {
+            //   "info": {
+            //     "creation_date": Math.floor(new Date() / 1000),
+            //     "modification_date": Math.floor(new Date() / 1000),
+            //     "description": "",
+            //     "dimensions": {
+            //       "width": 25,
+            //       "height": 25
+            //     }
+            //   },
+            //   "tiles": [],
+            //   "npcs": [],
+            //   "events": [],
+            //   "warps": []
+            // }
           }
         };
 
@@ -166,10 +166,21 @@ router.get('/sets/:name', function(req, res, next) {
 
 router.get('/sets', function(req, res, next) {
     fs.readdir('public/img/editor/sets', function(err, files) {
+        var sets = {};
+
         if (err) {
             res.status(400).send({ msg: "An error occured while retrieving sets list" });
         } else {
-            res.status(200).send(files.map(function(file) { return file.slice(0, -4); }));
+            files.forEach(function(file) {
+                file = file.slice(0, -4);
+                var dim = sizeOf('public/img/editor/sets/' + file + '.png');
+
+                sets[file] = {};
+                sets[file].width = dim.width;
+                sets[file].height = dim.height;
+            });
+
+            res.status(200).send(sets);
         }
     });
 });

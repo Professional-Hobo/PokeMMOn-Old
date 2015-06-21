@@ -46,6 +46,8 @@ html
                                 input(placeholder="New world name")#newWorldInput
                                 | 
                                 button(onClick="return false", disabled)#newWorldSave Save
+                                | 
+                                button(onClick="return false")#newWorldCancel.red Cancel
                         .section(style="display: none; text-align: center")#deleteWorldSection
                                 p#deleteWorldText
                                 button.red#deleteWorldNo No
@@ -59,6 +61,17 @@ html
                             button.blue#newMap New
                             | 
                             button.red(disabled)#deleteMap Delete
+                        .section(style="display: none;")#newMapSection
+                                input(placeholder="New map name")#newMapInput
+                                | 
+                                button(onClick="return false", disabled)#newMapSave Save
+                                | 
+                                button(onClick="return false")#newMapCancel.red Cancel
+                        .section(style="display: none; text-align: center")#deleteMapSection
+                                p#deleteMapText
+                                button.red#deleteMapNo No
+                                | 
+                                button.green#deleteMapYes Yes
                     #mapEditor.tab
                         .section
                             h5 Resize
