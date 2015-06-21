@@ -59,10 +59,16 @@ Tileset.prototype = {
     this.tileset.attr("width", this.tilesets[set].width);
     this.tileset.attr("height", this.tilesets[set].height);
 
+    this.width = this.tilesets[set].width;
+    this.height = this.tilesets[set].height;
+
     // Load in tileset image
     this.image.src = this.tilesets[set].img.src;
 
-    this.drawTileset();
+    var self = this;
+    this.image.onload = function() {
+      self.drawTileset();
+    }
   },
 
   clear: function() {
