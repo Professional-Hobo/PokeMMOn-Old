@@ -5,8 +5,6 @@ var PokeMap = function() {
   this.tile    = [0, 0];
   this.width   = 25;
   this.height  = 25;
-  this.img     = new Image();
-  this.img.src = "/img/editor/sets/all.png";
   this.history = [];
 
   this.map     = $('#map');
@@ -36,7 +34,7 @@ PokeMap.prototype = {
 
     // Draw from layer 1 to 3
     tile.getLayers().forEach(function(layer) {
-      self.ctx.drawImage(self.img, layer[0]*self.scale, layer[1]*self.scale, self.scale, self.scale, x*self.scale, y*self.scale, self.scale, self.scale);
+      self.ctx.drawImage(tileset.image, layer[0]*self.scale, layer[1]*self.scale, self.scale, self.scale, x*self.scale, y*self.scale, self.scale, self.scale);
     });
   },
 
@@ -162,9 +160,9 @@ PokeMap.prototype = {
 
         // Create tile with 3 random layers
         var tile = new Tile(
-          [Math.floor((Math.random() * 8) + 1), Math.floor((Math.random() * 500) + 1)],
-          [Math.floor((Math.random() * 8) + 1), Math.floor((Math.random() * 500) + 1)],
-          [Math.floor((Math.random() * 8) + 1), Math.floor((Math.random() * 500) + 1)]
+          [Math.floor((Math.random() * tileset.width/this.scale) + 1), Math.floor((Math.random() * tileset.height/this.scale) + 1)],
+          [Math.floor((Math.random() * tileset.width/this.scale) + 1), Math.floor((Math.random() * tileset.height/this.scale) + 1)],
+          [Math.floor((Math.random() * tileset.width/this.scale) + 1), Math.floor((Math.random() * tileset.height/this.scale) + 1)]
         );
         this.tiles[h][w] = tile;
       }

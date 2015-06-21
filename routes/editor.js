@@ -3,6 +3,7 @@ var fs       = require('fs');
 var path     = require('path'); 
 var rimraf   = require('rimraf');
 var sizeOf   = require('image-size');
+var pretty   = require('prettysize');
 var router   = express.Router();
 var settings = require('../settings.json');
 
@@ -27,21 +28,21 @@ router.route('/world')
           },
 
           "maps": {
-            "default": {
-              "info": {
-                "creation_date": Math.floor(new Date() / 1000),
-                "modification_date": Math.floor(new Date() / 1000),
-                "description": "",
-                "dimensions": {
-                  "width": 25,
-                  "height": 25
-                }
-              },
-              "tiles": [],
-              "npcs": [],
-              "events": [],
-              "warps": []
-            }
+            // "default": {
+            //   "info": {
+            //     "creation_date": Math.floor(new Date() / 1000),
+            //     "modification_date": Math.floor(new Date() / 1000),
+            //     "description": "",
+            //     "dimensions": {
+            //       "width": 25,
+            //       "height": 25
+            //     }
+            //   },
+            //   "tiles": [],
+            //   "npcs": [],
+            //   "events": [],
+            //   "warps": []
+            // }
           }
         };
 
@@ -73,12 +74,22 @@ router.route('/world')
     })
 
     .get(function(req, res) {
+
         fs.readdir('worlds', function(err, files) {
-            files.splice(files.indexOf("README.md"), 1);
             if (err) {
                 res.status(400).send({ msg: "An error occured while retrieving worlds list" });
             } else {
-                res.status(200).send(files);
+                var info = {};
+                var size = 0;
+
+                files.splice(files.indexOf("README.md"), 1);
+
+                files.forEach(function(world) {
+                    size = fs.statSync("worlds/" + world + "/map.json")["size"];
+                    info[world] = {size: pretty(size)};
+                });
+
+                res.status(200).send(info);
             }
         });
     });
@@ -155,10 +166,21 @@ router.get('/sets/:name', function(req, res, next) {
 
 router.get('/sets', function(req, res, next) {
     fs.readdir('public/img/editor/sets', function(err, files) {
+        var sets = {};
+
         if (err) {
             res.status(400).send({ msg: "An error occured while retrieving sets list" });
         } else {
-            res.status(200).send(files.map(function(file) { return file.slice(0, -4); }));
+            files.forEach(function(file) {
+                file = file.slice(0, -4);
+                var dim = sizeOf('public/img/editor/sets/' + file + '.png');
+
+                sets[file] = {};
+                sets[file].width = dim.width;
+                sets[file].height = dim.height;
+            });
+
+            res.status(200).send(sets);
         }
     });
 });
