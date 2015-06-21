@@ -1,4 +1,4 @@
-body {D
+body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
@@ -21,9 +21,9 @@ body {D
     opacity: 0.3; }
 ::-webkit-scrollbar-track:hover, ::-webkit-scrollbar:hover, ::-webkit-scrollbar-thumb:hover {
     opacity: 1; }
- 
-#small {
-  font-size: 10pt; }
+
+select, input {
+    color: #000; }
 
 .container {
     display: flex;
@@ -157,6 +157,7 @@ body {D
         .sidebar .section button {
             border: none;
             border-radius: 3px;
+            background: #337ab7;
             color: #fff;
             padding: 5px 5px;
             outline: none;
@@ -172,21 +173,14 @@ body {D
         .sidebar .section button:hover:enabled {
             opacity: 0.9; }
 
-        .blue {
-            background: #337ab7;
-        }
+        .sidebar .section .green {
+            background: #5cb85c; }
 
-        .green {
-            background: #5cb85c;
-        }
+        .sidebar .section .red {
+            background: #d9534f; }
 
-        .red {
-            background: #d9534f;
-        }
-
-        .yellow {
-            background: #E2CD1D;
-        }
+        .sidebar .section .yellow {
+            background: #E2CD1D; }
 
         .sidebar .section textarea {
             border: 1px solid rgba(255, 255, 255, 0.15);
