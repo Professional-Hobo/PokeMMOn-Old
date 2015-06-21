@@ -3,6 +3,7 @@ var fs       = require('fs');
 var path     = require('path'); 
 var rimraf   = require('rimraf');
 var sizeOf   = require('image-size');
+var pretty   = require('prettysize');
 var router   = express.Router();
 var settings = require('../settings.json');
 
@@ -73,12 +74,22 @@ router.route('/world')
     })
 
     .get(function(req, res) {
+
         fs.readdir('worlds', function(err, files) {
-            files.splice(files.indexOf("README.md"), 1);
             if (err) {
                 res.status(400).send({ msg: "An error occured while retrieving worlds list" });
             } else {
-                res.status(200).send(files);
+                var info = {};
+                var size = 0;
+
+                files.splice(files.indexOf("README.md"), 1);
+
+                files.forEach(function(world) {
+                    size = fs.statSync("worlds/" + world + "/map.json")["size"];
+                    info[world] = {size: pretty(size)};
+                });
+
+                res.status(200).send(info);
             }
         });
     });
