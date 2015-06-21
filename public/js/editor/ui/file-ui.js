@@ -36,6 +36,17 @@ $(function() {
 
             // Load in map data to Pokemap canvas
             var map = $("#maps").val();
+
+            UI.notify("Loaded map successfully!", "Map \"" + map + "\" was loaded successfully!", 2500);
+
+            updateMapList(function() {
+                $("#deleteWorld").prop("disabled", false);
+                $("#saveWorld").prop("disabled", false);
+
+                $("#maps").val(map);
+
+                $("#map").fadeIn();
+            });
         }
     });
 
@@ -149,7 +160,7 @@ $(function() {
 
         $.ajax('editor/world/default', {global: false, suppress: true, success: function(data) {
             world.maps[name] = data;
-            UI.notify("Created map successfully!", "map \"" + name + "\" was created successfully!", 2500);
+            UI.notify("Created map successfully!", "Map \"" + name + "\" was created successfully!", 2500);
             hideNewMap();
 
             updateMapList(function() {
@@ -161,6 +172,29 @@ $(function() {
 
                 $("#map").fadeIn();
             });
+        }});
+    });
+
+    // POST new world to server, update worlds list, and load in new world.
+    $('#saveWorld').click(function() {
+        var name = $("#worlds").val();
+        var map  = $("#maps").val();
+        $.ajax("editor/world/" + name, {method: "PUT", data: {data: JSON.stringify(world)}, global: true, suppress: true, success: function(data) {
+            UI.notify("Saved world successfully!", "World \"" + name + "\" was saved successfully!", 2500);
+
+            updateWorldList(function() {
+                $("#worlds").val(name);
+                $("#deleteWorld").prop("disabled", false);
+                $("#saveWorld").prop("disabled", false);
+
+                // Load in world data
+                loadWorld(true, function() {
+                    $("#maps").val(map);
+                });
+            });
+
+        }, fail: function() {
+            // fail
         }});
     });
 
@@ -286,7 +320,7 @@ $(function() {
         });
     }
 
-    function loadWorld(supress) {
+    function loadWorld(supress, callback) {
         var world = $("#worlds").val();
         $.ajax("editor/world/" + world, {global: true, suppress: true, success: function(data) {
             window.world = data;
@@ -302,6 +336,8 @@ $(function() {
                     $('#maps').prop("disabled", false);
                 });
             });
+
+            typeof callback === 'function' && callback();
         }, fail: function() {
             UI.notify("Failed to load world", "World \"" + world + "\" failed to load!", 2500);
         }});
