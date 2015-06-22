@@ -4,10 +4,17 @@ var Tile = function() {
 
     this.layers = [];
 
-    args.forEach(function(argument) {
-        self.layers.push(argument);
-    });
-
+    if (args.length != 0) {
+        if (typeof args[0][0] === 'object') {
+            args[0].forEach(function(argument) {
+                self.layers.push(argument);
+            });
+        } else {
+            args.forEach(function(argument) {
+                self.layers.push(argument);
+            });
+        }
+    }
 };
 
 // Clear all layers
