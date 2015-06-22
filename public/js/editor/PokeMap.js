@@ -167,5 +167,11 @@ PokeMap.prototype = {
         this.tiles[h][w] = tile;
       }
     }
+  },
+
+  // Update canvas width/height attributes
+  updateAttr: function() {
+    this.map.attr("width", this.width*this.scale);
+    this.map.attr("height", this.height*this.scale);
   }
 };
