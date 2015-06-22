@@ -1,9 +1,10 @@
 $(function() {
 
     var timer;             // Input timer
-    var delay      = 750;  // Delay for the notifications
-    var inputDelay = 50;   // Delay for inputs
-    window.world   = {};   // Contains world data
+    var delay        = 750;  // Delay for the notifications
+    var inputDelay   = 50;   // Delay for inputs
+    window.world     = {};   // Contains world data
+    window.worldName = null;
 
     updateWorldList();     // Initial fetch of world list
 
@@ -21,11 +22,14 @@ $(function() {
             $("#saveWorld").prop("disabled", true);
 
             $("#map").fadeOut(); // Disable map canvas if no world selected
+
             hideSection("deleteWorldSection");
             hideSection("deleteMapSection");
             hideSection("NewMapSection");
             hideSection("mapSection");
 
+            window.worldName = null;
+            window.map       = null;
         } else {
             $("#deleteWorld").prop("disabled", false);
 
@@ -43,13 +47,30 @@ $(function() {
             $("#saveWorld").prop("disabled", true);
 
             $("#map").fadeOut(); // Disable map canvas if no map selected
+
+            window.worldName = null;
+            window.map       = null;
         } else {
             $("#deleteMap").prop("disabled", false);
             $("#saveWorld").prop("disabled", false);
 
+            var map = window.map = $("#maps").val();   // Get name of map
+
+            Object.keys(world.maps[window.map].tiles).forEach(function(xindex) {
+                Object.keys(world.maps[window.map].tiles[xindex]).forEach(function(yindex) {
+                    world.maps[window.map].tiles[xindex][yindex] = new Tile(world.maps[window.map].tiles[xindex][yindex].layers);
+                });
+            });
+
+            pokemap.tiles = $.extend(true, [], world.maps[window.map].tiles);
+            pokemap.width = world.maps[window.map].info.dimensions.width;
+            pokemap.height = world.maps[window.map].info.dimensions.height;
+
+            pokemap.updateAttr();
+            pokemap.render();
+
             $("#map").fadeIn();   // Show map canvas
 
-            var map = window.map = $("#maps").val();   // Get name of map
             UI.notify("Loaded map successfully!", "Map \"" + map + "\" was loaded successfully!", delay);
         }
     });
@@ -108,6 +129,9 @@ $(function() {
                 $("#saveWorld").prop("disabled", true);
 
                 $("#map").fadeOut();   // Hide map canvas
+
+                window.worldName = null;
+                window.map       = null;
             });
         }});
     })
@@ -142,6 +166,8 @@ $(function() {
                 $("#saveWorld").prop("disabled", true);
 
                 $("#map").fadeOut();   // Hide map canvas
+
+                window.map       = null;
             });
         });
 
@@ -193,6 +219,15 @@ $(function() {
 
                 $("#maps").val(name);  // Update map selection
 
+                // Reset pokemap
+                pokemap.height = 25;
+                pokemap.width  = 25;
+
+                pokemap.new();
+                pokemap.updateAttr();
+                pokemap.clear();
+                pokemap.render();
+
                 $("#map").fadeIn();    // Show map canvas
 
                 hideNewMap();
@@ -204,7 +239,11 @@ $(function() {
     $('#saveWorld').click(function() {
 
         // Update current map tile with pokemap data
-        window.world.maps[window.map].tiles = pokemap.tiles;
+        window.world.maps[window.map].tiles = $.extend(true, [], pokemap.tiles);
+
+        // Update width and height
+        window.world.maps[window.map].info.dimensions.width = pokemap.width;
+        window.world.maps[window.map].info.dimensions.height = pokemap.height;
 
         $.ajax("editor/world/" + window.worldName, {method: "PUT", data: {data: JSON.stringify(window.world)}, global: true, suppress: true, success: function(data) {
             UI.notify("Saved world successfully!", "World \"" + window.worldName + "\" was saved successfully!", delay);
