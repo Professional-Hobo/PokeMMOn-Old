@@ -1,15 +1,13 @@
 $(function() {
 
-    var newWorldTimer;
-    var newMapTimer;
-    var delay = 750;
-    window.world = {};
+    var timer;             // Input timer
+    var delay      = 750;  // Delay for the notifications
+    var inputDelay = 50;   // Delay for inputs
+    window.world   = {};   // Contains world data
 
-    // Initial fetch of world list
-    updateWorldList();
+    updateWorldList();     // Initial fetch of world list
 
     // Load in world on change
-    // Disable delete button if selectedIndex is 0
     $("#worlds").change(function() {
 
         // Hide the delete world section if user changes world
@@ -25,37 +23,28 @@ $(function() {
             $("#deleteWorld").prop("disabled", false);
             $("#saveWorld").prop("disabled", false);
 
-            // Update current world name
             window.worldName = $("#worlds").val();
-
-            // Load in world data
             loadWorld();
         }
     });
 
-    // Disable delete buttons if selectedIndex is 0
+    // Load in map on change
     $("#maps").change(function() {
+
+        // Disable delete/save buttons if no map selected
         if ($("#maps")[0].selectedIndex == 0) {
             $("#deleteMap").prop("disabled", true);
             $("#saveWorld").prop("disabled", true);
+
             $("#map").fadeOut(); // Disable map canvas if no map selected
         } else {
             $("#deleteMap").prop("disabled", false);
             $("#saveWorld").prop("disabled", false);
 
-            // Load in map data to Pokemap canvas
-            var map = window.map = $("#maps").val();
+            $("#map").fadeIn();   // Show map canvas
 
+            var map = window.map = $("#maps").val();   // Get name of map
             UI.notify("Loaded map successfully!", "Map \"" + map + "\" was loaded successfully!", delay);
-
-            updateMapList(function() {
-                $("#deleteWorld").prop("disabled", false);
-                $("#saveWorld").prop("disabled", false);
-
-                $("#maps").val(map);
-
-                $("#map").fadeIn();
-            });
         }
     });
 
@@ -68,9 +57,9 @@ $(function() {
         showSection("newWorldSection", function() {
             $("#newWorldInput").focus();
         });
-    })
+    });
 
-    // Reveal new world input slide down
+    // Reveal new map input slide down
     $("#newMap").click(function() {
         hideSection("deleteMapSection", function() {
             $("#deleteMapText").html("");
@@ -79,44 +68,41 @@ $(function() {
         showSection("newMapSection", function() {
             $("#newMapInput").focus();
         });
-    })
+    });
 
     // Delete world
     $("#deleteWorld").click(function() {
         hideNewWorld();
 
-        $("#deleteWorldText").html("Are you sure you want to delete world " + $("#worlds").val() + "?");
+        $("#deleteWorldText").html("Are you sure you want to delete world " + window.worldName + "?");
         showSection("deleteWorldSection");
-    })
+    });
 
     // Delete world no
     $("#deleteWorldNo").click(function() {
         hideSection("deleteWorldSection", function() {
             $("#deleteWorldText").html("");
         });
-    })
+    });
 
     // Delete world yes
     $("#deleteWorldYes").click(function() {
-        $.ajax({
-            url: 'editor/world/' + $("#worlds").val(),
-            type: 'DELETE',
-            global: false,
-            success: function(result) {
-                UI.notify("Deleted world successfully!", "World \"" + $("#worlds").val() + "\" was deleted successfully!", delay);
+        $.ajax("editor/world/' + window.worldName", {type: 'DELETE', global: false, success: function(result) {
+            UI.notify("Deleted world successfully!", "World \"" + $("#worlds").val() + "\" was deleted successfully!", delay);
 
-                hideSection("deleteWorldSection", function() {
-                    $("#deleteWorldText").html("");
-                });
+            hideSection("deleteWorldSection", function() {
+                $("#deleteWorldText").html("");
+            });
 
-                hideSection("mapSection");
-                updateWorldList(function() {
-                    $("#worlds").val("");
-                    $("#deleteWorld").prop("disabled", true);
-                    $("#saveWorld").prop("disabled", true);
-                    $("#map").fadeOut();
-                });
-            }
+            hideSection("mapSection");
+            updateWorldList(function() {
+                $("#worlds").val("");
+
+                $("#deleteWorld").prop("disabled", true);
+                $("#saveWorld").prop("disabled", true);
+
+                $("#map").fadeOut();   // Hide map canvas
+            });
         });
     })
 
@@ -124,7 +110,7 @@ $(function() {
     $("#deleteMap").click(function() {
         hideNewMap();
 
-        $("#deleteMapText").html("Are you sure you want to delete map " + $("#maps").val() + "?");
+        $("#deleteMapText").html("Are you sure you want to delete map " + window.map + "?");
         showSection("deleteMapSection");
     })
 
@@ -137,46 +123,47 @@ $(function() {
 
     // Delete map yes
     $("#deleteMapYes").click(function() {
-        delete window.world.maps[$("#maps").val()];
-        UI.notify("Deleted map successfully!", "Map \"" + $("#maps").val() + "\" was deleted successfully!", delay);
+        delete window.world.maps[window.map];
+        UI.notify("Deleted map successfully!", "Map \"" + window.map + "\" was deleted successfully!", delay);
 
         hideSection("deleteMapSection", function() {
             $("#deleteMapText").html("");
+
             updateMapList(function() {
-                 $("#maps").val("");
+                $("#maps").val("");
+
                 $("#deleteMap").prop("disabled", true);
                 $("#saveMap").prop("disabled", true);
-                $("#map").fadeOut();
+
+                $("#map").fadeOut();   // Hide map canvas
             });
         });
 
     })
 
     // Cancel new world slide down if cancel is clicked
-    $('#newWorldCancel').click(function() {
-        hideNewWorld();
-    });
+    $('#newWorldCancel').click(function() { hideNewWorld(); });
 
     // Cancel new map slide down if cancel is clicked
-    $('#newMapCancel').click(function() {
-        hideNewMap();
-    });
+    $('#newMapCancel').click(function() { hideNewMap(); });
 
     // POST new world to server, update worlds list, and load in new world.
     $('#newWorldSave').click(function() {
-        var name = window.worldName = $("#newWorldInput").val();
+        var name = window.worldName = $("#newWorldInput").val();  // Update current world name
+
         $.ajax("editor/world", {method: "POST", data: {name: name, data: JSON.stringify({})}, global: false, success: function(data) {
             UI.notify("Created world successfully!", "World \"" + name + "\" was created successfully!", delay);
-            hideNewWorld();
 
+            hideNewWorld();
             updateWorldList(function() {
                 $("#worlds").val(name);
+
                 $("#deleteWorld").prop("disabled", false);
                 $("#saveWorld").prop("disabled", false);
                 $("#deleteMap").prop("disabled", true);
 
                 // Load in world data
-                loadWorld(true);
+                loadWorld(true);   // Overrides default loaded world message
                 hideNewMap();
             });
 
@@ -185,12 +172,13 @@ $(function() {
         }});
     });
 
-    // Only update the local world object. Save to server when Save button is pushed.
+    // Only update the local world object. Save to server when save button is pushed
     $('#newMapSave').click(function() {
-        var name = window.map = $("#newMapInput").val();
+        var name = window.map = $("#newMapInput").val();   // Update current map name
 
         $.ajax('editor/world/default', {global: false, suppress: true, success: function(data) {
-            world.maps[name] = data;
+            world.maps[name] = data; // Update world object with new map data
+
             UI.notify("Created map successfully!", "Map \"" + name + "\" was created successfully!", delay);
             hideNewMap();
 
@@ -198,48 +186,49 @@ $(function() {
                 $("#deleteMap").prop("disabled", false);
                 $("#saveMap").prop("disabled", false);
 
-                //$("#maps").val(name + " [W: " + window.world.maps[name].info.dimensions.width + ", H: " + window.world.maps[name].info.dimensions.height + "]");
-                $("#maps").val(name);
-                hideNewMap();
+                $("#maps").val(name);  // Update map selection
 
-                $("#map").fadeIn();
+                $("#map").fadeIn();    // Show map canvas
+
+                hideNewMap();
             });
         }});
     });
 
-    // POST world to server, update worlds list, and load in new world.
+    // Save world by PUT-ting on server
     $('#saveWorld').click(function() {
-        // Update window.world.maps[window.map].tiles with pokemap data
+
+        // Update current map tile with pokemap data
         window.world.maps[window.map].tiles = pokemap.tiles;
 
         $.ajax("editor/world/" + window.worldName, {method: "PUT", data: {data: JSON.stringify(window.world)}, global: true, suppress: true, success: function(data) {
             UI.notify("Saved world successfully!", "World \"" + window.worldName + "\" was saved successfully!", delay);
 
         }, fail: function() {
-            // fail
+            UI.notify("Failed to save world", "World \"" + window.worldName + "\" failed to save!", delay);
         }});
     });
 
-    // Wait for user's input 50 ms before querying for valid name
+    // Wait inputDelay ms for user's input
     $('#newWorldInput').keyup(function() {
-        clearTimeout(newWorldTimer);
-        newWorldTimer = setTimeout(queryNewWorld, 50);
+        clearTimeout(timer);
+        timer = setTimeout(queryNewWorld, inputDelay);
     });
 
-    $('#newWorldInput').keydown(function() {
-        clearTimeout(newWorldTimer);
-    });
-
-    // Wait for user's input 50 ms before querying for valid name
     $('#newMapInput').keyup(function() {
-        clearTimeout(newMapTimer);
-        newMapTimer = setTimeout(queryNewMap, 50);
+        clearTimeout(timer);
+        timer = setTimeout(queryNewMap, inputDelay);
     });
 
     $('#newWorldInput').keydown(function() {
-        clearTimeout(newMapTimer);
+        clearTimeout(timer);
     });
 
+    $('#newWorldInput').keydown(function() {
+        clearTimeout(timer);
+    });
+
+    // Verify world name is available and valid
     function queryNewWorld() {
         var worldName = $("#newWorldInput").val();
         var pattern = new RegExp("^[-a-zA-Z0-9_ ]*$");
@@ -257,6 +246,7 @@ $(function() {
         }
     }
 
+    // Verify map name is available and valid
     function queryNewMap() {
         var mapName = $("#newMapInput").val();
         var pattern = new RegExp("^[-a-zA-Z0-9_ ]*$");
@@ -272,6 +262,7 @@ $(function() {
         }
     }
 
+    // Update list of worlds to edit
     function updateWorldList(callback) {
         $.ajax('editor/world/', {global: false, success: function(data) {
             window.worlds = data;
@@ -344,10 +335,11 @@ $(function() {
     }
 
     // Load world from server
-    function loadWorld(suppress, callback) {
+    function loadWorld(suppress) {
         $.ajax("editor/world/" + window.worldName, {global: true, suppress: true, success: function(data) {
             window.world = data; // Contains the world's data
 
+            // Suppress disables default loaded world message
             if (!suppress) {
                 UI.notify("Loaded world successfully!", "World \"" + window.worldName + "\" was loaded successfully!", delay);
             }
@@ -360,8 +352,6 @@ $(function() {
                     $('#maps').prop("disabled", false);
                 });
             });
-
-            typeof callback === 'function' && callback();
 
         }, fail: function() {
             UI.notify("Failed to load world", "World \"" + window.worldName + "\" failed to load!", delay);
