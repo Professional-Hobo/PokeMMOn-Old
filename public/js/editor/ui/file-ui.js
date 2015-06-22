@@ -19,9 +19,15 @@ $(function() {
         if ($("#worlds")[0].selectedIndex == 0) {
             $("#deleteWorld").prop("disabled", true);
             $("#saveWorld").prop("disabled", true);
+
+            $("#map").fadeOut(); // Disable map canvas if no world selected
+            hideSection("deleteWorldSection");
+            hideSection("deleteMapSection");
+            hideSection("NewMapSection");
+            hideSection("mapSection");
+
         } else {
             $("#deleteWorld").prop("disabled", false);
-            $("#saveWorld").prop("disabled", false);
 
             window.worldName = $("#worlds").val();
             loadWorld();
@@ -87,7 +93,7 @@ $(function() {
 
     // Delete world yes
     $("#deleteWorldYes").click(function() {
-        $.ajax("editor/world/' + window.worldName", {type: 'DELETE', global: false, success: function(result) {
+        $.ajax("editor/world/" + window.worldName, {type: 'DELETE', global: false, success: function(result) {
             UI.notify("Deleted world successfully!", "World \"" + $("#worlds").val() + "\" was deleted successfully!", delay);
 
             hideSection("deleteWorldSection", function() {
@@ -103,7 +109,7 @@ $(function() {
 
                 $("#map").fadeOut();   // Hide map canvas
             });
-        });
+        }});
     })
 
     // Delete map
@@ -133,7 +139,7 @@ $(function() {
                 $("#maps").val("");
 
                 $("#deleteMap").prop("disabled", true);
-                $("#saveMap").prop("disabled", true);
+                $("#saveWorld").prop("disabled", true);
 
                 $("#map").fadeOut();   // Hide map canvas
             });
@@ -159,7 +165,7 @@ $(function() {
                 $("#worlds").val(name);
 
                 $("#deleteWorld").prop("disabled", false);
-                $("#saveWorld").prop("disabled", false);
+                $("#saveWorld").prop("disabled", true);
                 $("#deleteMap").prop("disabled", true);
 
                 // Load in world data
@@ -180,11 +186,10 @@ $(function() {
             world.maps[name] = data; // Update world object with new map data
 
             UI.notify("Created map successfully!", "Map \"" + name + "\" was created successfully!", delay);
-            hideNewMap();
 
             updateMapList(function() {
                 $("#deleteMap").prop("disabled", false);
-                $("#saveMap").prop("disabled", false);
+                $("#saveWorld").prop("disabled", false);
 
                 $("#maps").val(name);  // Update map selection
 
