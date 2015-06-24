@@ -1,6 +1,6 @@
 $(function() {
 
-    var timer;             // Input timer
+    var timer;               // Input timer
     var delay        = 750;  // Delay for the notifications
     var inputDelay   = 50;   // Delay for inputs
     window.world     = {};   // Contains world data
