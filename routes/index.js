@@ -1,6 +1,7 @@
 var express  = require('express');
 var router   = express.Router();
 var settings = require('../settings.json');
+var Tile     = require('../public/js/editor/Tile.js');
 
 // Index //
 router.get('/', function(req, res, next) {
@@ -81,6 +82,37 @@ router.post('/register', function(req, res, next) {
             req.flash('info', "Registered successfully! Welcome to PokeMMOn!");
             res.redirect('/');
         });
+    }
+});
+
+router.get('/fakemap', function(req, res, next) {
+    var tiles = new Array(64);
+    for (var i = 0; i < 64; i++) {
+        tiles[i] = new Array();
+    }
+
+    for (var h = 0; h < 64; h++) {
+        for (var w = 0; w < 64; w++) {
+            tiles[h][w] = randomTile();
+        }
+    }
+
+    res.json(tiles);
+
+    function randomTile() {
+        var tile = new Tile(
+            [Math.floor((Math.random() * 16) + 1), Math.floor((Math.random() * 501) + 1)],
+            [Math.floor((Math.random() * 16) + 1), Math.floor((Math.random() * 501) + 1)],
+            [Math.floor((Math.random() * 16) + 1), Math.floor((Math.random() * 501) + 1)]
+        );
+
+        if (Math.random() > .5) {
+            tile.setWalkable(true);
+        } else {
+            tile.setWalkable(false);
+        }
+
+        return tile;
     }
 });
 

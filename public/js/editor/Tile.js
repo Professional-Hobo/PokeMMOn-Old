@@ -3,6 +3,7 @@ var Tile = function() {
     var self = this;
 
     this.layers = [];
+    this.walkable = false;
 
     if (args.length != 0) {
         if (typeof args[0][0] === 'object') {
@@ -47,3 +48,9 @@ Tile.prototype.setLayers = function() {
         self.layers[item] = args[item];
     });
 };
+
+Tile.prototype.setWalkable = function(bool) {
+    this.walkable = bool;
+};
+
+module.exports = Tile;
