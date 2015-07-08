@@ -76,6 +76,7 @@ select, input {
             color: #fff; }
 
     .sidebar .tileset {
+        cursor: pointer;
         background-image: url(../../img/editor/grid.png); }
 
     .sidebar .tab-container {
@@ -136,6 +137,7 @@ select, input {
             position: relative;}
 
             .sidebar .section .tileset-container .selector {
+                pointer-events: none;
                 position: absolute;
                 top: 0;
                 padding: 0;
