@@ -24,3 +24,7 @@
     white-space: -o-pre-wrap;   /* Opera 7 */    
     word-wrap: break-word;      /* IE */
 }
+
+.sidebar select, .sidebar input {
+    width: 100%; }
+

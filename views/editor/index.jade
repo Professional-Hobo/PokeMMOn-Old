@@ -37,44 +37,42 @@ html
                             h5 World Selector
                             select#worlds(disabled)
                                 option Loading Worlds...
-                            br
-                            button.blue#newWorld New
+                            button.blue.third#newWorld New
                             | 
-                            button.green#saveWorld(disabled) Save
+                            button.green.third#saveWorld(disabled) Save
                             | 
-                            button.red(disabled)#deleteWorld Delete
+                            button.red.third(disabled)#deleteWorld Delete
                         .section(style="display: none;")#newWorldSection
                             form(action="editor/world")
                                 input(placeholder="New world name")#newWorldInput
                                 | 
-                                button(onClick="return false", disabled)#newWorldSave Save
+                                button.half(onClick="return false", disabled)#newWorldSave Save
                                 | 
-                                button(onClick="return false")#newWorldCancel.red Cancel
+                                button.half(onClick="return false")#newWorldCancel.red Cancel
                         .section(style="display: none; text-align: center")#deleteWorldSection
                                 p#deleteWorldText
-                                button.red#deleteWorldNo No
+                                button.green.half#deleteWorldYes Yes
                                 | 
-                                button.green#deleteWorldYes Yes
+                                button.red.half#deleteWorldNo No
                         .section(style="display: none")#mapSection
                             h5 Map Selector
                             select#maps(disabled)
                                 option Loading Maps...
-                            br
-                            button#newMap New
+                            button.half#newMap New
                             | 
-                            button.red(disabled)#deleteMap Delete
+                            button.red.half(disabled)#deleteMap Delete
                         .section(style="display: none;")#newMapSection
                             form(action="")
                                 input(placeholder="New map name")#newMapInput
                                 | 
-                                button(onClick="return false", disabled)#newMapSave Save
+                                button.half(onClick="return false", disabled)#newMapSave Save
                                 | 
-                                button(onClick="return false")#newMapCancel.red Cancel
+                                button.red.half(onClick="return false")#newMapCancel Cancel
                         .section(style="display: none; text-align: center")#deleteMapSection
                                 p#deleteMapText
-                                button.red#deleteMapNo No
+                                button.green.half#deleteMapYes Yes
                                 | 
-                                button.green#deleteMapYes Yes
+                                button.red.half#deleteMapNo No
                     #mapEditor.tab
                         .section
                             h5 Resize
