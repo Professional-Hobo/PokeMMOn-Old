@@ -1,6 +1,6 @@
 var express  = require('express');
 var fs       = require('fs');
-var path     = require('path'); 
+var path     = require('path');
 var rimraf   = require('rimraf');
 var sizeOf   = require('image-size');
 var pretty   = require('prettysize');
@@ -19,32 +19,6 @@ router.route('/world')
     .post(function(req, res) {
         var name = req.body.name;
         var data  = req.body.data;
-        data = {
-          "info": {
-            "created": Math.floor(new Date() / 1000),
-            "modified": Math.floor(new Date() / 1000),
-            "author": "",
-            "description": ""
-          },
-
-          "maps": {
-            // "default": {
-            //   "info": {
-            //     "creation_date": Math.floor(new Date() / 1000),
-            //     "modification_date": Math.floor(new Date() / 1000),
-            //     "description": "",
-            //     "dimensions": {
-            //       "width": 25,
-            //       "height": 25
-            //     }
-            //   },
-            //   "tiles": [],
-            //   "npcs": [],
-            //   "events": [],
-            //   "warps": []
-            // }
-          }
-        };
 
         var pattern = new RegExp("^[-a-zA-Z0-9_ ]*$");
 
@@ -93,26 +67,6 @@ router.route('/world')
             }
         });
     });
-
-router.get('/world/default', function(req, res) {
-    var data = {
-      "info": {
-        "creation_date": Math.floor(new Date() / 1000),
-        "modification_date": Math.floor(new Date() / 1000),
-        "description": "",
-        "dimensions": {
-          "width": 25,
-          "height": 25
-        }
-      },
-      "tiles": [],
-      "npcs": [],
-      "events": [],
-      "warps": []
-    }
-
-    res.status(200).send(data);
-});
 
 router.route('/world/:name')
     .get(function(req, res) {
@@ -227,10 +181,7 @@ router.get('/world/default', function(req, res, next) {
           "height": 25
         }
       },
-      "tiles": [],
-      "npcs": [],
-      "events": [],
-      "warps": []
+      "tiles": []
     }
 
     res.status(200).send(data);

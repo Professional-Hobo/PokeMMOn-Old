@@ -61,11 +61,6 @@ $(function() {
         clientUpdateHistory(this.dataset.index)
     });
 
-    // Load all tilesets and make default all
-    tileset.loadTilesets(function() {
-        tileset.changeTileset("all");
-    });
-
     // Update tileset on tileset selector change
     $("#tilesets").change(function() {
         // Scroll to top

@@ -33,13 +33,13 @@ html
                                 a(href='#eventEditor') Event Editor
                 .tab-container
                     #file.tab
-                        .section
+                        .section(style="display: none;")#worldSection
                             h5 World Selector
-                            select#worlds(disabled)
+                            select#worlds
                                 option Loading Worlds...
-                            button.blue.third#newWorld New
+                            button.green.third#saveWorld Save
                             | 
-                            button.green.third#saveWorld(disabled) Save
+                            button.yellow.third#renameWorld(disabled) Rename
                             | 
                             button.red.third(disabled)#deleteWorld Delete
                         .section(style="display: none;")#newWorldSection
@@ -54,13 +54,13 @@ html
                                 button.green.half#deleteWorldYes Yes
                                 | 
                                 button.red.half#deleteWorldNo No
-                        .section(style="display: none")#mapSection
+                        .section(style="display: none;")#mapSection
                             h5 Map Selector
                             select#maps(disabled)
                                 option Loading Maps...
-                            button.half#newMap New
+                            button.yellow.half#renameMap Rename
                             | 
-                            button.red.half(disabled)#deleteMap Delete
+                            button.red.half#deleteMap Delete
                         .section(style="display: none;")#newMapSection
                             form(action="")
                                 input(placeholder="New map name")#newMapInput
@@ -76,46 +76,46 @@ html
                     #mapEditor.tab
                         .section
                             h5 Resize
-                            button(onClick='pokemap.random(); pokemap.render(); return false;') Render Random Map
+                            button(onClick='pokeworld.pokemap.random(); pokeworld.pokemap.render(); return false;') Render Random Map
                             br
                             br
-                            #dim Current map dim: 0x0
+                            #dim Current map dim: 25x25
                             br
                             | up
                             br
-                            button(onClick='pokemap.resize("up", 25); return false;') 25
-                            button(onClick='pokemap.resize("up", 5); return false;') 5
-                            button(onClick='pokemap.resize("up", 1); return false;') 1
-                            button(onClick='pokemap.resize("up", -1); return false;') -1
-                            button(onClick='pokemap.resize("up", -5); return false;') -5
-                            button(onClick='pokemap.resize("up", -25); return false;') -25
+                            button(onClick='pokeworld.pokemap.resize("up", 25); return false;') 25
+                            button(onClick='pokeworld.pokemap.resize("up", 5); return false;') 5
+                            button(onClick='pokeworld.pokemap.resize("up", 1); return false;') 1
+                            button(onClick='pokeworld.pokemap.resize("up", -1); return false;') -1
+                            button(onClick='pokeworld.pokemap.resize("up", -5); return false;') -5
+                            button(onClick='pokeworld.pokemap.resize("up", -25); return false;') -25
                             br
                             | right
                             br
-                            button(onClick='pokemap.resize("right", 25); return false;') 25
-                            button(onClick='pokemap.resize("right", 5); return false;') 5
-                            button(onClick='pokemap.resize("right", 1); return false;') 1
-                            button(onClick='pokemap.resize("right", -1); return false;') -1
-                            button(onClick='pokemap.resize("right", -5); return false;') -5
-                            button(onClick='pokemap.resize("right", -25); return false;') -25
+                            button(onClick='pokeworld.pokemap.resize("right", 25); return false;') 25
+                            button(onClick='pokeworld.pokemap.resize("right", 5); return false;') 5
+                            button(onClick='pokeworld.pokemap.resize("right", 1); return false;') 1
+                            button(onClick='pokeworld.pokemap.resize("right", -1); return false;') -1
+                            button(onClick='pokeworld.pokemap.resize("right", -5); return false;') -5
+                            button(onClick='pokeworld.pokemap.resize("right", -25); return false;') -25
                             br
                             | down
                             br
-                            button(onClick='pokemap.resize("down", 25); return false;') 25
-                            button(onClick='pokemap.resize("down", 5); return false;') 5
-                            button(onClick='pokemap.resize("down", 1); return false;') 1
-                            button(onClick='pokemap.resize("down", -1); return false;') -1
-                            button(onClick='pokemap.resize("down", -5); return false;') -5
-                            button(onClick='pokemap.resize("down", -25); return false;') -25
+                            button(onClick='pokeworld.pokemap.resize("down", 25); return false;') 25
+                            button(onClick='pokeworld.pokemap.resize("down", 5); return false;') 5
+                            button(onClick='pokeworld.pokemap.resize("down", 1); return false;') 1
+                            button(onClick='pokeworld.pokemap.resize("down", -1); return false;') -1
+                            button(onClick='pokeworld.pokemap.resize("down", -5); return false;') -5
+                            button(onClick='pokeworld.pokemap.resize("down", -25); return false;') -25
                             br
                             | left
                             br
-                            button(onClick='pokemap.resize("left", 25); return false;') 25
-                            button(onClick='pokemap.resize("left", 5); return false;') 5
-                            button(onClick='pokemap.resize("left", 1); return false;') 1
-                            button(onClick='pokemap.resize("left", -1); return false;') -1
-                            button(onClick='pokemap.resize("left", -5); return false;') -5
-                            button(onClick='pokemap.resize("left", -25); return false;') -25
+                            button(onClick='pokeworld.pokemap.resize("left", 25); return false;') 25
+                            button(onClick='pokeworld.pokemap.resize("left", 5); return false;') 5
+                            button(onClick='pokeworld.pokemap.resize("left", 1); return false;') 1
+                            button(onClick='pokeworld.pokemap.resize("left", -1); return false;') -1
+                            button(onClick='pokeworld.pokemap.resize("left", -5); return false;') -5
+                            button(onClick='pokeworld.pokemap.resize("left", -25); return false;') -25
                         .section
                             h5 Tileset
                             select#tilesets(disabled)
