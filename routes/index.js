@@ -102,14 +102,13 @@ router.get('/fakemap', function(req, res, next) {
     function randomTile() {
         var tile = new Tile(
             [Math.floor((Math.random() * 16) + 1), Math.floor((Math.random() * 501) + 1)],
-            [Math.floor((Math.random() * 16) + 1), Math.floor((Math.random() * 501) + 1)],
             [Math.floor((Math.random() * 16) + 1), Math.floor((Math.random() * 501) + 1)]
         );
 
         if (Math.random() > .5) {
-            tile.setWalkable(true);
+            tile.walkable = true;
         } else {
-            tile.setWalkable(false);
+            tile.walkable = false;
         }
 
         return tile;

@@ -1,9 +1,8 @@
 var Tile = function() {
-    var args = Array.prototype.slice.call(arguments).slice(0, 3);
+    var args = Array.prototype.slice.call(arguments).slice(0, 2);
     var self = this;
 
     this.layers = [];
-    this.walkable = false;
 
     if (args.length != 0) {
         if (typeof args[0][0] === 'object') {
@@ -41,7 +40,7 @@ Tile.prototype.setLayer = function(layer, id) {
 // Clear layers and then set multiple layers at once
 Tile.prototype.setLayers = function() {
     this.clearLayers();
-    var args = Array.prototype.slice.call(arguments).slice(0, 3);
+    var args = Array.prototype.slice.call(arguments).slice(0, 2);
     var self = this;
 
     Object.keys(args).forEach(function(item) {
@@ -49,8 +48,6 @@ Tile.prototype.setLayers = function() {
     });
 };
 
-Tile.prototype.setWalkable = function(bool) {
-    this.walkable = bool;
-};
-
-module.exports = Tile;
+if (typeof exports !== 'undefined') {
+  exports = module.exports = Tile;
+}
