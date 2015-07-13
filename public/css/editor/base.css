@@ -98,7 +98,7 @@ select, input {
             width: 20%;
             height:100%;
             float: left;
-            overflow: hidden; 
+            overflow: hidden;
             overflow-y: auto;
             box-sizing: border-box; }
 
@@ -189,7 +189,7 @@ select, input {
             background: #d9534f; }
 
         .sidebar .section .yellow {
-            background: #E2CD1D; }
+            background: #eea236; }
 
         .sidebar .section textarea {
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -229,4 +229,3 @@ select, input {
 
 #newWorldInput, #newMapInput {
     color: #000; }
-
