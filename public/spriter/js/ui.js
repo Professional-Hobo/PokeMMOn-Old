@@ -52,11 +52,11 @@ $(function() {
             }
         // D
         } else if (e.keyCode == 68){
-            brush[0] += brush[0] < 7 ? 1 : -7
+            brush[0] += brush[0] < 15 ? 1 : -15
             drawTileSelector(brush[0], brush[1])
         // A
         } else if (e.keyCode == 65){
-            brush[0] -= brush[0] > 0 ? 1 : -7
+            brush[0] -= brush[0] > 0 ? 1 : -15
             drawTileSelector(brush[0], brush[1])
         // E
         } else if (e.keyCode == 69) {

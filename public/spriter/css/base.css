@@ -82,8 +82,8 @@ body {
       .sidebar .section .recent-tiles li {
         position: relative;
         display: inline-block;
-        width: 32px;
-        height: 32px;
+        width: 16px;
+        height: 16px;
         margin: 0 8px 5px 0;
         text-align: center;
         line-height: 90px;
@@ -103,8 +103,8 @@ body {
         position: absolute;
         top: 0;
         padding: 0;
-        width: 32px;
-        height: 32px;
+        width: 16px;
+        height: 16px;
         outline: 2px solid #E010A3;
         transition: all 0.2s ease-out; }
     .sidebar .section .placeholder {

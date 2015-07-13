@@ -3,7 +3,7 @@ var grid        = 16;
 var brush       = [0,0];
 var mapWidth    = 16;
 var mapHeight   = 256;
-var mapSource   = "img/map_tile.png";
+var mapSource   = "img/b.png";
 var mapArray    = [];
 var brushHistory= [];
 var tileSelectX = 0;
@@ -11,7 +11,7 @@ var tileSelectY = 0;
 var tileSelectW = 1;
 var tileSelectH = 1;
 
-// 
+//
 // Draws an image to the canvas
 //
 // imgData.....an array with the tile's X and Y coordinates. ex. [2, 4]
@@ -25,12 +25,12 @@ function drawImage(imgData, posX, posY, sizeW, sizeH){
 
     var sizeW = sizeW ? sizeW : grid;
     var sizeH = sizeH ? sizeH : grid;
-    
+
     img.onload = function() {
         if (imgData == "clear") {
             m.clearRect(posX, posY, sizeW, sizeH);
         } else {
-            m.drawImage(img, imgData[0]*grid, imgData[1]*grid, grid, grid, posX, posY, sizeW, sizeH);  
+            m.drawImage(img, imgData[0]*grid, imgData[1]*grid, grid, grid, posX, posY, sizeW, sizeH);
         }
     };
     img.src = mapSource;
@@ -66,7 +66,7 @@ function newBlankMap(src, w, h){
 
 //
 // Redraw the map
-// 
+//
 // Takes a valid _mapArray and redraws the map from it
 //
 function redrawMap(_mapArray){
@@ -88,7 +88,7 @@ function redrawMap(_mapArray){
     m.canvas.height = _mapHeight*grid;
     mapWidth = _mapWidth;
     mapHeight = _mapHeight;
-    
+
     // updatePreviewPNG('map-image');
 }
 
@@ -98,8 +98,8 @@ function redrawMap(_mapArray){
 // dir......Direction to resize. Right / Bottom.
 // i........Increment number.
 //
-// NOTE: This code is not very DRY and needs to be redone 
-// 
+// NOTE: This code is not very DRY and needs to be redone
+//
 function resizeMap(dir, i){
     if(dir == "w"){
         if(i > mapArray[0].length){
@@ -132,7 +132,7 @@ function resizeMap(dir, i){
                     row.push("(0,0)")
                 }
                 mapArray.push(row)
-            }         
+            }
         } else {
             // If it's decreased
             var changedBy = mapArray.length - i;
@@ -158,14 +158,14 @@ function initiateTileset(){
 
     // Draw the tileset to the canvas
     function drawTileset(src){
-        var tilesetImg = new Image(); 
+        var tilesetImg = new Image();
 
         tilesetImg.onload = function(){
-            t.drawImage(tilesetImg, 0, 0); 
+            t.drawImage(tilesetImg, 0, 0);
         }
         tilesetImg.src=src;
     }
-    drawTileset("img/map_tile@2x.png"); 
+    drawTileset("img/b.png");
 
     // Add event listeners
     var tilesetMouseDown = 0;
@@ -178,14 +178,14 @@ function initiateTileset(){
     })
 
     function selectTile(e){
-        var mouse_x = Math.floor(e.offsetX/(grid*2));
-        var mouse_y = Math.floor(e.offsetY/(grid*2));
+        var mouse_x = Math.floor(e.offsetX/(grid));
+        var mouse_y = Math.floor(e.offsetY/(grid));
 
         // Draw the rectangle
         drawTileSelector(mouse_x, mouse_y)
 
         brush = [mouse_x, mouse_y];
-        
+
         updateBrushHistory(brush);
         console.log("Brush: ("+brush[0]+","+brush[1]+")");
     }
@@ -200,27 +200,27 @@ initiateTileset();
 function moveTileSelector(x, y){
     tileSelectX = x
     tileSelectY = y
-    
-    selector.style.left = tileSelectX*(grid*2)+"px";
-    selector.style.top = tileSelectY*(grid*2)+"px";
+
+    selector.style.left = tileSelectX*(grid)+"px";
+    selector.style.top = tileSelectY*(grid)+"px";
 }
 function drawTileSelector(x, y){
     var selector = document.getElementById('selector');
-        selector.style.width  = tileSelectW*(grid*2)+'px';
-        selector.style.height = tileSelectH*(grid*2)+'px';
-        
+        selector.style.width  = tileSelectW*(grid)+'px';
+        selector.style.height = tileSelectH*(grid)+'px';
+
         moveTileSelector(x, y)
 }
 function resizeTileSelector(inc){
-    
+
     tileSelectW += inc[0];
     tileSelectH += inc[1];
-    
+
     drawTileSelector(tileSelectX, tileSelectY)
-    
+
     /*
     console.log(tileSelectH*grid)
-    
+
     var selector = document.getElementById('selector');
         selector.style.width = tileSelectW*(grid*2)+'px'
         selector.style.height = tileSelectH*(grid*2)+'px'
@@ -230,20 +230,20 @@ function resizeTileSelector(inc){
 //
 // Update the brush history
 //
-// Adds your brush to the brush history array 
+// Adds your brush to the brush history array
 //
 function updateBrushHistory(currBrush){
-    
+
     brushHistory.unshift(currBrush);
-    brushHistory.splice(6, 1); 
-    
+    brushHistory.splice(6, 1);
+
     for(var i in brushHistory){
         var elem = document.getElementById('hist_'+i);
         var hist = brushHistory[i];
-        var histx = hist[0]*grid*2;
-        var histy = hist[1]*grid*2;
-        
-        elem.style.backgroundImage = "url(img/map_tile@2x.png), url(img/grid.png)";
+        var histx = hist[0]*grid;
+        var histy = hist[1]*grid;
+
+        elem.style.backgroundImage = "url(img/b.png), url(img/grid.png)";
         elem.style.backgroundPosition = "-"+histx+"px -"+histy+"px";
     }
 }
@@ -253,7 +253,7 @@ updateBrushHistory(brush)
 //
 // [WIP] Allows you to draw on the map.
 //
-// We need to both draw on the physical map, AND update the mapArray. 
+// We need to both draw on the physical map, AND update the mapArray.
 //
 function initiateDrawing(){
     var temp_x;
@@ -282,7 +282,7 @@ function initiateDrawing(){
     map.addEventListener('mousemove', function(e){
         if(mousedown){
             if (rightclick == 0) {
-                drawAtPoint(e, brush);   
+                drawAtPoint(e, brush);
             } else {
                 // Transparent
                 drawAtPoint(e, "clear");
@@ -300,7 +300,7 @@ function initiateDrawing(){
             drawImage(_brush, mouse_x, mouse_y);
             // Add it to the array
             mapArray[mouse_y][mouse_x] = "("+_brush[0]+","+_brush[1]+")";
-            
+
             temp_x = mouse_x;
             temp_y = mouse_y;
         }
@@ -311,11 +311,11 @@ function initiateDrawing(){
 }
 initiateDrawing();
 
-// 
+//
 // Update the preview image
 //
 function updatePreviewPNG(imgID){
-    var img = map.toDataURL("image/png");
+    var img = map.toDataURL("image/png", 1.0);
     document.getElementById(imgID).src = img;
 }
 updatePreviewPNG('map-image');
