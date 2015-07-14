@@ -142,9 +142,8 @@ PokeMap.prototype = {
           var toAdd = Array.apply(null, Array(Math.abs(this.dim.width))).map(function(x) {
             return new Tile([0, 0]);
           });
-
-          this.tiles[direction == "up" ? "unshift" : "push"](toAdd);
-          pokeworld.maps[map].tiles[direction == "up" ? "unshift" : "push"](toAdd);
+          this.tiles[direction == "up" ? "unshift" : "push"](toAdd.slice());
+          pokeworld.maps[map].tiles[direction == "up" ? "unshift" : "push"](toAdd.slice());
         }
 
         // Update height of pokemap object
