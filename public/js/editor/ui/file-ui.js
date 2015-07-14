@@ -114,10 +114,11 @@ $(function() {
         worldName = null;
         map       = "default";
 
+
         // Reset pokemap
         pokeworld.pokemap.dim.height = 25;
         pokeworld.pokemap.dim.width  = 25;
-        pokeworld.pokemap.new([0, 0]);
+        pokeworld.populate([0, 0])
         pokeworld.pokemap.updateAttr();
         pokeworld.pokemap.clear();
         pokeworld.pokemap.render();
