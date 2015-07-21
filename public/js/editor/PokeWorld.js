@@ -38,7 +38,7 @@ var PokeWorld = function() {
     this.maps[map].tiles[i] = new Array();
   }
 
-  this.populate([0, 0])   // Populate map tiles with grass
+  this.populate(0)   // Populate map tiles with grass
 
   this.pokemap   = new PokeMap($.extend(true, [], this.maps[map].tiles));  // Send in the map tiles to pokemap
 
@@ -56,7 +56,7 @@ PokeWorld.prototype = {
 
     for (var h = 0; h < this.maps[map].info.dimensions.height; h++) {
       for (var w = 0; w < this.maps[map].info.dimensions.width; w++) {
-        this.maps[map].tiles[h][w] = new Tile(tile) || new Tile([0, 0]);
+        this.maps[map].tiles[h][w] = new Tile(tile) || new Tile(0);
       }
     }
   },
@@ -95,11 +95,11 @@ PokeWorld.prototype = {
 
       // Left click
       if (e.which == 1) {
-        self.pokemap.setTile([tileset.mouse.tile_x, tileset.mouse.tile_y], self.mouse.tile_y, self.mouse.tile_x);
+        self.pokemap.setTile(tileset.mouse.tile_y*16 + tileset.mouse.tile_x, self.mouse.tile_y, self.mouse.tile_x);
         self.pokemap.renderTile(self.mouse.tile_y, self.mouse.tile_x);
       } else {
           self.mouse.right = true;
-          self.pokemap.setTile([0, 0], self.mouse.tile_y, self.mouse.tile_x);
+          self.pokemap.setTile(0, self.mouse.tile_y, self.mouse.tile_x);
           self.pokemap.renderTile(self.mouse.tile_y, self.mouse.tile_x);
       }
 
@@ -122,11 +122,11 @@ PokeWorld.prototype = {
 
         // Left click
         if (e.which == 1) {
-          self.pokemap.setTile([tileset.mouse.tile_x, tileset.mouse.tile_y], self.mouse.tile_y, self.mouse.tile_x);
+          self.pokemap.setTile(tileset.mouse.tile_y*16 + tileset.mouse.tile_x, self.mouse.tile_y, self.mouse.tile_x);
           self.pokemap.renderTile(self.mouse.tile_y, self.mouse.tile_x);
         } else {
             self.mouse.right = true;
-            self.pokemap.setTile([0, 0], self.mouse.tile_y, self.mouse.tile_x);
+            self.pokemap.setTile(0, self.mouse.tile_y, self.mouse.tile_x);
             self.pokemap.renderTile(self.mouse.tile_y, self.mouse.tile_x);
         }
 

@@ -1,6 +1,5 @@
 var PokeMap = function(tiles) {
 
-  this.scale = 16;
   this.dim   = {
     width:  25,
     height: 25
@@ -22,7 +21,7 @@ var PokeMap = function(tiles) {
       for (var w = 0; w < this.dim.width; w++) {
 
         // Create tile with default grass layer
-        this.tiles[h][w] = new Tile([0,0],[0,0])
+        this.tiles[h][w] = new Tile(0, 0)
       }
     }
   } else {
@@ -33,8 +32,8 @@ var PokeMap = function(tiles) {
   this.dim.height = this.tiles.length;
 
   // Set width and height
-  this.ctx.canvas.width = this.dim.width * this.scale;
-  this.ctx.canvas.height = this.dim.height * this.scale;
+  this.ctx.canvas.width = this.dim.width * 16;
+  this.ctx.canvas.height = this.dim.height * 16;
 
   this.render();
 
@@ -48,7 +47,7 @@ PokeMap.prototype = {
 
   // Clears a tile (canvas only)
   clearTile: function(x, y) {
-    this.ctx.clearRect(x*this.scale, y*this.scale, 16, 16);
+    this.ctx.clearRect(x*16, y*16, 16, 16);
   },
 
   // Deletes a tile (data only)
@@ -65,7 +64,7 @@ PokeMap.prototype = {
 
     // Draw from layer 1 to 3
     tile.getLayers().forEach(function(layer) {
-      self.ctx.drawImage(tileset.image, layer[0]*self.scale, layer[1]*self.scale, self.scale, self.scale, x*self.scale, y*self.scale, self.scale, self.scale);
+      self.ctx.drawImage(tileset.image, (layer-Math.floor(layer/16)*16)*16, Math.floor(layer/16)*16, 16, 16, x*16, y*16, 16, 16);
     });
   },
 
@@ -93,7 +92,7 @@ PokeMap.prototype = {
 
   // Clear the canvas
   clear: function() {
-    this.ctx.clearRect(0, 0, this.dim.width*this.scale, this.dim.height*this.scale);
+    this.ctx.clearRect(0, 0, this.dim.width*16, this.dim.height*16);
   },
 
   // Renders the canvas using the tiles array
@@ -140,7 +139,7 @@ PokeMap.prototype = {
         for (var i = 0; i < amount; i++) {
           // add pokemap-width number of new tiles.
           var toAdd = Array.apply(null, Array(Math.abs(this.dim.width))).map(function(x) {
-            return new Tile([0, 0]);
+            return new Tile(0);
           });
           this.tiles[direction == "up" ? "unshift" : "push"](toAdd.slice());
           pokeworld.maps[map].tiles[direction == "up" ? "unshift" : "push"](toAdd.slice());
@@ -178,8 +177,8 @@ PokeMap.prototype = {
 
         Object.keys(this.tiles).forEach(function(index) {
           for (var i = 0; i < amount; i++) {
-            self.tiles[index][direction == "left" ? "unshift" : "push"](new Tile([0, 0]));
-            pokeworld.maps[map].tiles[index][direction == "left" ? "unshift" : "push"](new Tile([0, 0]));
+            self.tiles[index][direction == "left" ? "unshift" : "push"](new Tile(0));
+            pokeworld.maps[map].tiles[index][direction == "left" ? "unshift" : "push"](new Tile(0));
           }
         });
 
@@ -190,8 +189,8 @@ PokeMap.prototype = {
     }
 
     // Update the attributes of the canvas tag
-    this.map.attr("width", this.dim.width*this.scale);
-    this.map.attr("height", this.dim.height*this.scale);
+    this.map.attr("width", this.dim.width*16);
+    this.map.attr("height", this.dim.height*16);
 
     // Render new resized map
     this.render();
@@ -209,8 +208,8 @@ PokeMap.prototype = {
 
         // Create tile with 2 random layers
         var tile = new Tile(
-          [Math.floor((Math.random() * tileset.width/this.scale) + 1), Math.floor((Math.random() * tileset.height/this.scale) + 1)],
-          [Math.floor((Math.random() * tileset.width/this.scale) + 1), Math.floor((Math.random() * tileset.height/this.scale) + 1)]
+          Math.floor((Math.random() * tileset.height) + 1),
+          Math.floor((Math.random() * tileset.height) + 1)
         );
         this.tiles[h][w] = tile;
         pokeworld.maps[map].tiles[h][w] = tile;
@@ -220,7 +219,7 @@ PokeMap.prototype = {
 
   // Update canvas width/height attributes
   updateAttr: function() {
-    this.map.attr("width", this.dim.width*this.scale);
-    this.map.attr("height", this.dim.height*this.scale);
+    this.map.attr("width", this.dim.width*16);
+    this.map.attr("height", this.dim.height*16);
   }
 };

@@ -5,7 +5,7 @@ var Tile = function() {
     this.layers = [];
 
     if (args.length != 0) {
-        if (typeof args[0][0] === 'object') {
+        if (typeof args[0] === 'object') {
             args[0].forEach(function(argument) {
                 self.layers.push(argument);
             });
