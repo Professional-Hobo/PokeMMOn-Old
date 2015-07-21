@@ -56,13 +56,12 @@ function newBlankMap(src, w, h){
     for(var n=0; n<h; n++){
         var newRow = [];
         for(var i=0; i<w; i++){
-            drawImage([0,0], i, n);
-            newRow.push("(0,0)")
+            newRow.push(null)
         }
         mapArray.push(newRow)
     }
 }
-//newBlankMap(mapSource, mapWidth, mapHeight);
+newBlankMap(mapSource, mapWidth, mapHeight);
 
 //
 // Redraw the map
@@ -299,7 +298,11 @@ function initiateDrawing(){
             // Draw the tile
             drawImage(_brush, mouse_x, mouse_y);
             // Add it to the array
-            mapArray[mouse_y][mouse_x] = "("+_brush[0]+","+_brush[1]+")";
+            if (_brush[0] == "c") {
+              mapArray[mouse_y][mouse_x] = null;
+            } else {
+              mapArray[mouse_y][mouse_x] = _brush[1]*16 + _brush[0];
+            }
 
             temp_x = mouse_x;
             temp_y = mouse_y;
@@ -352,5 +355,20 @@ function loadImage() {
             //map.height = img.height;
             m.clearRect(0, 0, map.width, map.height);
             m.drawImage(img,0,0);
+        }
+    }
+
+function loadJson() {
+        var input, file, fr, img;
+
+        input = document.getElementById('jsonfile');
+        if (input) {
+            file = input.files[0];
+            fr = new FileReader();
+
+            fr.onload = function(e) {
+             mapArray = JSON.parse(e.target.result); //<-- I removed the `var` keyword
+           }
+           fr.readAsText(file);
         }
     }

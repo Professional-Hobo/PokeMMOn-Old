@@ -3,12 +3,12 @@
 <html>
     <head>
         <title>Pokemap</title>
-        
+
         <link rel="stylesheet" href="css/base.css" type="text/css" />
         <script src="js/jquery.js"></script>
     </head>
     <body>
-    
+
     <div class="container">
         <div class="sidebar" id="export-pane">
             <div class="header">
@@ -16,7 +16,7 @@
                     <a href="#"><li data-tab="draw">Draw</li></a>
                     <a href="#export-pane"><li data-tab="export">Load/Save</li></a>
                 </ul>
-            </div>  
+            </div>
             <div class="tab-container">
                 <div class="tab" id="draw">
                     <div hiddenclass="section">
@@ -40,10 +40,16 @@
                             <input type='file' id='imgfile' />
                             <input type='button' id='btnLoad' value='Load' onclick='loadImage();' />
                         </form>
+                        <form action='#' onsubmit="return false;">
+                            <input type='file' id='jsonfile' />
+                            <input type='button' id='btnLoad' value='Load' onclick='loadJson();' />
+                        </form>
                     </div>
                     <div class="section">
                         <h5>Save Map</h5>
                         <a href="" id="download-png" target="_blank"><button class="button-download">Download as PNG</button></a>
+                        <br><br>
+                        <a href="" id="download-txt" target="_blank"><button class="button-download">Download JSON</button></a>
                     </div>
                 </div>
             </div>
@@ -66,7 +72,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="js/map-builder.js"></script>
     <script src="js/ui.js"></script>
     </body>
