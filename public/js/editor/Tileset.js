@@ -16,6 +16,9 @@ var Tileset = function() {
 
   this.startListeners();
 
+  this.transparents = {};
+  this.loadTransparents();
+
   this.selector = $("#selector")[0];
 
   this.selector.style.left = "0px";
@@ -56,6 +59,17 @@ Tileset.prototype = {
     }});
   },
 
+  loadTransparents: function() {
+    var self = this;
+
+    $.ajax("js/editor/transparent.json", {dataType: "json", global: false, success: function(data) {
+      self.transparents = data;
+    }});
+  },
+
+  isTransparent: function(id) {
+    return this.transparents.indexOf(id) != -1 ? true : false;
+  },
 
   drawTileset: function() {
     this.ctx.drawImage(this.image, 0, 0);
