@@ -95,7 +95,11 @@ PokeWorld.prototype = {
 
       // Left click
       if (e.which == 1) {
-        self.pokemap.setTile(tileset.mouse.tile_y*16 + tileset.mouse.tile_x, self.mouse.tile_y, self.mouse.tile_x);
+        if (tileset.isTransparent(tileset.mouse.tileID)) {
+          self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y, self.mouse.tile_x);
+        } else {
+          self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y, self.mouse.tile_x);
+        }
         self.pokemap.renderTile(self.mouse.tile_y, self.mouse.tile_x);
       } else {
           self.mouse.right = true;
@@ -120,9 +124,13 @@ PokeWorld.prototype = {
       if (self.mouse.down && self.mouseDifferent()) {
         self.selectTile();
 
-        // Left click
+        // Left click (drag)
         if (e.which == 1) {
-          self.pokemap.setTile(tileset.mouse.tile_y*16 + tileset.mouse.tile_x, self.mouse.tile_y, self.mouse.tile_x);
+          if (tileset.isTransparent(tileset.mouse.tileID)) {
+            self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y, self.mouse.tile_x);
+          } else {
+            self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y, self.mouse.tile_x);
+          }
           self.pokemap.renderTile(self.mouse.tile_y, self.mouse.tile_x);
         } else {
             self.mouse.right = true;

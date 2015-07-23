@@ -70,9 +70,12 @@ PokeMap.prototype = {
 
   // Defines what tile at x/y is
   setTile: function(tile, x, y) {
+    if (typeof tile == "number") {
+      tile = [tile];
+    }
     var self = this;
-    self.tiles[x][y].setLayers(tile);
-    pokeworld.maps[map].tiles[x][y].setLayers(tile);
+    self.tiles[x][y].setLayers(tile.slice());
+    pokeworld.maps[map].tiles[x][y].setLayers(tile.slice());
   },
 
   // Render specific tile

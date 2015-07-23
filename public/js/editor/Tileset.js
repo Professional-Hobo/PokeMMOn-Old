@@ -1,16 +1,17 @@
 var Tileset = function() {
   var self      = this;
 
-  this.width    = 0;
-  this.height   = 0;
-  this.grid     = 16;
+  this.width      = 0;
+  this.height     = 0;
+  this.grid       = 16;
+  this.background = 0;
 
   this.tileset  = $('#tileset');
   this.ctx      = $('#tileset')[0].getContext('2d');
 
   this.image    = new Image();
 
-  this.mouse    = {tile_x: 0, tile_y: 0, down: false};
+  this.mouse    = {tile_x: 0, tile_y: 0, down: false, tileID: 0};
 
   this.tilesets = {};
 
@@ -140,6 +141,7 @@ Tileset.prototype = {
 
     this.mouse.tile_x = Math.floor(x/(this.grid));
     this.mouse.tile_y = Math.floor(y/(this.grid));
+    this.mouse.tileID = this.mouse.tile_y * 16 + this.mouse.tile_x;
 
     this.selector.style.left = this.mouse.tile_x*(this.grid)+"px";
     this.selector.style.top  = this.mouse.tile_y*(this.grid)+"px";
