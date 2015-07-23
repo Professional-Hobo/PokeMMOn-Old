@@ -118,7 +118,7 @@ $(function() {
         // Reset pokemap
         pokeworld.pokemap.dim.height = 25;
         pokeworld.pokemap.dim.width  = 25;
-        pokeworld.populate([0, 0])
+        pokeworld.populate(0)
         pokeworld.pokemap.updateAttr();
         pokeworld.pokemap.clear();
         pokeworld.pokemap.render();
@@ -265,7 +265,7 @@ $(function() {
         pokeworld.maps[map].tiles[i] = new Array();
       }
 
-      pokeworld.populate([0, 0])   // Populate map tiles with grass
+      pokeworld.populate(0)   // Populate map tiles with grass
 
       pokeworld.pokemap   = new PokeMap(pokeworld.maps[map].tiles.slice());  // Send in the map tiles to pokemap
 

@@ -21,7 +21,7 @@ var PokeMap = function(tiles) {
       for (var w = 0; w < this.dim.width; w++) {
 
         // Create tile with default grass layer
-        this.tiles[h][w] = new Tile(0, 0)
+        this.tiles[h][w] = new Tile(0)
       }
     }
   } else {
@@ -73,8 +73,7 @@ PokeMap.prototype = {
     if (typeof tile == "number") {
       tile = [tile];
     }
-    var self = this;
-    self.tiles[x][y].setLayers(tile.slice());
+    this.tiles[x][y].setLayers(tile.slice());
     pokeworld.maps[map].tiles[x][y].setLayers(tile.slice());
   },
 
