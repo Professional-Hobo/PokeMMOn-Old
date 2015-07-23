@@ -198,7 +198,7 @@ PokeMap.prototype = {
     this.render();
 
     // Update dimensions viewer
-    $("#dim").html("Current map dim: " + this.dim.width + "x" + this.dim.height);
+    this.updateDim();
   },
 
   // Generate random map with random tiles
@@ -223,5 +223,9 @@ PokeMap.prototype = {
   updateAttr: function() {
     this.map.attr("width", this.dim.width*16);
     this.map.attr("height", this.dim.height*16);
+  },
+
+  updateDim: function() {
+    $("#dim").html("Current map dim: " + this.dim.width + "x" + this.dim.height);
   }
 };

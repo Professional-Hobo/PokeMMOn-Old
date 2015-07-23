@@ -472,6 +472,8 @@ $(function() {
 
     pokeworld.pokemap.updateAttr();
     pokeworld.pokemap.render();
+
+    pokeworld.pokemap.updateDim();
   }
 
   // Exported functions for UI
