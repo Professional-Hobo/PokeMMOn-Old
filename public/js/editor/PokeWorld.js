@@ -44,7 +44,12 @@ var PokeWorld = function() {
 
   this.mouse    = {tile_x: 0, tile_y: 0, down: false, right: false};
 
-  this.history   = [];   // Sets up history for undo/redo
+  this.previous  = {};    // Saves the previous state of the pokemap.tiles
+  this.original  = {};
+  this.history   = [];    // Sets up history for undo/redo
+  this.updatePrevious();
+  this.saveOriginal();
+  this.undoIndex = 0;
 
   this.startListeners();
 };
@@ -81,7 +86,12 @@ PokeWorld.prototype = {
 
     map = Object.keys(pokeworld.maps)[0];   // Load in first map
 
-    this.history = [];
+    this.previous  = {};    // Saves the previous state of the pokemap.tiles
+    this.original  = {};
+    this.history   = [];    // Sets up history for undo/redo
+    this.updatePrevious();
+    this.saveOriginal();
+    this.undoIndex = 0;
   },
 
   startListeners: function() {
@@ -112,6 +122,7 @@ PokeWorld.prototype = {
     $('#map')[0].addEventListener('mouseup', function(e){
       self.mouse.down = false;
       self.mouse.right = false;
+      self.saveState();
     });
 
     $('#map')[0].addEventListener('mousemove', function(e){
@@ -167,5 +178,58 @@ PokeWorld.prototype = {
       return true;
     }
     return false;
+  },
+
+  // Pushes a jsondiffpatch to the history array
+  saveState: function() {
+    return;
+    var current = _.cloneDeep(this.pokemap.tiles);
+
+    // If resuming from the middle of the history, this'll delete the states
+    // that were saved past this point and update the undoIndex to point to
+    // the most recent.
+    if (this.undoIndex != 0) {
+      this.history = this.history.slice(this.undoIndex);
+
+      // We need to make this.previous equal all of the changes up to undo index
+      this.undoIndex = 0;
+
+    }
+
+    this.history.push(jsondiffpatch.reverse(jsondiffpatch.diff(this.previous, current)));
+
+    this.updatePrevious();   // Update previous with current state
+  },
+
+  // "Undos" by restoring to previous state
+  undoState: function() {
+    var stateToRestore = this.history.length - 1 - this.undoIndex;
+    if (stateToRestore in this.history) {
+      jsondiffpatch.patch(this.pokemap.tiles, this.history[stateToRestore]);
+      this.pokemap.render();
+      this.undoIndex++;   // Update undo index;
+    } else {
+      throw "END_OF_HISTORY";
+    }
+  },
+
+  // "Redos" by restoring to preceeding state from undoIndex
+  redoState: function() {
+    var stateToRestore = this.history.length - this.undoIndex;
+    if (stateToRestore in this.history) {
+      jsondiffpatch.patch(this.pokemap.tiles, jsondiffpatch.reverse(this.history[stateToRestore]));
+      this.pokemap.render();
+      this.undoIndex--;   // Update undo index;
+    } else {
+      throw "START_OF_HISTORY";
+    }
+  },
+
+  updatePrevious: function() {
+    this.previous = _.cloneDeep(this.pokemap.tiles);
+  },
+
+  saveOriginal: function() {
+    this.original = _.cloneDeep(this.pokemap.tiles);
   }
 };
