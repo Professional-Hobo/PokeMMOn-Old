@@ -224,7 +224,7 @@ select, input {
 
         .builder .canvas-container #map {
             margin: 64px;
-            background-image: url(../../img/editor/grid.png);
+            background-color: #000;
             cursor: pointer; }
 
 #newWorldInput, #newMapInput {

@@ -42,7 +42,16 @@ var PokeWorld = function() {
 
   this.pokemap   = new PokeMap($.extend(true, [], this.maps[map].tiles));  // Send in the map tiles to pokemap
 
-  this.mouse    = {tile_x: 0, tile_y: 0, down: false, right: false};
+  this.mouse = {
+    down: false,
+    right: false,
+    x: 0,         // Clicked X
+    y: 0,         // Clicked Y
+    hover_x: 0,   // Currently hovering X
+    hover_y: 0,   // Currently hovering Y
+    prev_x: 0,    // Previous Xcoord of mouse for panning
+    prev_y: 0     // Previous Ycoord of mouse for panning
+  };
 
   this.previous  = {};    // Saves the previous state of the pokemap.tiles
   this.original  = {};
@@ -96,59 +105,106 @@ PokeWorld.prototype = {
 
   startListeners: function() {
     var self = this;
+
+    // Shift on
+    window.addEventListener('keydown', function(e) {
+      if (e.shiftKey) {
+        $("#map").css("cursor", "-webkit-grab");
+        self.mouse.shift = true;
+      }
+    });
+
+    // Shift off
+    window.addEventListener('keyup', function(e) {
+      console.log(e.shiftKey);
+      if (!e.shiftKey) {
+        $("#map").css("cursor", "pointer");
+        self.mouse.shift = false;
+      }
+    });
+
     $('#map')[0].addEventListener('mousedown', function(e){
       self.mouse.down = true;
 
-      if (self.mouseDifferent()) {
-        self.selectTile();
-      }
+      if (self.mouse.shift) {
+        $("#map").css("cursor", "-webkit-grabbing");
 
-      // Left click
-      if (e.which == 1) {
-        if (tileset.isTransparent(tileset.mouse.tileID)) {
-          self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y, self.mouse.tile_x);
-        } else {
-          self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y, self.mouse.tile_x);
-        }
-        self.pokemap.renderTile(self.mouse.tile_y, self.mouse.tile_x);
+        self.mouse.prev_x = e.offsetX - self.pokemap.offset.x;
+        self.mouse.prev_y = e.offsetY - self.pokemap.offset.y;
       } else {
-          self.mouse.right = true;
-          self.pokemap.setTile(0, self.mouse.tile_y, self.mouse.tile_x);
-          self.pokemap.renderTile(self.mouse.tile_y, self.mouse.tile_x);
-      }
+        if (self.mouseDifferent()) {
+          self.selectTile();
+        }
 
-    });
-
-    $('#map')[0].addEventListener('mouseup', function(e){
-      self.mouse.down = false;
-      self.mouse.right = false;
-      self.saveState();
-    });
-
-    $('#map')[0].addEventListener('mousemove', function(e){
-      self.mouse.x = e.offsetX;
-      self.mouse.y = e.offsetY;
-
-      self.mouse.hover_x = Math.floor(self.mouse.x/(self.grid));
-      self.mouse.hover_y = Math.floor(self.mouse.y/(self.grid));
-
-      if (self.mouse.down && self.mouseDifferent()) {
-        self.selectTile();
-
-        // Left click (drag)
+        // Left click
         if (e.which == 1) {
           if (tileset.isTransparent(tileset.mouse.tileID)) {
             self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y, self.mouse.tile_x);
           } else {
             self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y, self.mouse.tile_x);
           }
-          self.pokemap.renderTile(self.mouse.tile_y, self.mouse.tile_x);
         } else {
             self.mouse.right = true;
             self.pokemap.setTile(0, self.mouse.tile_y, self.mouse.tile_x);
-            self.pokemap.renderTile(self.mouse.tile_y, self.mouse.tile_x);
         }
+      }
+    });
 
+    $('#map')[0].addEventListener('mouseup', function(e){
+      self.mouse.down = false;
+      self.mouse.right = false;
+
+      if (!self.mouse.shift) {
+        $("#map").css("cursor", "pointer");
+      } else {
+        $("#map").css("cursor", "-webkit-grab");
+      }
+
+      self.saveState();
+    });
+
+    $('#map')[0].addEventListener('mousemove', function(e){
+
+      self.mouse.x = e.offsetX - self.pokemap.offset.x;
+      self.mouse.y = e.offsetY - self.pokemap.offset.y
+
+      self.mouse.hover_x = Math.floor(self.mouse.x / 16);
+      self.mouse.hover_y = Math.floor(self.mouse.y / 16);
+
+      if (self.mouse.shift) {
+        if (self.mouse.down) {
+          $("#map").css("cursor", "-webkit-grabbing");
+          // Record difference
+          var x_diff = e.offsetX - self.pokemap.offset.x - self.mouse.prev_x;
+          var y_diff = e.offsetY - self.pokemap.offset.y - self.mouse.prev_y;
+
+            self.pokemap.offset.x += x_diff;
+            self.pokemap.offset.y += y_diff;
+
+            // Update
+            self.mouse.prev_x = e.offsetX - self.pokemap.offset.x;
+            self.mouse.prev_y = e.offsetY - self.pokemap.offset.y;
+
+            self.pokemap.updatePlayerPosByOffset();
+        }
+      } else {
+
+        if (self.mouse.down && self.mouseDifferent()) {
+          self.selectTile();
+
+          // Left click (drag)
+          if (e.which == 1) {
+            if (tileset.isTransparent(tileset.mouse.tileID)) {
+              self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y, self.mouse.tile_x);
+            } else {
+              self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y, self.mouse.tile_x);
+            }
+          } else {
+              self.mouse.right = true;
+              self.pokemap.setTile(0, self.mouse.tile_y, self.mouse.tile_x);
+          }
+
+        }
       }
     });
 

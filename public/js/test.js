@@ -62,12 +62,6 @@ $(function() {
     context.fillStyle="#000";
     context.fillRect(0, 0, canvas_width, canvas_height);
 
-    var map_height = img.height;
-    var map_width  = img.width;
-
-    var tile_height = map_height/scale;
-    var tile_width  = map_height/scale;
-
     var viewport_height = canvas_width;
     var viewport_width  = canvas_height;
 
