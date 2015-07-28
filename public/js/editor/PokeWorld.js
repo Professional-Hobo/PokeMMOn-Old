@@ -116,7 +116,6 @@ PokeWorld.prototype = {
 
     // Shift off
     window.addEventListener('keyup', function(e) {
-      console.log(e.shiftKey);
       if (!e.shiftKey) {
         $("#map").css("cursor", "pointer");
         self.mouse.shift = false;

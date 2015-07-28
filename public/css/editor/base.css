@@ -223,7 +223,7 @@ select, input {
         overflow: auto; }
 
         .builder .canvas-container #map {
-            margin: 64px;
+            margin: 32px;
             background-color: #000;
             cursor: pointer; }
 

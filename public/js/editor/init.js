@@ -58,7 +58,7 @@ $(function() {
   ]);
 
   function resize() {
-    pokeworld.pokemap.ctx.canvas.width = Math.floor($(".canvas-container").width()/16)*16-128;
-    pokeworld.pokemap.ctx.canvas.height = Math.floor($(".canvas-container").height()/16)*16-128;
+    pokeworld.pokemap.ctx.canvas.width = Math.floor($(".canvas-container").width()/16)*16-64;
+    pokeworld.pokemap.ctx.canvas.height = Math.floor($(".canvas-container").height()/16)*16-64;
   }
 });

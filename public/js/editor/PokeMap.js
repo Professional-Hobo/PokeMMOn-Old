@@ -39,8 +39,8 @@ var PokeMap = function(tiles) {
   this.dim.height = this.tiles.length;
 
   // Set width and height of canvas to canvas-container with 64px border of padding
-  this.ctx.canvas.width  = Math.floor($(".canvas-container").width()/16)*16-128;
-  this.ctx.canvas.height = Math.floor($(".canvas-container").height()/16)*16-128;
+  this.ctx.canvas.width  = Math.floor($(".canvas-container").width()/16)*16-64;
+  this.ctx.canvas.height = Math.floor($(".canvas-container").height()/16)*16-64;
 
   // Centering
   //this.offset.x += this.ctx.canvas.width/2;

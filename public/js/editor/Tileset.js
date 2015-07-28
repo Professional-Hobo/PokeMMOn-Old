@@ -1,17 +1,22 @@
 var Tileset = function() {
-  var self      = this;
+  var self = this;
 
-  this.width      = 0;
-  this.height     = 0;
-  this.grid       = 16;
+  this.width = 0;
+  this.height = 0;
+  this.grid = 16;
   this.background = 0;
 
-  this.tileset  = $('#tileset');
-  this.ctx      = $('#tileset')[0].getContext('2d');
+  this.tileset = $('#tileset');
+  this.ctx = $('#tileset')[0].getContext('2d');
 
-  this.image    = new Image();
+  this.image = new Image();
 
-  this.mouse    = {tile_x: 0, tile_y: 0, down: false, tileID: 0};
+  this.mouse = {
+    tile_x: 0,
+    tile_y: 0,
+    down: false,
+    tileID: 0
+  };
 
   this.tilesets = {};
 
@@ -23,7 +28,7 @@ var Tileset = function() {
   this.selector = $("#selector")[0];
 
   this.selector.style.left = "0px";
-  this.selector.style.top  = "0px";
+  this.selector.style.top = "0px";
 
 };
 
@@ -31,41 +36,48 @@ Tileset.prototype = {
   loadTilesets: function(callback) {
     var self = this;
 
-    $.ajax("editor/sets", {global: false, success: function(data) {
-      self.sets = data;
+    $.ajax("editor/sets", {
+      global: false,
+      success: function(data) {
+        self.sets = data;
 
-      $('#tilesets').empty();
+        $('#tilesets').empty();
 
-      // Update tileset select
-      $.each(data, function(key, value) {
+        // Update tileset select
+        $.each(data, function(key, value) {
           $('#tilesets')
-              .append($("<option></option>")
+            .append($("<option></option>")
               .attr("value", key)
               .text(key));
-      });
+        });
 
-      // Load all tileset images
-      $.each(data, function(key, value) {
-        self.tilesets[key] = {};
-        self.tilesets[key].img = new Image();
-        self.tilesets[key].img.src = "img/editor/sets/" + key + ".png";
+        // Load all tileset images
+        $.each(data, function(key, value) {
+          self.tilesets[key] = {};
+          self.tilesets[key].img = new Image();
+          self.tilesets[key].img.src = "img/editor/sets/" + key + ".png";
 
-        self.tilesets[key].width = value.width;
-        self.tilesets[key].height = value.height;
-      });
+          self.tilesets[key].width = value.width;
+          self.tilesets[key].height = value.height;
+        });
 
-      $('#tilesets').prop("disabled", false);
+        $('#tilesets').prop("disabled", false);
 
-      typeof callback === 'function' && callback();
-    }});
+        typeof callback === 'function' && callback();
+      }
+    });
   },
 
   loadTransparents: function() {
     var self = this;
 
-    $.ajax("js/editor/transparent.json", {dataType: "json", global: false, success: function(data) {
-      self.transparents = data;
-    }});
+    $.ajax("js/editor/transparent.json", {
+      dataType: "json",
+      global: false,
+      success: function(data) {
+        self.transparents = data;
+      }
+    });
   },
 
   isTransparent: function(id) {
@@ -103,24 +115,24 @@ Tileset.prototype = {
 
   startListeners: function() {
     var self = this;
-    $('#tileset')[0].addEventListener('mousedown', function(e){
-        self.mouse.down = true;
-        self.selectTile();
+    $('#tileset')[0].addEventListener('mousedown', function(e) {
+      self.mouse.down = true;
+      self.selectTile();
     });
 
-    $('#tileset')[0].addEventListener('mouseup', function(e){
-        self.mouse.down = false;
+    $('#tileset')[0].addEventListener('mouseup', function(e) {
+      self.mouse.down = false;
     });
 
-    $('#tileset')[0].addEventListener('mousemove', function(e){
-        self.mouse.x       = e.offsetX;
-        self.mouse.y       = e.offsetY;
-        self.mouse.hover_x = Math.floor(self.mouse.x/(self.grid));
-        self.mouse.hover_y = Math.floor(self.mouse.y/(self.grid));
+    $('#tileset')[0].addEventListener('mousemove', function(e) {
+      self.mouse.x = e.offsetX;
+      self.mouse.y = e.offsetY;
+      self.mouse.hover_x = Math.floor(self.mouse.x / (self.grid));
+      self.mouse.hover_y = Math.floor(self.mouse.y / (self.grid));
     });
 
-    $('#tileset')[0].addEventListener('mouseleave', function(e){
-        self.mouse.down = false;
+    $('#tileset')[0].addEventListener('mouseleave', function(e) {
+      self.mouse.down = false;
     });
   },
 
@@ -139,11 +151,11 @@ Tileset.prototype = {
     x = x > 240 ? 240 : x;
     y = y > 8000 ? 8000 : y;
 
-    this.mouse.tile_x = Math.floor(x/(this.grid));
-    this.mouse.tile_y = Math.floor(y/(this.grid));
+    this.mouse.tile_x = Math.floor(x / (this.grid));
+    this.mouse.tile_y = Math.floor(y / (this.grid));
     this.mouse.tileID = this.mouse.tile_y * 16 + this.mouse.tile_x;
 
-    this.selector.style.left = this.mouse.tile_x*(this.grid)+"px";
-    this.selector.style.top  = this.mouse.tile_y*(this.grid)+"px";
+    this.selector.style.left = this.mouse.tile_x * (this.grid) + "px";
+    this.selector.style.top = this.mouse.tile_y * (this.grid) + "px";
   }
 };

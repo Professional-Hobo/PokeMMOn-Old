@@ -116,6 +116,15 @@ html
                             button(onClick='pokeworld.pokemap.resize("left", -1); return false;') -1
                             button(onClick='pokeworld.pokemap.resize("left", -5); return false;') -5
                             button(onClick='pokeworld.pokemap.resize("left", -25); return false;') -25
+                            br
+                            | scale
+                            br
+                            button(onClick='pokeworld.pokemap.scale = 1') 1
+                            button(onClick='pokeworld.pokemap.scale = 2') 2
+                            button(onClick='pokeworld.pokemap.scale = 4') 4
+                            button(onClick='pokeworld.pokemap.scale = 8') 8
+                            button(onClick='pokeworld.pokemap.scale = 16') 16
+                            button(onClick='pokeworld.pokemap.scale = 32') 32
                         .section
                             h5 Tileset
                             select#tilesets(disabled)
