@@ -181,8 +181,10 @@ PokeMap.prototype = {
     if (typeof tile == "number") {
       tile = [tile];
     }
-    this.tiles[x][y].setLayers(tile.slice());
-    pokeworld.maps[map].tiles[x][y].setLayers(tile.slice());
+    if ((x >= bounds.smallest.x && x <= bounds.largest.x) && (y >= bounds.smallest.y && y <= bounds.largest.y)) {
+      this.tiles[x][y].setLayers(tile.slice());
+      pokeworld.maps[map].tiles[x][y].setLayers(tile.slice());
+    }
   },
 
   // New map
