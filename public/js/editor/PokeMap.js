@@ -1,7 +1,7 @@
 var PokeMap = function(tiles) {
 
-  this.dim   = {
-    width:  25,
+  this.dim = {
+    width: 25,
     height: 25
   };
 
@@ -9,19 +9,19 @@ var PokeMap = function(tiles) {
   this.pos = [0, 0];
 
   this.offset = {
-    x: -this.pos[0]*this.scale,
-    y: -this.pos[1]*this.scale
+    x: -this.pos[0] * this.scale,
+    y: -this.pos[1] * this.scale
   };
 
-  this.map     = $('#map');
-  this.ctx     = $('#map')[0].getContext('2d');
+  this.map = $('#map');
+  this.ctx = $('#map')[0].getContext('2d');
 
   if (tiles === undefined) {
 
     // Allocate tiles matrix
     this.tiles = new Array(this.dim.height);
     for (var i = 0; i < this.tiles.length; i++) {
-        this.tiles[i] = new Array(this.dim.width);
+      this.tiles[i] = new Array(this.dim.width);
     }
 
     // Populate with default grass
@@ -39,8 +39,8 @@ var PokeMap = function(tiles) {
   this.dim.height = this.tiles.length;
 
   // Set width and height of canvas to canvas-container with 64px border of padding
-  this.ctx.canvas.width  = Math.floor($(".canvas-container").width()/16)*16-64;
-  this.ctx.canvas.height = Math.floor($(".canvas-container").height()/16)*16-64;
+  this.ctx.canvas.width = Math.floor($(".canvas-container").width() / 16) * 16 - 64;
+  this.ctx.canvas.height = Math.floor($(".canvas-container").height() / 16) * 16 - 64;
 
   // Centering
   //this.offset.x += this.ctx.canvas.width/2;
@@ -49,7 +49,7 @@ var PokeMap = function(tiles) {
   this.render();
 
   // Disable right click menu
-  $('#map')[0].oncontextmenu = function (e) {
+  $('#map')[0].oncontextmenu = function(e) {
     e.preventDefault();
   };
 };
@@ -66,7 +66,7 @@ PokeMap.prototype = {
 
     // Draw from layer 1 to 3
     tile.getLayers().forEach(function(layer) {
-      self.ctx.drawImage(tileset.image, (layer-Math.floor(layer/16)*16)*16, Math.floor(layer/16)*16, 16, 16, x*16, y*16, 16, 16);
+      self.ctx.drawImage(tileset.image, (layer - Math.floor(layer / 16) * 16) * 16, Math.floor(layer / 16) * 16, 16, 16, x * 16, y * 16, 16, 16);
     });
   },
 
@@ -85,10 +85,10 @@ PokeMap.prototype = {
     var self = this;
     this.clear();
 
-    var viewport_tile_width  = this.ctx.canvas.width / this.scale;
+    var viewport_tile_width = this.ctx.canvas.width / this.scale;
     var viewport_tile_height = this.ctx.canvas.height / this.scale;
 
-    half_width  = this.ctx.canvas.width / 2 / this.scale;
+    half_width = this.ctx.canvas.width / 2 / this.scale;
     half_height = this.ctx.canvas.height / 2 / this.scale;
 
     render = [];
@@ -108,18 +108,18 @@ PokeMap.prototype = {
     // Calculate min/max x/y
     bounds = {
       largest: {
-        x:  Math.max.apply(null, render.map(function(item) {
+        x: Math.max.apply(null, render.map(function(item) {
           return item[0];
         })),
-        y:  Math.max.apply(null, render.map(function(item) {
+        y: Math.max.apply(null, render.map(function(item) {
           return item[1];
         }))
       },
       smallest: {
-        x:  Math.min.apply(null, render.map(function(item) {
+        x: Math.min.apply(null, render.map(function(item) {
           return item[0];
         })),
-        y:  Math.min.apply(null, render.map(function(item) {
+        y: Math.min.apply(null, render.map(function(item) {
           return item[1];
         }))
       }
@@ -129,8 +129,8 @@ PokeMap.prototype = {
     // Raw padding is not sanitized
 
     // Top
-    start = [bounds.smallest.x-1, bounds.smallest.y-1];
-    end   = [bounds.largest.x+1, bounds.largest.y+1];
+    start = [bounds.smallest.x - 1, bounds.smallest.y - 1];
+    end = [bounds.largest.x + 1, bounds.largest.y + 1];
 
     raw_padding = [];
 
@@ -143,7 +143,7 @@ PokeMap.prototype = {
 
     // Left and Right
     for (var i = start[1]; i <= end[1]; i++) {
-      raw_padding.push([end[0], i]);   // Right
+      raw_padding.push([end[0], i]); // Right
       raw_padding.push([start[0], i]); // Left
     }
 
@@ -155,7 +155,7 @@ PokeMap.prototype = {
       }
     });
 
-    render = render.concat(padding);  // Add padding to rendering tiles
+    render = render.concat(padding); // Add padding to rendering tiles
 
     render.forEach(function(tile) {
       var layers = self.tiles[tile[0]][tile[1]].layers;
@@ -167,21 +167,22 @@ PokeMap.prototype = {
         self.drawTileNew(layers[0], tile[1], tile[0]);
       }
     });
+
+    // Hover for tile placement
+    if (pokeworld.mouse.inBounds && !pokeworld.mouse.shift) {
+      this.ctx.save();
+      this.ctx.globalAlpha = .5;
+      this.drawTileNew(tileset.mouse.tileID, pokeworld.mouse.hover_x, pokeworld.mouse.hover_y);
+      this.ctx.restore();
+    }
   },
-
-
-
-
-
-
-
 
   // Defines what tile at x/y is
   setTile: function(tile, x, y) {
     if (typeof tile == "number") {
       tile = [tile];
     }
-    if ((x >= bounds.smallest.x && x <= bounds.largest.x) && (y >= bounds.smallest.y && y <= bounds.largest.y)) {
+    if (pokeworld.mouse.inBounds) {
       this.tiles[x][y].setLayers(tile.slice());
       pokeworld.maps[map].tiles[x][y].setLayers(tile.slice());
     }
@@ -238,8 +239,8 @@ PokeMap.prototype = {
         this.dim.height -= amount;
         pokeworld.maps[map].info.dimensions.height -= amount;
 
-      // Adding rows
-      } else if (amount > 0 && this.dim.height+amount <= 1024) {
+        // Adding rows
+      } else if (amount > 0 && this.dim.height + amount <= 1024) {
         amount = Math.abs(amount);
 
         for (var i = 0; i < amount; i++) {
@@ -277,8 +278,8 @@ PokeMap.prototype = {
         this.dim.width -= amount;
         pokeworld.maps[map].info.dimensions.width -= amount;
 
-      // Adding cols
-      } else if (amount > 0 && this.dim.width+amount <= 1024) {
+        // Adding cols
+      } else if (amount > 0 && this.dim.width + amount <= 1024) {
         amount = Math.abs(amount);
 
         Object.keys(this.tiles).forEach(function(index) {

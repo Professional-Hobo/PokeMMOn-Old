@@ -170,6 +170,12 @@ PokeWorld.prototype = {
       self.mouse.hover_x = Math.floor(self.mouse.x / 16);
       self.mouse.hover_y = Math.floor(self.mouse.y / 16);
 
+      if ((self.mouse.hover_x >= bounds.smallest.x && self.mouse.hover_x <= bounds.largest.x) && (self.mouse.hover_y >= bounds.smallest.y && self.mouse.hover_y <= bounds.largest.y)) {
+        self.mouse.inBounds = true;
+      } else {
+        self.mouse.inBounds = false;
+      }
+
       if (self.mouse.shift) {
         if (self.mouse.down) {
           $("#map").css("cursor", "-webkit-grabbing");
@@ -210,6 +216,7 @@ PokeWorld.prototype = {
     $('#map')[0].addEventListener('mouseleave', function(e){
       self.mouse.down = false;
       self.mouse.right = false;
+      self.mouse.inBounds = false;
     });
   },
 
