@@ -125,6 +125,12 @@ html
                             button(onClick='pokeworld.pokemap.scale = 8') 8
                             button(onClick='pokeworld.pokemap.scale = 16') 16
                             button(onClick='pokeworld.pokemap.scale = 32') 32
+                            br
+                            | Jump to
+                            br
+                            input(type='number', placeholder='X', value='0').jumpto#x
+                            | 
+                            input(type='number', placeholder='Y', value='0').jumpto#y
                         .section
                             h5 Tileset
                             select#tilesets(disabled)

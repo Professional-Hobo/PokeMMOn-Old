@@ -17,14 +17,22 @@
 .modal-content {
     cursor: pointer; }
 
-.modal-title, .modal-body { 
-    white-space: pre-wrap;      /* CSS3 */   
-    white-space: -moz-pre-wrap; /* Firefox */    
-    white-space: -pre-wrap;     /* Opera <7 */   
-    white-space: -o-pre-wrap;   /* Opera 7 */    
+.modal-title, .modal-body {
+    white-space: pre-wrap;      /* CSS3 */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
     word-wrap: break-word;      /* IE */
 }
 
-.sidebar select, .sidebar input {
-    width: 100%; }
+#newWorldInput, #newMapInput {
+    color: #000;
+}
 
+.sidebar select, .sidebar input {
+    width: 100%;
+  }
+
+.sidebar .jumpto {
+  width: 60px;
+}

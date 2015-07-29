@@ -35,6 +35,10 @@ $(function() {
       }
     }
   });
+  $("#x, #y").change(function() {
+    console.log("blah");
+    pokeworld.pokemap.updatePlayerPosByCoords($("#x").val(), $("#y").val());
+  });
 
   //
   // Update the history when clicking on 0-5

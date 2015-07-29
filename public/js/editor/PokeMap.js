@@ -74,6 +74,13 @@ PokeMap.prototype = {
     this.ctx.drawImage(tileset.tilesets.all.img, (id % 16) * 16, Math.floor(id / 16) * 16, 16, 16, x * this.scale + this.offset.x, y * this.scale + this.offset.y, this.scale, this.scale);
   },
 
+  updatePlayerPosByCoords: function(x, y) {
+    this.offset.x = x * this.scale;
+    this.offset.y = y * this.scale;
+
+    this.renderAroundCenter();
+  },
+
   updatePlayerPosByOffset: function() {
     this.pos[0] = -Math.round(this.offset.x / this.scale);
     this.pos[1] = -Math.round(this.offset.y / this.scale);

@@ -234,6 +234,3 @@ select, input {
             margin: 32px;
             background-color: #000;
             cursor: pointer; }
-
-#newWorldInput, #newMapInput {
-    color: #000; }
