@@ -18,6 +18,17 @@ $(function() {
     },
 
     function(callback) {
+      window.bounds = {
+        largest: {
+          x: 0,
+          y: 0
+        },
+        smallest: {
+          x: 0,
+          y: 0
+        }
+      };
+
       window.pokeworld = new PokeWorld();
       window.worldName = null;
       window.map = "default";

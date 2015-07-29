@@ -74,6 +74,10 @@ PokeMap.prototype = {
     this.ctx.drawImage(tileset.tilesets.all.img, (id % 16) * 16, Math.floor(id / 16) * 16, 16, 16, x * this.scale + this.offset.x, y * this.scale + this.offset.y, this.scale, this.scale);
   },
 
+  drawTileNew: function(id, x, y) {
+    this.ctx.drawImage(tileset.tilesets.all.img, (id % 16) * 16, Math.floor(id / 16) * 16, 16, 16, x * this.scale + this.offset.x, y * this.scale + this.offset.y, this.scale, this.scale);
+  },
+
   updatePlayerPosByCoords: function(x, y) {
     this.offset.x = x * this.scale;
     this.offset.y = y * this.scale;
@@ -180,7 +184,24 @@ PokeMap.prototype = {
     if (pokeworld.mouse.inBounds && !pokeworld.mouse.shift) {
       this.ctx.save();
       this.ctx.globalAlpha = .7;
-      this.drawTileNew(tileset.mouse.tileID, pokeworld.mouse.hover_x, pokeworld.mouse.hover_y);
+
+      // group tiles
+      if (tileset.multi) {
+        var start = [tileset.mouse.tile_x, tileset.mouse.tile_y];
+        var end = [tileset.mouse.tile_x + tileset.selectorDim[0], tileset.mouse.tile_y + tileset.selectorDim[1]];
+
+        for (var a = start[1], i = 0; a < end[1]; a++, i++) {
+          for (var b = start[0], j = 0; b < end[0]; b++, j++) {
+            if (b <= 15 && a <= 500) {
+              if (pokeworld.mouse.hover_x + j < this.dim.width && pokeworld.mouse.hover_y + i < this.dim.height) {
+                this.drawTileNew(a * 16 + b, pokeworld.mouse.hover_x + j, pokeworld.mouse.hover_y + i);
+              }
+            }
+          }
+        }
+      } else {
+        this.drawTileNew(tileset.mouse.tileID, pokeworld.mouse.hover_x, pokeworld.mouse.hover_y);
+      }
       this.ctx.restore();
     }
   },
