@@ -8,6 +8,7 @@ $(function() {
 
   // Load in world on change
   $("#worlds").change(function() {
+    $(this).blur();
 
     // Hide the delete world section if user changes world
     hideSection("deleteWorldSection", function() {
@@ -54,6 +55,7 @@ $(function() {
 
   // Load in map on change
   $("#maps").change(function() {
+    $(this).blur();
 
     // Disable delete/save buttons if no map selected
     if ($("#maps")[0].selectedIndex == 0) {
