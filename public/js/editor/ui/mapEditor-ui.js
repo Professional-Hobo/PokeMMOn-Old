@@ -36,7 +36,6 @@ $(function() {
     }
   });
   $("#x, #y").change(function() {
-    console.log("blah");
     pokeworld.pokemap.updatePlayerPosByCoords($("#x").val(), $("#y").val());
   });
 

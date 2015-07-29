@@ -78,6 +78,8 @@ PokeMap.prototype = {
     this.offset.x = x * this.scale;
     this.offset.y = y * this.scale;
 
+    this.pos = [-x, -y];
+
     this.renderAroundCenter();
   },
 
