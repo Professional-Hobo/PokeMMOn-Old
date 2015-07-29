@@ -109,18 +109,18 @@ PokeMap.prototype = {
     bounds = {
       largest: {
         x: Math.max.apply(null, render.map(function(item) {
-          return item[0];
+          return item[1];
         })),
         y: Math.max.apply(null, render.map(function(item) {
-          return item[1];
+          return item[0];
         }))
       },
       smallest: {
         x: Math.min.apply(null, render.map(function(item) {
-          return item[0];
+          return item[1];
         })),
         y: Math.min.apply(null, render.map(function(item) {
-          return item[1];
+          return item[0];
         }))
       }
     };
@@ -134,23 +134,22 @@ PokeMap.prototype = {
 
     raw_padding = [];
 
-
     // Top and Bottom
     for (var i = start[0]; i <= end[0]; i++) {
-      raw_padding.push([i, start[1]]); // Top
-      raw_padding.push([i, end[1]]); // Bottom
+      raw_padding.push([start[1], i]); // Top
+      raw_padding.push([end[1], i]); // Bottom
     }
 
     // Left and Right
     for (var i = start[1]; i <= end[1]; i++) {
-      raw_padding.push([end[0], i]); // Right
-      raw_padding.push([start[0], i]); // Left
+      raw_padding.push([i, end[0]]); // Right
+      raw_padding.push([i, start[0]]); // Left
     }
 
     // Sanitize padding
     padding = [];
     raw_padding.forEach(function(coords) {
-      if (coords[0] >= 0 && coords[0] < self.tiles[0].length && coords[1] >= 0 && coords[1] < self.tiles.length) {
+      if (coords[0] >= 0 && coords[0] < self.tiles.length && coords[1] >= 0 && coords[1] < self.tiles[0].length) {
         padding.push(coords);
       }
     });
