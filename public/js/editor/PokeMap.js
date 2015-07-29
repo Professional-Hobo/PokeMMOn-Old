@@ -179,7 +179,7 @@ PokeMap.prototype = {
     // Hover for tile placement
     if (pokeworld.mouse.inBounds && !pokeworld.mouse.shift) {
       this.ctx.save();
-      this.ctx.globalAlpha = .5;
+      this.ctx.globalAlpha = .7;
       this.drawTileNew(tileset.mouse.tileID, pokeworld.mouse.hover_x, pokeworld.mouse.hover_y);
       this.ctx.restore();
     }
