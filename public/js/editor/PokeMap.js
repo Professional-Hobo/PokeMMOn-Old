@@ -180,8 +180,8 @@ PokeMap.prototype = {
       }
     });
 
-    // Hover for tile placement
-    if (pokeworld.mouse.inBounds && !pokeworld.mouse.shift) {
+    // Hover for tile placement - Preview
+    if (pokeworld.mouse.inBounds) {
       this.ctx.save();
       this.ctx.globalAlpha = .7;
 
@@ -189,18 +189,39 @@ PokeMap.prototype = {
       if (tileset.multi) {
         var start = [tileset.mouse.tile_x, tileset.mouse.tile_y];
         var end = [tileset.mouse.tile_x + tileset.selectorDim[0], tileset.mouse.tile_y + tileset.selectorDim[1]];
+        var tiles = [];
 
+        // Determine tiles to draw from left top corner to bottom right corner
         for (var a = start[1], i = 0; a < end[1]; a++, i++) {
           for (var b = start[0], j = 0; b < end[0]; b++, j++) {
-            if (b <= 15 && a <= 500) {
-              if (pokeworld.mouse.hover_x + j < this.dim.width && pokeworld.mouse.hover_y + i < this.dim.height) {
-                this.drawTileNew(a * 16 + b, pokeworld.mouse.hover_x + j, pokeworld.mouse.hover_y + i);
-              }
+            if (b <= 15 && a <= 500) {   // Make sure tiles are within the tileset
+              tiles.push({id: a*16+b, x: pokeworld.mouse.hover_x + j, y: pokeworld.mouse.hover_y + i});
             }
           }
         }
+
+        // Now determine if we are drawing multiple instances
+        for (var x = 0; x < pokeworld.multi.x; x++) {
+          for (var y = 0; y < pokeworld.multi.y; y++) {
+            tiles.forEach(function(tile) {
+
+              // Verify coords are inbounds of pokemap
+              if (tile.x + tileset.selectorDim[0]*x < self.dim.width && tile.y + tileset.selectorDim[1]*y < self.dim.height) {
+                self.drawTileNew(tile.id, tile.x + tileset.selectorDim[0]*x, tile.y + tileset.selectorDim[1]*y);
+              }
+            });
+          }
+        }
       } else {
-        this.drawTileNew(tileset.mouse.tileID, pokeworld.mouse.hover_x, pokeworld.mouse.hover_y);
+        for (var x = 0; x < pokeworld.multi.x; x++) {
+          for (var y = 0; y < pokeworld.multi.y; y++) {
+
+            // Verify coords are inbounds of pokemap
+            if (pokeworld.mouse.hover_x + tileset.selectorDim[0]*x < self.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim[1]*y < self.dim.height) {
+              self.drawTileNew(tileset.mouse.tileID, pokeworld.mouse.hover_x + tileset.selectorDim[0]*x, pokeworld.mouse.hover_y + tileset.selectorDim[1]*y);
+            }
+          }
+        }
       }
       this.ctx.restore();
     }

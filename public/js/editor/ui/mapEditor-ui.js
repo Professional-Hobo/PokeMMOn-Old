@@ -19,19 +19,19 @@ $(function() {
         // Up Arrow
       } else if (e.which == 38){
         e.preventDefault();
-        tileset.resizeTileSelector([0, -1])
+        e.shiftKey ? pokeworld.resizeMultiplier([0, -1]) : tileset.resizeTileSelector([0, -1])
         // Down Arrow
       } else if (e.which == 40){
         e.preventDefault();
-        tileset.resizeTileSelector([0, 1])
+        e.shiftKey ? pokeworld.resizeMultiplier([0, 1]) : tileset.resizeTileSelector([0, 1])
         // Left Arrow
       } else if (e.which == 37){
         e.preventDefault();
-        tileset.resizeTileSelector([-1, 0])
+        e.shiftKey ? pokeworld.resizeMultiplier([-1, 0]) : tileset.resizeTileSelector([-1, 0])
         // Right Arrow
       } else if (e.which == 39){
         e.preventDefault();
-        tileset.resizeTileSelector([1, 0])
+        e.shiftKey ? pokeworld.resizeMultiplier([1, 0]) : tileset.resizeTileSelector([1, 0])
       }
     }
   });

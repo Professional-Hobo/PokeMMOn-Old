@@ -60,6 +60,10 @@ var PokeWorld = function() {
   this.saveOriginal();
   this.undoIndex = 0;
 
+  this.multi = {};
+  this.multi.x = 1;
+  this.multi.y = 1;
+
   this.startListeners();
 };
 
@@ -138,28 +142,50 @@ PokeWorld.prototype = {
               // Left click
               if (e.which == 1) {
 
+                // group tiles
                 if (tileset.multi) {
                   var start = [tileset.mouse.tile_x, tileset.mouse.tile_y];
                   var end = [tileset.mouse.tile_x + tileset.selectorDim[0], tileset.mouse.tile_y + tileset.selectorDim[1]];
+                  var tiles = [];
 
+                  // Determine tiles to draw from left top corner to bottom right corner
                   for (var a = start[1], i = 0; a < end[1]; a++, i++) {
                     for (var b = start[0], j = 0; b < end[0]; b++, j++) {
-                      if (b <= 15 && a <= 500) {
-                        if (self.mouse.hover_x + j < self.pokemap.dim.width && self.mouse.hover_y + i < self.pokemap.dim.height) {
-                          if (tileset.isTransparent(a * 16 + b)) {
-                            self.pokemap.setTile([a * 16 + b, tileset.background], self.mouse.hover_y + i, self.mouse.hover_x + j);
-                          } else {
-                            self.pokemap.setTile(a * 16 + b, self.mouse.hover_y + i, self.mouse.hover_x + j);
-                          }
-                        }
+                      if (b <= 15 && a <= 500) {   // Make sure tiles are within the tileset
+                        tiles.push({id: a*16+b, x: pokeworld.mouse.hover_x + j, y: pokeworld.mouse.hover_y + i});
                       }
                     }
                   }
+
+                  // Now determine if we are drawing multiple instances
+                  for (var x = 0; x < pokeworld.multi.x; x++) {
+                    for (var y = 0; y < pokeworld.multi.y; y++) {
+                      tiles.forEach(function(tile) {
+
+                        // Verify coords are inbounds of pokemap
+                        if (tile.x + tileset.selectorDim[0]*x < self.pokemap.dim.width && tile.y + tileset.selectorDim[1]*y < self.pokemap.dim.height) {
+                          if (tileset.isTransparent(tile.id)) {
+                            self.pokemap.setTile([tile.id, tileset.background], tile.y + tileset.selectorDim[1]*y, tile.x + tileset.selectorDim[0]*x);
+                          } else {
+                            self.pokemap.setTile(tile.id, tile.y + tileset.selectorDim[1]*y, tile.x + tileset.selectorDim[0]*x);
+                          }
+                        }
+                      });
+                    }
+                  }
                 } else {
-                  if (tileset.isTransparent(tileset.mouse.tileID)) {
-                    self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y, self.mouse.tile_x);
-                  } else {
-                    self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y, self.mouse.tile_x);
+                  for (var x = 0; x < pokeworld.multi.x; x++) {
+                    for (var y = 0; y < pokeworld.multi.y; y++) {
+
+                      // Verify coords are inbounds of pokemap
+                      if (pokeworld.mouse.hover_x + tileset.selectorDim[0]*x < self.pokemap.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim[1]*y < self.pokemap.dim.height) {
+                        if (tileset.isTransparent(tileset.mouse.tileID)) {
+                          self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y + tileset.selectorDim[1]*y, self.mouse.tile_x + tileset.selectorDim[0]*x);
+                        } else {
+                          self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y + tileset.selectorDim[1]*y, self.mouse.tile_x + tileset.selectorDim[0]*x);
+                        }
+                      }
+                    }
                   }
                 }
               } else {
@@ -222,25 +248,46 @@ PokeWorld.prototype = {
                   if (tileset.multi) {
                     var start = [tileset.mouse.tile_x, tileset.mouse.tile_y];
                     var end = [tileset.mouse.tile_x + tileset.selectorDim[0], tileset.mouse.tile_y + tileset.selectorDim[1]];
+                    var tiles = [];
 
+                    // Determine tiles to draw from left top corner to bottom right corner
                     for (var a = start[1], i = 0; a < end[1]; a++, i++) {
                       for (var b = start[0], j = 0; b < end[0]; b++, j++) {
-                        if (b <= 15 && a <= 500) {
-                          if (self.mouse.hover_x + j < self.pokemap.dim.width && self.mouse.hover_y + i < self.pokemap.dim.height) {
-                            if (tileset.isTransparent(a * 16 + b)) {
-                              self.pokemap.setTile([a * 16 + b, tileset.background], self.mouse.hover_y + i, self.mouse.hover_x + j);
-                            } else {
-                              self.pokemap.setTile(a * 16 + b, self.mouse.hover_y + i, self.mouse.hover_x + j);
-                            }
-                          }
+                        if (b <= 15 && a <= 500) {   // Make sure tiles are within the tileset
+                          tiles.push({id: a*16+b, x: pokeworld.mouse.hover_x + j, y: pokeworld.mouse.hover_y + i});
                         }
                       }
                     }
+
+                    // Now determine if we are drawing multiple instances
+                    for (var x = 0; x < pokeworld.multi.x; x++) {
+                      for (var y = 0; y < pokeworld.multi.y; y++) {
+                        tiles.forEach(function(tile) {
+
+                          // Verify coords are inbounds of pokemap
+                          if (tile.x + tileset.selectorDim[0]*x < self.pokemap.dim.width && tile.y + tileset.selectorDim[1]*y < self.pokemap.dim.height) {
+                            if (tileset.isTransparent(tile.id)) {
+                              self.pokemap.setTile([tile.id, tileset.background], tile.y + tileset.selectorDim[1]*y, tile.x + tileset.selectorDim[0]*x);
+                            } else {
+                              self.pokemap.setTile(tile.id, tile.y + tileset.selectorDim[1]*y, tile.x + tileset.selectorDim[0]*x);
+                            }
+                          }
+                        });
+                      }
+                    }
                   } else {
-                    if (tileset.isTransparent(tileset.mouse.tileID)) {
-                      self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y, self.mouse.tile_x);
-                    } else {
-                      self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y, self.mouse.tile_x);
+                    for (var x = 0; x < pokeworld.multi.x; x++) {
+                      for (var y = 0; y < pokeworld.multi.y; y++) {
+
+                        // Verify coords are inbounds of pokemap
+                        if (pokeworld.mouse.hover_x + tileset.selectorDim[0]*x < self.pokemap.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim[1]*y < self.pokemap.dim.height) {
+                          if (tileset.isTransparent(tileset.mouse.tileID)) {
+                            self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y + tileset.selectorDim[1]*y, self.mouse.tile_x + tileset.selectorDim[0]*x);
+                          } else {
+                            self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y + tileset.selectorDim[1]*y, self.mouse.tile_x + tileset.selectorDim[0]*x);
+                          }
+                        }
+                      }
                     }
                   }
                 } else {
@@ -332,5 +379,14 @@ PokeWorld.prototype = {
 
         saveOriginal: function() {
           this.original = _.cloneDeep(this.pokemap.tiles);
+        },
+
+        resizeMultiplier: function(multi) {
+          if (this.multi.x + multi[0] >= 1) {
+            this.multi.x += multi[0];
+          }
+          if (this.multi.y + multi[1] >= 1) {
+            this.multi.y += multi[1];
+          }
         }
     };
