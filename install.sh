@@ -2,7 +2,8 @@
 NODE_VERSION=0.12.7
 echo "Elevating permissions to root"
 sudo echo "Permissions elevated to root"
-sudo apt-get install postgresql redis-server build-essential openssl libssl-dev curl libtool git tmux;
+sudo apt-get update
+sudo apt-get install postgresql redis-server build-essential openssl libssl-dev curl libtool git tmux -y;
 wget http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION.tar.gz;
 tar xfv node-v$NODE_VERSION.tar.gz;
 cd node-v$NODE_VERSION;
