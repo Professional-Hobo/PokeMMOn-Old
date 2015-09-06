@@ -46,8 +46,6 @@ var PokeMap = function(tiles) {
   //this.offset.x += this.ctx.canvas.width/2;
   //this.offset.y += this.ctx.canvas.height/2;
 
-  this.render();
-
   // Disable right click menu
   $('#map')[0].oncontextmenu = function(e) {
     e.preventDefault();
@@ -58,16 +56,6 @@ PokeMap.prototype = {
   // Deletes a tile (data only)
   deleteTile: function(x, y) {
     this.tiles[x][y].clearLayers();
-  },
-
-  // Accepts a tile object
-  drawTile: function(tile, x, y) {
-    var self = this;
-
-    // Draw from layer 1 to 3
-    tile.getLayers().forEach(function(layer) {
-      self.ctx.drawImage(tileset.image, (layer - Math.floor(layer / 16) * 16) * 16, Math.floor(layer / 16) * 16, 16, 16, x * 16, y * 16, 16, 16);
-    });
   },
 
   drawTileNew: function(id, x, y) {
@@ -251,20 +239,6 @@ PokeMap.prototype = {
   // Clear the canvas
   clear: function() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-  },
-
-  // Renders the canvas using the tiles array
-  render: function() {
-
-    // Clear the canvas first
-    this.clear();
-
-    // Now draw all the tiles
-    for (var h = 0; h < this.dim.height; h++) {
-      for (var w = 0; w < this.dim.width; w++) {
-        this.drawTile(this.tiles[h][w], w, h);
-      }
-    }
   },
 
   // Resizes the map and updates the positions
