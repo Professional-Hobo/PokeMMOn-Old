@@ -5,7 +5,7 @@ var User = Waterline.Collection.extend({
 
     identity: 'user',
     connection: 'connection',
-    migrate: 'safe',
+//    migrate: 'safe',
 
     attributes: {
         username: {

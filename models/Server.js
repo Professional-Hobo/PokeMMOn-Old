@@ -4,7 +4,7 @@ var Server = Waterline.Collection.extend({
 
     identity: 'server',
     connection: 'connection',
-    migrate: 'safe',
+//    migrate: 'safe',
 
     attributes: {
         name: 'string',

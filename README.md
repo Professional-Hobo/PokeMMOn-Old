@@ -7,13 +7,10 @@ Make sure you run ./setup.sh first in order to download assets and setup web/gam
 
 Database Setup
 ==============
-Comment the following in models/Users.js and models/Server.js and then ./run      
+Execute ./run and after it is finished initializing, quit the server.
+Next, navigate to models/Users.js and models/Server.js and uncomment `migrate: 'safe'`.
 
-```
-migrate: 'safe'      
-```
-
-After running successfully, terminate your server and uncomment the lines you just commented.
+The database should be properly set up now.
 
 Running
 =======
