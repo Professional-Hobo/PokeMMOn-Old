@@ -74,14 +74,22 @@ router.get('/register', function(req, res, next) {
 
 router.post('/register', function(req, res, next) {
     if (!req.session.loggedin) {
+      if (req.body.username.match(/^[a-zA-Z0-9]{1,20}$/)) {
         req.app.models.user.create(req.body, function(err, model) {
-            if(err) return res.status(500).json({ err: err });
-
+          if (err) {
+              req.flash('info', "This username is already in use!");
+              res.redirect('/register');
+          } else {
             req.session.loggedin = true;
             req.session.user = model;
             req.flash('info', "Registered successfully! Welcome to PokeMMOn!");
             res.redirect('/');
+          }
         });
+      } else {
+        req.flash('info', "Only 20 alphanumeric characters max please!");
+        res.redirect('/register');
+      }
     }
 });
 

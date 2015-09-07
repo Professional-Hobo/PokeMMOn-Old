@@ -5,6 +5,8 @@ html(lang="en")
     link(rel='stylesheet', href='css/general.css')
   body
     div(align="center")
+      -if(messages)
+        div#note #{messages}
       h1 Register
       hr(width="50%")
       h3
