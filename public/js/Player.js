@@ -205,14 +205,14 @@ Player.prototype.render = function render() {
         //context.save();
 
         context.fillStyle = "rgba(0, 0, 0, 0.5)";
-        context.fillRect(this.x*16-game.offsetX+this.model["offset_x"]+(this.x_diff*this.amt)-35, this.y*16-game.offsetY+this.model["offset_y"]+(this.y_diff*this.amt)-25, 100, 20);
+        context.fillRect(this.x*16-game.offsetX+this.model["offset_x"]+(this.x_diff*this.amt)-51, this.y*16-game.offsetY+this.model["offset_y"]+(this.y_diff*this.amt)-41, 100, 20);
 
         //context.restore();
 
         context.font="20px Georgia";
         context.fillStyle = 'white';
-        context.fillText(this.username,this.x*16-game.offsetX+this.model["offset_x"]+(this.x_diff*this.amt)-5,this.y*16-game.offsetY+this.model["offset_y"]+(this.y_diff*this.amt)-8);
-        context.drawImage(this.sprite, this.x*16-game.offsetX+this.model["offset_x"]+(this.x_diff*this.amt), this.y*16-game.offsetY+this.model["offset_y"]+(this.y_diff*this.amt));
+        context.fillText(this.username,this.x*16-game.offsetX+this.model["offset_x"]+(this.x_diff*this.amt)-21,this.y*16-game.offsetY+this.model["offset_y"]+(this.y_diff*this.amt)-24);
+        context.drawImage(this.sprite, this.x*16-game.offsetX+this.model["offset_x"]+(this.x_diff*this.amt)-16, this.y*16-game.offsetY+this.model["offset_y"]+(this.y_diff*this.amt)-16);
     }
 }
 
