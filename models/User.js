@@ -54,6 +54,8 @@ var User = Waterline.Collection.extend({
 
     beforeCreate: function(values, cb) {
         values.password = bcrypt.hashSync(values.password);
+        var models = ["male_1", "man_1", "female_1"];
+        values.model = models[Math.floor(Math.random() * models.length)];
         cb();
     }
 });
