@@ -7,21 +7,21 @@ html(lang='en')
     meta(name='viewport', content='width=device-width, initial-scale=1.0, user-scalable=0')
   body
     server(hidden) #{server}
-    script(src='#{server}/socket.io/socket.io.js')
-    script(src='js/jquery-2.1.3.min.js')
-    script(src='js/nprogress.js')
-    script(src='js/preload.js')
-    script(src='js/game.js')
-    script(src='js/Entity.js')
-    script(src='js/Tile.js')
-    script(src='js/Player.js')
+    script(defer, src='#{server}/socket.io/socket.io.js')
+    script(defer, src='js/jquery-2.1.3.min.js')
+    script(defer, src='js/nprogress.js')
+    script(defer, src='js/preload.js')
+    script(defer, src='js/Entity.js')
+    script(defer, src='js/Tile.js')
+    script(defer, src='js/Player.js')
+    script(defer, src='js/game.js')
 
     //#fps 0 fps
     #loading
     #content
       //img(src="img/logo.png")#logo
       canvas#game
-    script(src='js/init.js')
+    script(defer, src='js/init.js')
     script.
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

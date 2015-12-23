@@ -1,10 +1,5 @@
 function Game(options) {
-    // this.dom = this.build();        // The root of the game in the DOM. When creating new elements, append to this.dom
     this.options = options;
-
-    this.bufA = {};                 // Used by render
-    this.bufB = {};                 // Used by update/logic
-    this.dirty = false;             // Used to signal when updates should be pulled from bufB to bufA
 
     this.oldTime;                   // Used to calculate deltaTime
     this.deltaTime;                 // In milliseconds
@@ -27,33 +22,18 @@ function Game(options) {
     this.showFps = false;
 
     this.defaultDim = 512;
-
-    // this.cache = // TODO Need to implement a cache for canvas
 }
-
-/*
-keys = {};
-$(document).keydown(function(event){
-
-    keys[event.which] = true;
-    if (!game.player.walking) {
-        game.player.move(event.which);
-    }
-}).keyup(function(event){
-    delete keys[event.which];
-});
-*/
 
 $(document).keydown(function(e) {
     // Only move if proper key is used
-    if (!freeze && inArray(e.which, [87, 65, 83, 68]) && !game.player.walking) {
+    if (!game.freeze && inArray(e.which, [87, 65, 83, 68]) && !game.player.walking) {
         e.preventDefault();
         game.player.move(e.which);
     }
 
     var elem = document.getElementById('game');
     // Full screen
-    if (!freeze && e.which == 70) {
+    if (!game.freeze && e.which == 70) {
         if (elem.requestFullscreen) {
           elem.requestFullscreen();
         } else if (elem.msRequestFullscreen) {
@@ -78,8 +58,6 @@ document.addEventListener("webkitfullscreenchange", function () {
 function inArray(value, array) {
   return array.indexOf(value) > -1;
 }
-
-
 
 Game.prototype.updatePlayerPosses = function updatePlayerPosses() {
     // Remove players not in playerdata list
@@ -126,16 +104,6 @@ Game.prototype.calcFps = function() {
     }
 };
 
-// Create the root from which game elements will be created and removed
-Game.prototype.build = function() {
-    var div = document.createElement("div");
-
-    div.setAttribute("class", "game");
-    document.body.appendChild(div);
-
-    return div;
-};
-
 // Connects the game to the server and starts the update and render loops
 Game.prototype.start = function(username, model, direction, x, y, callback) {
     // Push player object as first entity
@@ -162,26 +130,8 @@ Game.prototype.connect = function() {
     this.socket = io(this.options.server);
 }
 
-// Set up event based game logic here
-// this.dirty is set to false within these socket events
 Game.prototype.logic = function() {
-    // Example of how an update event would look like
-    // Nothing in this example should be changed except for the 
-    // event that the socket is waiting on and the arguments of the handler
-    // Also the comment in the middle of the handler should be replaced with 
-    // update code
-    this.socket.on('', function(data) {
-        if(!dirty) {
-            this.bufB = {};
-            dirty = true;
-        }
 
-        // Store all information inside of this.bufB
-    });
-
-
-    // TODO Keybindings and mouseevents need to be tied with this.socket.emit
-    // https://github.com/tzuryby/jquery.hotkeys for examples
 };
 
 Game.prototype.drawFps = function() {
@@ -191,6 +141,7 @@ Game.prototype.drawFps = function() {
     context.restore();
     context.font = "20px Courier";
     context.fillStyle = 'yellow';
+
     var fps = Math.round(game.fps*10)/10;
     context.fillText(fps + (fps % 1 != 0 ? "" : ".0"), 0, 15);
 };
@@ -204,11 +155,6 @@ Game.prototype.render = function(time) {
     this.oldTime = time;
 
     this.calcFps();             // Calculates the fps for utility.
-
-    if (this.dirty) {
-        this.bufA = this.bufB;  // Moves updates from bufB to bufA
-        this.dirty = false;
-    }
 
     // Render background first
     var height = Math.floor(((game.isFullScreen) ? screen.height : window.innerHeight)/16)*16;
