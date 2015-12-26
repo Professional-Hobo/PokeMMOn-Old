@@ -210,8 +210,8 @@ Game.prototype.renderTiles = function() {
 
     if (!this.old) {
         //console.log(x,y);
-        for (var i = game.player.y-16-1, a = 0; i < 33+game.player.y-16; i++, a++) {
-            for (var j = game.player.x-16-1, b = 0; j < 33+game.player.x-16; j++, b++) {
+        for (var i = game.player.y-16-1, a = -1; i < 33+game.player.y-16; i++, a++) {
+            for (var j = game.player.x-16-1, b = -1; j < 33+game.player.x-16; j++, b++) {
                 if (i === 0 && j === 0 && this.frame%60 === 0) {
                     console.log(16*j+(this.player.x_diff*this.player.amt), 16*i+(this.player.y_diff*this.player.amt));
                 }
@@ -240,7 +240,7 @@ Game.prototype.getTile = function(x, y) {
             return src[x][y];
         }
     }
-    return new Tile(-1);
+    return new Tile(0);
 };
 
 Game.prototype.startLogic = function() {
