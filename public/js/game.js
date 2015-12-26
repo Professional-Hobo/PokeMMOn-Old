@@ -173,10 +173,11 @@ Game.prototype.render = function(time) {
     var height = Math.floor(((game.isFullScreen) ? screen.height : window.innerHeight)/16)*16;
     var width = Math.floor(((game.isFullScreen) ? screen.width : window.innerWidth)/16)*16;
 
-    this.dim = Math.min(height, width);
+    this.dim = 512;
+    /*Math.min(height, width);
     while (this.dim > this.defaultDim) {
         this.dim-=16;
-    }
+    }*/
     this.renderTiles();
 
     // Player render
@@ -210,8 +211,8 @@ Game.prototype.renderTiles = function() {
 
     if (!this.old) {
         //console.log(x,y);
-        for (var i = game.player.y-16-1, a = -1; i < 33+game.player.y-16; i++, a++) {
-            for (var j = game.player.x-16-1, b = -1; j < 33+game.player.x-16; j++, b++) {
+        for (var i = game.player.y-Math.floor(this.dim/2/16)-1, a = -1; i < 33+game.player.y-Math.floor(this.dim/2/16); i++, a++) {
+            for (var j = game.player.x-Math.floor(this.dim/2/16)-1, b = -1; j < 33+game.player.x-Math.floor(this.dim/2/16); j++, b++) {
                 if (i === 0 && j === 0 && this.frame%60 === 0) {
                     console.log(16*j+(this.player.x_diff*this.player.amt), 16*i+(this.player.y_diff*this.player.amt));
                 }
