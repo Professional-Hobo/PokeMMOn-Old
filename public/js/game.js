@@ -17,11 +17,10 @@ function Game(options) {
 
     this.isFullScreen = false;
 
-    this.logicLoop = "";
-
-    this.showFps = false;
+    this.showFps = true;
 
     this.defaultDim = 512;
+    this.old = false;
 }
 
 $(document).keydown(function(e) {
@@ -59,7 +58,7 @@ function inArray(value, array) {
   return array.indexOf(value) > -1;
 }
 
-Game.prototype.updatePlayerPosses = function updatePlayerPosses() {
+Game.prototype.updatePlayerPosses = function() {
     // Remove players not in playerdata list
     $.each(game.playerData, function(key) {
         if (typeof game.players[key] == "undefined") {
@@ -111,7 +110,7 @@ Game.prototype.start = function(username, model, direction, x, y, callback) {
 
     this.connect();                     // Connects to the server
 
-    this.logic();                       // Sets up game logic
+    this.startLogic();                  // Starts game logic loop
 
     requestAnimationFrame(this.render.bind(this)); // Has an animation loop
 
@@ -136,14 +135,28 @@ Game.prototype.logic = function() {
 
 Game.prototype.drawFps = function() {
     context.save();
-    context.fillStyle = "rgba(0, 0, 0, 0.8)";
-    context.fillRect(0, 0, 50, 20);
+    context.fillStyle = "rgba(0, 0, 0, 0.65)";
+    context.fillRect(0, 0, 512, 512);
+    //context.fillRect(0, 20, 300, 20);
     context.restore();
-    context.font = "20px Courier";
+    context.font = "16px Courier";
     context.fillStyle = 'yellow';
 
     var fps = Math.round(game.fps*10)/10;
-    context.fillText(fps + (fps % 1 != 0 ? "" : ".0"), 0, 15);
+    context.fillText(fps + (fps % 1 != 0 ? "" : ".0") + " FPS | walkingFrame: " + zeroPad(this.player.walkingFrame, 10) + " | currentFrame: " + this.frame, 0, 15);
+    context.fillText("Player: [" + this.player.x + ", " + this.player.y + "][" + this.x + ", " + this.y + "][" + this.player.amt + "]{" + this.player.direction + "}" , 0, 35);
+    context.fillText("Origin coords: [" + this.raw_x + ", " + this.raw_y + "] [" + Math.round(this.raw_x/16) + ", " + Math.round(this.raw_y/16) + "]", 0, 55);
+    context.fillText("toRender sum: " + this.toRender.reduce(function(a, b) { return a + b; }) + " | contains negatives: " + (this.toRender.indexOf(-1) === 1) , 0, 75);
+    context.fillText("Clients connected: " + Object.keys(this.playerData).length, 0, 95);
+    context.fillText("Sx, Sy, Sw, Sh, Dx, Dy, Dw, Dh", 0, 115);
+    context.fillText(this.tilesThing[0], 0, 135);
+    context.fillText(this.tilesThing[1], 0, 155);
+    context.fillText(this.tilesThing[2], 0, 175);
+
+    function zeroPad(nr,base){
+      var  len = (String(base).length - String(nr).length)+1;
+      return len > 0? new Array(len).join('0')+nr : nr;
+    }
 };
 
 // Game rendering loop
@@ -164,8 +177,7 @@ Game.prototype.render = function(time) {
     while (this.dim > this.defaultDim) {
         this.dim-=16;
     }
-
-    context.drawImage(background, (this.player.x-(this.dim/16/2))*16 + (this.player.x_diff*this.player.amt), (this.player.y-(this.dim/16/2))*16 + (this.player.y_diff*this.player.amt), this.dim, this.dim, 0, 0, this.dim, this.dim);
+    this.renderTiles();
 
     // Player render
     this.player.render();
@@ -185,3 +197,67 @@ Game.prototype.render = function(time) {
 
     game.loop = requestAnimationFrame(this.render.bind(this));
 };
+
+Game.prototype.renderTiles = function() {
+    this.raw_x = (this.player.x-(this.dim/16/2))*16 + (this.player.x_diff*this.player.amt);
+    this.raw_y = (this.player.y-(this.dim/16/2))*16 + (this.player.y_diff*this.player.amt);
+    this.dim = this.dim;
+
+    this.x = Math.floor(this.raw_x/16)
+    this.y = Math.floor(this.raw_y/16)
+    this.toRender = [0];
+    this.tilesThing = [];
+
+    if (!this.old) {
+        //console.log(x,y);
+        for (var i = game.player.y-16-1, a = 0; i < 33+game.player.y-16; i++, a++) {
+            for (var j = game.player.x-16-1, b = 0; j < 33+game.player.x-16; j++, b++) {
+                if (i === 0 && j === 0 && this.frame%60 === 0) {
+                    console.log(16*j+(this.player.x_diff*this.player.amt), 16*i+(this.player.y_diff*this.player.amt));
+                }
+                tile = this.getTile([i,j]);
+                this.toRender.push(tile.getLayer(1));
+                this.tilesThing.push(((tile.getLayer(2) % 16) * 16) + ", " +  (Math.floor(tile.getLayer(1) / 16) * 16) + ", " + 16 + ", " + 16 + ", " + (16*j+(this.player.x_diff*this.player.amt)) + ", " + (16*i+(this.player.y_diff*this.player.amt)) + ", 16, 16");
+                context.drawImage(tileset, (tile.getLayer(1) % 16) * 16, Math.floor(tile.getLayer(1) / 16) * 16, 16, 16, 16*b-(this.player.x_diff*this.player.amt), 16*a-(this.player.y_diff*this.player.amt), 16, 16);
+                context.drawImage(tileset, (tile.getLayer(2) % 16) * 16, Math.floor(tile.getLayer(2) / 16) * 16, 16, 16, 16*b-(this.player.x_diff*this.player.amt), 16*a-(this.player.y_diff*this.player.amt), 16, 16);
+            }
+        }
+    } else {
+        //console.log(x, y, dim/16, dim/16, 0, 0, dim/16, dim/16);
+        context.drawImage(background, this.raw_x, this.raw_y, this.dim, this.dim, 0, 0, this.dim, this.dim);
+    }
+
+};
+
+Game.prototype.getTile = function(x, y) {
+    if (Array.isArray(x)) {
+        y = x[1];
+        x = x[0];
+    }
+
+    if (src[x] !== undefined) {
+        if (src[x][y] !== undefined) {
+            return src[x][y];
+        }
+    }
+    return new Tile(-1);
+};
+
+Game.prototype.startLogic = function() {
+    var self = this;
+    this.logicLoop = setInterval(function() {
+        // Player logic
+        self.player.walk();
+
+        // Other players logic
+        for (key in self.players) {
+            // Don't render
+            //if ((self.players[key].x-self.player.x > -19 && self.players[key].x-self.player.x < 17) && (self.players[key].y-self.player.y < 17 && self.players[key].y-self.player.y > -19)) {
+                self.players[key].walk();
+            //}
+        }
+
+        // Update other players positions
+        self.updatePlayerPosses();
+    }, 1000/60);
+}

@@ -19,49 +19,68 @@ var tiles;
 var background = document.createElement("img");
 background.src = "assets/world/surface.png";
 
-// Game is hidden until everything is loaded
-$("#game").hide();
-$(window).load(function() {
-    game.freeze = true;
-      $('#game')
-        .attr('width', game.dim)
-        .attr('height', game.dim)
-        .css('width', game.dim + "px")
-        .css('height', game.dim + "px");
+$.get("editor/world/test world", function(data) {
+    map = data;
+    dim = map.maps.default.info.dimensions;
+    src = map.maps.default.tiles;
+    for (var i = 0; i < src.length; i++) {
+      for (var j = 0; j < src[0].length; j++) {
+        src[i][j] = new Tile(src[i][j].layers);
+      }
+    }
 
-        // Center game canvas on screen if not full screen already
-        if (!game.isFullScreen) {
-            $('#game')
-            .css('margin-left', (window.innerWidth-game.dim)/2 + "px")
-            .css('margin-top', (window.innerHeight-game.dim)/2 + "px");
-        } else {
-            $('#game')
-            .css('margin-left', "")
-            .css('margin-top', "");
-        }
-        
-      $('#loading').text('');
-      $("#game").fadeIn(1000, function() {
-        resize();
-        $('#loading').text('');
-        // Allow player to move
-        game.freeze = false;
-        game.logicLoop = setInterval(function() {
-            // Player logic
-            game.player.walk();
+    tileset = new Image();
+    tileset.src = "img/editor/sets/all.png";
+    tileset.onload = function() {
+        // Game is hidden until everything is loaded
+        $("#game").hide();
+        $(window).load(function() {
+            game.freeze = true;
+              $('#game')
+                .attr('width', game.dim)
+                .attr('height', game.dim)
+                .css('width', game.dim + "px")
+                .css('height', game.dim + "px");
 
-            // Other players logic
-            for (key in this.players) {
-                // Don't render
-                //if ((game.players[key].x-game.player.x > -19 && game.players[key].x-game.player.x < 17) && (game.players[key].y-game.player.y < 17 && game.players[key].y-game.player.y > -19)) {
-                    game.players[key].walk();
-                //}
-            }
+                // Center game canvas on screen if not full screen already
+                if (!game.isFullScreen) {
+                    $('#game')
+                    .css('margin-left', (window.innerWidth-game.dim)/2 + "px")
+                    .css('margin-top', (window.innerHeight-game.dim)/2 + "px");
+                } else {
+                    $('#game')
+                    .css('margin-left', "")
+                    .css('margin-top', "");
+                }
 
-            // Update other players positions
-            game.updatePlayerPosses();
-        }, 1000/60);
-    });
+              $('#loading').text('');
+              $("#game").fadeIn(1000, function() {
+                resize();
+                $('#loading').text('');
+                // Allow player to move
+                game.freeze = false;
+
+                /*
+                game.logicLoop = setInterval(function() {
+                    // Player logic
+                    game.player.walk();
+
+                    // Other players logic
+                    for (key in this.players) {
+                        // Don't render
+                        //if ((game.players[key].x-game.player.x > -19 && game.players[key].x-game.player.x < 17) && (game.players[key].y-game.player.y < 17 && game.players[key].y-game.player.y > -19)) {
+                            game.players[key].walk();
+                        //}
+                    }
+
+                    // Update other players positions
+                    game.updatePlayerPosses();
+                }, 1000/60);
+
+                */
+            });
+        });
+    }
 });
 
 // Load
