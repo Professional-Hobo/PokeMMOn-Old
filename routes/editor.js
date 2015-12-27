@@ -155,10 +155,16 @@ router.route('/worldRevisions/:name')
 
     .post(function(req, res) {
         var name = req.params.name;
-        var git = require('simple-git')('worlds/' + name);
-        git.checkout([req.body.hash, "map.json"], function(err, result) {
-            console.log(err, result);
-            res.status(200).send("success");
+        fs.exists('worlds/' + name, function(exists) {
+            if (exists) {
+                var git = require('simple-git')('worlds/' + name);
+                git.checkout([req.body.hash, "map.json"], function(err, result) {
+                    console.log(err, result);
+                    res.status(200).send("success");
+                });
+            } else {
+                res.status(404).send("World not found!");
+            }
         });
     });
 
