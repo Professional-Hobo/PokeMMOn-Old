@@ -411,16 +411,13 @@ $(function() {
   function updateRevisionList(callback) {
     // Load in available maps for editing
     $('#revisions')
-    .empty()
-    .append($("<option></option>")
-    .attr("value", "")
-    .text("--- Current Revision ---"));
+    .empty();
 
     $.each(pokeworld.revisions, function(key, item) {
       $('#revisions')
       .append($("<option></option>")
       .attr("key", item[0])
-      .text(item[0].slice(0, 6) + " - " + moment(+item[1]).format('MMM Do YYYY, h:mm:ss a')));
+      .text((key === 0 ? "[latest] " : "") + item[0].slice(0, 6) + " - " + moment(+item[1]).format('MMM Do YYYY, h:mm:ss a')));
     });
 
     typeof callback === 'function' && callback();
