@@ -158,9 +158,10 @@ router.route('/worldRevisions/:name')
         fs.exists('worlds/' + name, function(exists) {
             if (exists) {
                 var git = require('simple-git')('worlds/' + name);
-                git.checkout([req.body.hash, "map.json"], function(err, result) {
-                    console.log(err, result);
-                    res.status(200).send("success");
+                git.show([req.body.hash + ":map.json"], function(err, result) {
+                    fs.writeFile(process.cwd() + '/worlds/' + name + '/tmpMap.json', result, function(err) {
+                        res.sendFile(process.cwd() + '/worlds/' + name + '/tmpMap.json');
+                    });
                 });
             } else {
                 res.status(404).send("World not found!");

@@ -92,7 +92,26 @@ $(function() {
   $("#revisions").change(function() {
     console.log($("#revisions").find('option:selected').attr("key"));
     $.ajax('editor/worldRevisions/' + worldName, {type: 'POST', contentType : 'application/json', data: JSON.stringify({hash: $("#revisions").find('option:selected').attr("key")}), global: false, success: function(data) {
-      loadWorld();   // Load world data and update map stuff
+
+      pokeworld.load(data); // Contains the world's data
+      var currentMap = $("#maps").val();   // Save current selected map to restore after updating map list
+
+      // Fetch the list of maps in world
+      updateMapList(function() {
+
+        // Restore previous selected option
+        if (currentMap in pokeworld.maps) {
+          $("#maps").val(currentMap);
+        } else {
+          $("#maps").val(map);
+        }
+
+        $("#deleteMap").prop("disabled", false);
+        $("#renameMap").prop("disabled", false);
+
+        map = $("#maps").val();   // Get name of map
+        loadPokeMap();
+      });
     }});
   });
 
