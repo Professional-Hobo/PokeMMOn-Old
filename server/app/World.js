@@ -50,7 +50,7 @@ exports.start = function start() {
             players[key].socket.emit('update', playerData);
         });
         updateData = "{";
-    }, 100);
+    }, 1000/30);
 };
 
 /*
