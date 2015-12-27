@@ -41,6 +41,12 @@ $(function() {
           .val("default")
           .prop("disabled", false);
 
+      $('#revisions')
+          .empty()
+          .append($("<option></option>")
+          .attr("value", "")
+          .text("--- No revisions available ---"));
+
       pokeworld.pokemap.renderAroundCenter();
 
     } else {
@@ -145,6 +151,12 @@ $(function() {
         .text("default"))
         .val("default")
         .prop("disabled", false);
+
+        $('#revisions')
+          .empty()
+          .append($("<option></option>")
+          .attr("value", "")
+          .text("--- No revisions available ---"));
       });
     }});
   })
