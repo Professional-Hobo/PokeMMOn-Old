@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser')();
 var bodyParser   = require('body-parser');
 var fs           = require('fs');
 var flash        = require('connect-flash');
+var compress     = require('compression');
 var app          = express();
 
 var settings     = require('./settings.json');
@@ -31,6 +32,9 @@ var config = Waterline_init.config;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+// gzip compression
+app.use(compress());
 
 // Session store
 app.use(cookieParser);
