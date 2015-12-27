@@ -105,9 +105,9 @@ router.route('/world/:name')
 
                             var git = require('simple-git')('worlds/' + name);
                             git.add('.')
-                            git.commit(new Date().getTime());
-
-                            res.status(200).send({ msg: "Updated world " + name + " successfully!" });
+                            git.commit(new Date().getTime(), function(err, blah) {
+                                res.status(200).send({ msg: "Updated world " + name + " successfully!" });
+                            });
                         }
                     });
                 }
@@ -132,25 +132,35 @@ router.route('/world/:name')
 
     });
 
-router.get('/worldRevisions/:name', function(req, res, next) {
-    var name = req.params.name;
+router.route('/worldRevisions/:name')
+    .get(function(req, res) {
+        var name = req.params.name;
 
-    fs.exists('worlds/' + name, function(exists) {
-        if (exists) {
-            var git = require('simple-git')('worlds/' + name);
-            git.log(function(err, log) {
-                var revisions = [];
-                _.each(log.all.slice(1), function(revision) {
-                    revisions.push([revision.hash.slice(1), revision.message]);
+        fs.exists('worlds/' + name, function(exists) {
+            if (exists) {
+                var git = require('simple-git')('worlds/' + name);
+                git.log(function(err, log) {
+                    var revisions = [];
+                    _.each(log.all, function(revision) {
+                        revisions.push([revision.hash.slice(1), revision.message.match(/\d+/)[0]]);
+                    });
+
+                    res.status(200).send(revisions);
                 });
+            } else {
+                res.status(400).send({ msg: "World " + name + " doesn't exist!" });
+            }
+        })
+    })
 
-                res.status(200).send(revisions);
-            });
-        } else {
-            res.status(400).send({ msg: "World " + name + " doesn't exist!" });
-        }
+    .post(function(req, res) {
+        var name = req.params.name;
+        var git = require('simple-git')('worlds/' + name);
+        git.checkout([req.body.hash, "map.json"], function(err, result) {
+            console.log(err, result);
+            res.status(200).send("success");
+        });
     });
-});
 
 router.get('/sets/:name', function(req, res, next) {
     var name = req.params.name;

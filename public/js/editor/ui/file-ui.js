@@ -50,6 +50,7 @@ $(function() {
 
       worldName = $("#worlds").val();   // Fetch current chosen world value
       loadWorld();   // Load world data and update map stuff
+      loadRevisions();
     }
   });
 
@@ -79,6 +80,14 @@ $(function() {
 
       UI.notify("Loaded map successfully!", "Map \"" + map + "\" was loaded successfully!", delay);
     }
+  });
+
+  // Load in revision on change
+  $("#revisions").change(function() {
+    console.log($("#revisions").find('option:selected').attr("key"));
+    $.ajax('editor/worldRevisions/' + worldName, {type: 'POST', contentType : 'application/json', data: JSON.stringify({hash: $("#revisions").find('option:selected').attr("key")}), global: false, success: function(data) {
+      loadWorld();   // Load world data and update map stuff
+    }});
   });
 
   // Delete world
@@ -297,7 +306,7 @@ $(function() {
 
       $.ajax("editor/world/" + worldName, {method: "PUT", data: {data: JSON.stringify(pokeworld.export())}, global: true, suppress: true, success: function(data) {
         UI.notify("Saved world successfully!", "World \"" + worldName + "\" was saved successfully!", delay);
-
+        loadRevisions();
       }, fail: function() {
         UI.notify("Failed to save world", "World \"" + worldName + "\" failed to save!", delay);
       }});
@@ -471,7 +480,6 @@ $(function() {
         $("#renameMap").prop("disabled", false);
 
         map = $("#maps").val();   // Get name of map
-        loadRevisions();
         loadPokeMap();
       });
 
