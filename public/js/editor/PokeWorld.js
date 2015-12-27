@@ -30,6 +30,9 @@ var PokeWorld = function() {
     }
   };
 
+  // Empty Revisions list
+  this.revisions = [];
+
   map = "default" // Global var contains current map name
 
   // Allocate space for the map tiles

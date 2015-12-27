@@ -399,6 +399,24 @@ $(function() {
     typeof callback === 'function' && callback();
   }
 
+  function updateRevisionList(callback) {
+    // Load in available maps for editing
+    $('#revisions')
+    .empty()
+    .append($("<option></option>")
+    .attr("value", "")
+    .text("--- Current Revision ---"));
+
+    $.each(pokeworld.revisions, function(key, item) {
+      $('#revisions')
+      .append($("<option></option>")
+      .attr("key", item[0])
+      .text(item[0].slice(0, 6) + " - " + moment(+item[1]).format('MMM Do YYYY, h:mm:ss a')));
+    });
+
+    typeof callback === 'function' && callback();
+  }
+
   // Reveal a section by id
   function showSection(section, callback) {
     $("#" + section).slideDown("medium", function() {
@@ -453,11 +471,25 @@ $(function() {
         $("#renameMap").prop("disabled", false);
 
         map = $("#maps").val();   // Get name of map
+        loadRevisions();
         loadPokeMap();
       });
 
     }, fail: function() {
       UI.notify("Failed to load world", "World \"" + worldName + "\" failed to load!", delay);
+    }});
+  }
+
+  // Load world from server
+  function loadRevisions() {
+    $.ajax("editor/worldRevisions/" + worldName, {global: true, suppress: true, success: function(data) {
+      pokeworld.revisions = data;
+
+      // Fetch the list of maps in world
+      updateRevisionList();
+
+    }, fail: function() {
+      UI.notify("Failed to load world Revisions", "World \"" + worldName + "\" failed to load!", delay);
     }});
   }
 

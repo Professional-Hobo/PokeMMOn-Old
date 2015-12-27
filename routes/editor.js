@@ -4,6 +4,7 @@ var path     = require('path');
 var rimraf   = require('rimraf');
 var sizeOf   = require('image-size');
 var pretty   = require('prettysize');
+var _        = require('lodash');
 var router   = express.Router();
 var settings = require('../settings.json');
 
@@ -32,6 +33,8 @@ router.route('/world')
                     res.status(400).send({ msg: name + " is an invalid name." });
                 } else {
                     fs.mkdir('worlds/' + name, "0755", function() {
+                        var git = require('simple-git')('worlds/' + name);
+                        git.init();
                         fs.writeFile("worlds/" + name + '/map.json', JSON.stringify(data), function (err) {
                             if (err) {
                                 console.log(err);
@@ -41,7 +44,7 @@ router.route('/world')
                                 res.status(200).send({ msg: "Saved world " + name + " successfully!" });
                             }
                         });
-                    })
+                    });
                 }
             });
         }
@@ -99,6 +102,11 @@ router.route('/world/:name')
                             res.status(400).send({ msg: "An error was encountered while saving world " + name + "!" });
                         } else {
                             console.log('Updated world ' + name + '!');
+
+                            var git = require('simple-git')('worlds/' + name);
+                            git.add('.')
+                            git.commit(new Date().getTime());
+
                             res.status(200).send({ msg: "Updated world " + name + " successfully!" });
                         }
                     });
@@ -123,6 +131,26 @@ router.route('/world/:name')
 
 
     });
+
+router.get('/worldRevisions/:name', function(req, res, next) {
+    var name = req.params.name;
+
+    fs.exists('worlds/' + name, function(exists) {
+        if (exists) {
+            var git = require('simple-git')('worlds/' + name);
+            git.log(function(err, log) {
+                var revisions = [];
+                _.each(log.all.slice(1), function(revision) {
+                    revisions.push([revision.hash.slice(1), revision.message]);
+                });
+
+                res.status(200).send(revisions);
+            });
+        } else {
+            res.status(400).send({ msg: "World " + name + " doesn't exist!" });
+        }
+    });
+});
 
 router.get('/sets/:name', function(req, res, next) {
     var name = req.params.name;
