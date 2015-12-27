@@ -61,6 +61,10 @@ html
                             button.yellow.half#renameMap Rename
                             | 
                             button.red.half#deleteMap Delete
+                        .section(style="display: none;")#revisionSection
+                            h5 Revision Selector
+                            select#revisions
+                                option --- No revisions available ---
                         .section(style="display: none;")#newMapSection
                             form(action="")
                                 input(placeholder="New map name")#newMapInput
@@ -187,6 +191,7 @@ html
                 .canvas-container
                     canvas#map(width="0 px", height="0 px")
         script(src='js/editor/jsondiffpatch.min.js')
+        script(src='js/editor/moment.min.js')
         script(src='js/editor/async.js')
         script(src='js/editor/ui.js')
         script(src='js/editor/lodash.min.js')

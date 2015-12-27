@@ -4,6 +4,7 @@ var path     = require('path');
 var rimraf   = require('rimraf');
 var sizeOf   = require('image-size');
 var pretty   = require('prettysize');
+var _        = require('lodash');
 var router   = express.Router();
 var settings = require('../settings.json');
 
@@ -32,6 +33,8 @@ router.route('/world')
                     res.status(400).send({ msg: name + " is an invalid name." });
                 } else {
                     fs.mkdir('worlds/' + name, "0755", function() {
+                        var git = require('simple-git')('worlds/' + name);
+                        git.init();
                         fs.writeFile("worlds/" + name + '/map.json', JSON.stringify(data), function (err) {
                             if (err) {
                                 console.log(err);
@@ -41,7 +44,7 @@ router.route('/world')
                                 res.status(200).send({ msg: "Saved world " + name + " successfully!" });
                             }
                         });
-                    })
+                    });
                 }
             });
         }
@@ -99,7 +102,12 @@ router.route('/world/:name')
                             res.status(400).send({ msg: "An error was encountered while saving world " + name + "!" });
                         } else {
                             console.log('Updated world ' + name + '!');
-                            res.status(200).send({ msg: "Updated world " + name + " successfully!" });
+
+                            var git = require('simple-git')('worlds/' + name);
+                            git.add('.')
+                            git.commit(new Date().getTime(), function(err, blah) {
+                                res.status(200).send({ msg: "Updated world " + name + " successfully!" });
+                            });
                         }
                     });
                 }
@@ -122,6 +130,43 @@ router.route('/world/:name')
         });
 
 
+    });
+
+router.route('/worldRevisions/:name')
+    .get(function(req, res) {
+        var name = req.params.name;
+
+        fs.exists('worlds/' + name, function(exists) {
+            if (exists) {
+                var git = require('simple-git')('worlds/' + name);
+                git.log(function(err, log) {
+                    var revisions = [];
+                    _.each(log.all, function(revision) {
+                        revisions.push([revision.hash.slice(1), revision.message.match(/\d+/)[0]]);
+                    });
+
+                    res.status(200).send(revisions);
+                });
+            } else {
+                res.status(400).send({ msg: "World " + name + " doesn't exist!" });
+            }
+        })
+    })
+
+    .post(function(req, res) {
+        var name = req.params.name;
+        fs.exists('worlds/' + name, function(exists) {
+            if (exists) {
+                var git = require('simple-git')('worlds/' + name);
+                git.show([req.body.hash + ":map.json"], function(err, result) {
+                    fs.writeFile(process.cwd() + '/worlds/' + name + '/tmpMap.json', result, function(err) {
+                        res.sendFile(process.cwd() + '/worlds/' + name + '/tmpMap.json');
+                    });
+                });
+            } else {
+                res.status(404).send("World not found!");
+            }
+        });
     });
 
 router.get('/sets/:name', function(req, res, next) {

@@ -35,6 +35,7 @@ $(function() {
 
       $("#worldSection").slideDown("medium");
       $("#mapSection").slideDown("medium");
+      $("#revisionSection").slideDown("medium");
 
       $('#maps')
         .empty()

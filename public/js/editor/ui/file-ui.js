@@ -41,6 +41,12 @@ $(function() {
           .val("default")
           .prop("disabled", false);
 
+      $('#revisions')
+          .empty()
+          .append($("<option></option>")
+          .attr("value", "")
+          .text("--- No revisions available ---"));
+
       pokeworld.pokemap.renderAroundCenter();
 
     } else {
@@ -50,6 +56,7 @@ $(function() {
 
       worldName = $("#worlds").val();   // Fetch current chosen world value
       loadWorld();   // Load world data and update map stuff
+      loadRevisions();
     }
   });
 
@@ -79,6 +86,33 @@ $(function() {
 
       UI.notify("Loaded map successfully!", "Map \"" + map + "\" was loaded successfully!", delay);
     }
+  });
+
+  // Load in revision on change
+  $("#revisions").change(function() {
+    console.log($("#revisions").find('option:selected').attr("key"));
+    $.ajax('editor/worldRevisions/' + worldName, {type: 'POST', contentType : 'application/json', data: JSON.stringify({hash: $("#revisions").find('option:selected').attr("key")}), global: false, success: function(data) {
+
+      pokeworld.load(data); // Contains the world's data
+      var currentMap = $("#maps").val();   // Save current selected map to restore after updating map list
+
+      // Fetch the list of maps in world
+      updateMapList(function() {
+
+        // Restore previous selected option
+        if (currentMap in pokeworld.maps) {
+          $("#maps").val(currentMap);
+        } else {
+          $("#maps").val(map);
+        }
+
+        $("#deleteMap").prop("disabled", false);
+        $("#renameMap").prop("disabled", false);
+
+        map = $("#maps").val();   // Get name of map
+        loadPokeMap();
+      });
+    }});
   });
 
   // Delete world
@@ -136,6 +170,12 @@ $(function() {
         .text("default"))
         .val("default")
         .prop("disabled", false);
+
+        $('#revisions')
+          .empty()
+          .append($("<option></option>")
+          .attr("value", "")
+          .text("--- No revisions available ---"));
       });
     }});
   })
@@ -297,7 +337,7 @@ $(function() {
 
       $.ajax("editor/world/" + worldName, {method: "PUT", data: {data: JSON.stringify(pokeworld.export())}, global: true, suppress: true, success: function(data) {
         UI.notify("Saved world successfully!", "World \"" + worldName + "\" was saved successfully!", delay);
-
+        loadRevisions();
       }, fail: function() {
         UI.notify("Failed to save world", "World \"" + worldName + "\" failed to save!", delay);
       }});
@@ -399,6 +439,21 @@ $(function() {
     typeof callback === 'function' && callback();
   }
 
+  function updateRevisionList(callback) {
+    // Load in available maps for editing
+    $('#revisions')
+    .empty();
+
+    $.each(pokeworld.revisions, function(key, item) {
+      $('#revisions')
+      .append($("<option></option>")
+      .attr("key", item[0])
+      .text((key === 0 ? "[latest] " : "") + item[0].slice(0, 6) + " - " + moment(+item[1]).format('MMM Do YYYY, h:mm:ss a')));
+    });
+
+    typeof callback === 'function' && callback();
+  }
+
   // Reveal a section by id
   function showSection(section, callback) {
     $("#" + section).slideDown("medium", function() {
@@ -458,6 +513,19 @@ $(function() {
 
     }, fail: function() {
       UI.notify("Failed to load world", "World \"" + worldName + "\" failed to load!", delay);
+    }});
+  }
+
+  // Load world from server
+  function loadRevisions() {
+    $.ajax("editor/worldRevisions/" + worldName, {global: true, suppress: true, success: function(data) {
+      pokeworld.revisions = data;
+
+      // Fetch the list of maps in world
+      updateRevisionList();
+
+    }, fail: function() {
+      UI.notify("Failed to load world Revisions", "World \"" + worldName + "\" failed to load!", delay);
     }});
   }
 
