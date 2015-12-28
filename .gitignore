@@ -1,6 +1,7 @@
 node_modules
 *.swp
 *.swo
+*.log
 public/assets
 .pokeMMOn_history
 .a
