@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/Professional-Hobo/PokeMMOn.png?label=ready&title=Ready)](https://waffle.io/Professional-Hobo/PokeMMOn)
 PokeMMOn
 ========
 
