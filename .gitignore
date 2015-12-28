@@ -3,6 +3,9 @@ node_modules
 *.swo
 *.log
 public/assets
+public/img
+public/spriter/img
+tools/missingno/*.png
 .pokeMMOn_history
 .a
 worlds

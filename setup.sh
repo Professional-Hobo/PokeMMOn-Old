@@ -18,5 +18,5 @@ sleep 2
 echo "Performing npm install for Web & Game Server"
 (cd server && npm install)
 echo "Done with Web & Game Server's npm install"
-echo "Changes to settings will be ignored by git"
+echo "Changes to settings.json will be ignored by git"
 git update-index --assume-unchanged settings.json
