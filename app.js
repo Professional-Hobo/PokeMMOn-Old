@@ -66,11 +66,6 @@ app.use(bodyParser.json({limit: '128mb'}));
 app.use(bodyParser.urlencoded({ limit: '128mb', extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next) {
-  //console.log(req.session);
-  next();
-});
-
 // Routes
 app.use('/', index);
 app.use('/editor', editor);
