@@ -7,6 +7,10 @@ echo "Extracting PokeMMOn Assets & Sprites..."
 tar xf assets.tar.gz
 echo "Removing compressed file..."
 rm assets.tar.gz
+echo "Moving images..."
+mv missingno/* ../../tools/missingno/
+mv public/img ..
+mv public/spriter_img/* ../spriter/img
 echo "Done with PokeMMOn Assets & Sprites"
 echo "=== npm install =="
 cd ../..
