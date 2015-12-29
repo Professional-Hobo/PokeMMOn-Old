@@ -2,7 +2,7 @@ echo "=== PokeMMOn Assets & Sprites ==="
 mkdir public/assets
 cd public/assets
 echo "Downloading PokeMMOn Assets & Sprites..."
-curl -L https://www.dropbox.com/s/kyrq7jcv6fvqu9h/assets.tar.gz?dl=1 -o assets.tar.gz
+curl -L https://www.dropbox.com/s/xddgtgco1ryjua3/assets.tar.gz?dl=1 -o assets.tar.gz
 echo "Extracting PokeMMOn Assets & Sprites..."
 tar xf assets.tar.gz
 echo "Removing compressed file..."
@@ -11,6 +11,7 @@ echo "Moving images..."
 mv missingno/* ../../tools/missingno/
 mv public/img ..
 mv public/spriter_img/* ../spriter/img
+rm -rf missingno public
 echo "Done with PokeMMOn Assets & Sprites"
 echo "=== npm install =="
 cd ../..
