@@ -9,6 +9,7 @@ var flash        = require('connect-flash');
 var compress     = require('compression');
 var app          = express();
 
+var db           = require('./models/db');
 var settings     = require('./settings.json');
 
 // Redis Session Store
@@ -19,15 +20,6 @@ var redisStore   = require('connect-redis')(session);
 // Routes
 var index = require('./routes/index');
 var editor = require('./routes/editor');
-
-// Waterline
-var Waterline_init = require("./models/index");
-
-// Instantiate a new instance of the ORM
-var orm = Waterline_init.waterline;
-
-// Build a config object
-var config = Waterline_init.config;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -99,14 +91,6 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
-});
-
-// Initialize orm
-orm.initialize(config, function(err, models) {
-  if(err) throw err;
-
-  app.models = models.collections;
-  app.connections = models.connections;
 });
 
 module.exports = app;

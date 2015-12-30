@@ -1,63 +1,53 @@
-var Waterline = require('waterline');
-var bcrypt = require('bcrypt-nodejs');
+var mongoose = require('mongoose');
 
-var User = Waterline.Collection.extend({
+var bcrypt   = require('bcrypt-nodejs');
 
-    identity: 'user',
-    connection: 'connection',
-//    migrate: 'safe',
-
-    attributes: {
-        username: {
-            type: 'string',
-            unique: true
-        },
-
-        password: {
-            type: 'string'
-        },
-
-        role: {
-            type: 'string',
-            defaultsTo: 'user'
-        },
-
-        model: {
-            type: 'string',
-            defaultsTo: 'male_1'
-        },
-
-        zone: {
-            type: 'string',
-            defaultsTo: 'towny'
-        },
-
-        direction: {
-            type: 'string',
-            defaultsTo: 'down'
-        },
-
-        x: {
-            type: 'integer',
-            defaultsTo: 37
-        },
-
-        y: {
-            type: 'integer',
-            defaultsTo: 41
-        },
-
-        validPass: function(password) {
-            return bcrypt.compareSync(password, this.password);
-        }
+var userSchema = mongoose.Schema({
+    username: {
+        type: String,
+        unique: true
     },
-
-    beforeCreate: function(values, cb) {
-        values.password = bcrypt.hashSync(values.password);
-        var models = ["male_1", "man_1", "female_1"];
-        values.model = models[Math.floor(Math.random() * models.length)];
-        cb();
+    password: String,
+    role: {
+        type: String,
+        default: "user"
+    },
+    model: {
+        type: String,
+        default: "male_1"
+    },
+    zone: {
+        type: String,
+        default: "towny"
+    },
+    direction: {
+        type: String,
+        default: "down"
+    },
+    x: {
+        type: Number,
+        default: 37
+    },
+    y: {
+        type: Number,
+        default: 41
     }
 });
+
+userSchema.pre('save', function(next) {
+    this.password = bcrypt.hashSync(this.password);
+    var models = ["male_1", "man_1", "female_1"];
+    this.model = models[Math.floor(Math.random() * models.length)];
+    next();
+});
+
+userSchema.methods.validPass = function(password, cb) {
+    bcrypt.compare(password, this.password, function(err, isMatch) {
+        if (err) return cb(err);
+        cb(null, isMatch);
+    });
+};
+
+var User = mongoose.model('User', userSchema);
 
 module.exports = User;

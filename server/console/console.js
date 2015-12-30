@@ -373,7 +373,7 @@ function echo(txt, special) {
         echo(promptVal, true);  // Put buffer back
         echo(buffer, true);
     } else {
-        process.stdout.write(txt);
+        process.stdout.write(String(txt));
     }
 };
 

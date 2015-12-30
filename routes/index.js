@@ -2,6 +2,7 @@ var express  = require('express');
 var router   = express.Router();
 var settings = require('../settings.json');
 var Tile     = require('../public/js/editor/Tile.js');
+var User     = require('../models/User.js');
 
 // Index //
 router.get('/', function(req, res, next) {
@@ -35,18 +36,22 @@ router.post('/login', function(req, res, next) {
     if (req.session.loggedin) {
         res.redirect('/');
     } else {
-        req.app.models.user.findOne({username: req.body.username}).exec(function(err, model) {
+        User.findOne({username: req.body.username}, function(err, model) {
             if (err || !model) {
                 req.flash('info', "Invalid username or password!");
                 res.redirect('/login');
-            } else if (model.validPass(req.body.password)) {
-                req.session.loggedin = true;
-                req.session.user = model;
-                req.flash('info', "Logged in successfully! Welcome to PokeMMOn!");
-                res.redirect('/');
             } else {
-                req.flash('info', "Invalid username or password!");
-                res.redirect('/login');
+                model.validPass(req.body.password, function(err, match) {
+                    if (match) {
+                        req.session.loggedin = true;
+                        req.session.user = model;
+                        req.flash('info', "Logged in successfully! Welcome to PokeMMOn!");
+                        res.redirect('/');
+                    } else {
+                        req.flash('info', "Invalid username or password!");
+                        res.redirect('/login');
+                    }
+                });
             }
         });
     }
@@ -75,7 +80,7 @@ router.get('/register', function(req, res, next) {
 router.post('/register', function(req, res, next) {
     if (!req.session.loggedin) {
       if (req.body.username.match(/^[a-zA-Z0-9]{1,20}$/)) {
-        req.app.models.user.create(req.body, function(err, model) {
+        User.create(req.body, function(err, model) {
           if (err) {
               req.flash('info', "This username is already in use!");
               res.redirect('/register');
