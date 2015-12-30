@@ -140,11 +140,11 @@ Tileset.prototype = {
 
   selectTile: function(x, y) {
     if (x === undefined) {
-      var x = this.mouse.x;
-      var y = this.mouse.y;
+      x = this.mouse.x;
+      y = this.mouse.y;
     } else {
-      var x = x * 16;
-      var y = y * 16;
+      x *= 16;
+      y *= 16;
     }
 
     x = x < 0 ? 0 : x;
@@ -159,22 +159,38 @@ Tileset.prototype = {
 
     this.selector.style.left = this.mouse.tile_x * (this.grid) + "px";
     this.selector.style.top = this.mouse.tile_y * (this.grid) + "px";
+
+    var selectorOffsetX = this.width - parseInt(this.selector.style.left) - this.selectorDim[0]*this.grid;
+    var selectorOffsetY = this.height - parseInt(this.selector.style.top) - this.selectorDim[1]*this.grid;
+
+    if (selectorOffsetX < 0) {
+        this.selectorDim[0] -= -selectorOffsetX/this.grid;
+        selector.style.width  = this.selectorDim[0]*(this.grid)+'px';
+    }
+
+    if (selectorOffsetY < 0) {
+        this.selectorDim[1] -= -selectorOffsetY/this.grid;
+        selector.style.height  = this.selectorDim[1]*(this.grid)+'px';
+    }
   },
 
   resizeTileSelector: function(inc) {
-    var new_x = this.selectorDim[0] + inc[0];
-    var new_y = this.selectorDim[1] + inc[1];
+    var newX = this.selectorDim[0] + inc[0];
+    var newY = this.selectorDim[1] + inc[1];
+
+    var maxX = (this.width - parseInt(this.selector.style.left))/this.grid;
+    var maxY = (this.height - parseInt(this.selector.style.top))/this.grid;
 
     // Ignore if invalid new dimension
-    if (new_x > 16 || new_y > 16 || new_x < 1 || new_y < 1) return;
+    if (newX > maxX || newY > maxY || newX < 1 || newY < 1) return;
 
-    if (new_x != 1 || new_y != 1) {
+    if (newX != 1 || newY != 1) {
       this.multi = true;
     } else {
       this.multi = false;
     }
 
-    this.selectorDim = [new_x, new_y];
+    this.selectorDim = [newX, newY];
     selector.style.width  = this.selectorDim[0]*(this.grid)+'px';
     selector.style.height = this.selectorDim[1]*(this.grid)+'px';
   }
