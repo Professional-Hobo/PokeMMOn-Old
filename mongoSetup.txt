@@ -1,0 +1,6 @@
+use pokemmon 
+db.addUser({
+    user: "pokemmon",
+    pwd: "pokemmon",
+    roles: [ "readWrite", "dbAdmin" ]
+})

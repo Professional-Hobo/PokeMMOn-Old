@@ -1,15 +1,15 @@
-var Waterline = require('waterline');
+var mongoose = require('mongoose');
 
-var Server = Waterline.Collection.extend({
-
-    identity: 'server',
-    connection: 'connection',
-//    migrate: 'safe',
-
-    attributes: {
-        name: 'string',
-        capacity: 'number'
+var serverSchema = mongoose.Schema({
+    name: {
+        type: String,
+        unique: true
+    },
+    capacity: {
+        type: Number
     }
 });
+
+var Server = mongoose.model('Server', serverSchema);
 
 module.exports = Server;

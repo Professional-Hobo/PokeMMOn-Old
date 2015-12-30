@@ -5,6 +5,7 @@ var db           = require('./util/db'),
     merge        = require('merge');
 
 var Player, Zone, events, open, update, updateData = "{";
+var User = require("../../models/User.js");
 
 /*
  * Initializes the World so that it's ready to be started.
@@ -80,7 +81,7 @@ function save(name) {
     var player = players[name];
     var pos = player.getPos();
 
-    db.models.user.update({username: name}, {
+    User.update({username: name}, {
         model: player.model,
         zone: pos.zone,
         x: pos.x,
@@ -123,8 +124,7 @@ exports.shutdown = function shutdown() {
  */
 exports.loadPlayer = function loadPlayer(username, socket, callback) {
     if(!players[username] && open) {
-
-        db.models.user.findOne({username: username}, function(err, user) {
+        User.findOne({username: username}, function(err, user) {
             var options = {
                 'socket': socket,
                 'username': username,
