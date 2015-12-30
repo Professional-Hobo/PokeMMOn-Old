@@ -27,7 +27,6 @@ var Tileset = function() {
 
     this.selector.style.left = "0px";
     this.selector.style.top = "0px";
-    this.selectorDim = [1, 1];
     this.multi = false;
 };
 
@@ -157,23 +156,21 @@ Tileset.prototype = {
         this.selector.style.left = this.mouse.tile_x * (this.grid) + "px";
         this.selector.style.top = this.mouse.tile_y * (this.grid) + "px";
 
-        var selectorOffsetX = this.width - parseInt(this.selector.style.left) - this.selectorDim[0]*this.grid;
-        var selectorOffsetY = this.height - parseInt(this.selector.style.top) - this.selectorDim[1]*this.grid;
+        var selectorOffsetX = this.width - parseInt(this.selector.style.left) - this.selectorDim()[0]*this.grid;
+        var selectorOffsetY = this.height - parseInt(this.selector.style.top) - this.selectorDim()[1]*this.grid;
 
         if (selectorOffsetX < 0) {
-            this.selectorDim[0] -= -selectorOffsetX/this.grid;
-            this.selector.style.width  = this.selectorDim[0]*(this.grid)+'px';
+            this.selector.style.width  = this.selectorDim()[0]*(this.grid) + selectorOffsetX + 'px';
         }
 
         if (selectorOffsetY < 0) {
-            this.selectorDim[1] -= -selectorOffsetY/this.grid;
-            this.selector.style.height  = this.selectorDim[1]*(this.grid)+'px';
+            this.selector.style.height  = this.selectorDim()[1]*(this.grid) + selectorOffsetY + 'px';
         }
     },
 
     resizeTileSelector: function(inc) {
-        var newX = this.selectorDim[0] + inc[0];
-        var newY = this.selectorDim[1] + inc[1];
+        var newX = this.selectorDim()[0] + inc[0];
+        var newY = this.selectorDim()[1] + inc[1];
 
         var maxX = (this.width - parseInt(this.selector.style.left))/this.grid;
         var maxY = (this.height - parseInt(this.selector.style.top))/this.grid;
@@ -187,8 +184,14 @@ Tileset.prototype = {
             this.multi = false;
         }
 
-        this.selectorDim = [newX, newY];
-        this.selector.style.width  = this.selectorDim[0]*(this.grid)+'px';
-        this.selector.style.height = this.selectorDim[1]*(this.grid)+'px';
+        this.selector.style.width  = newX*(this.grid)+'px';
+        this.selector.style.height = newY*(this.grid)+'px';
+    },
+
+    selectorDim: function() {
+        var width =  parseInt(this.selector.style.width) ? parseInt(this.selector.style.width) : 16;
+        var height = parseInt(this.selector.style.height) ? parseInt(this.selector.style.height) : 16;
+
+        return [width/this.grid, height/this.grid];
     }
 };

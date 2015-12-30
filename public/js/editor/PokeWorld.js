@@ -140,7 +140,7 @@ PokeWorld.prototype = {
               // group tiles
               if (tileset.multi) {
                 var start = [tileset.mouse.tile_x, tileset.mouse.tile_y];
-                var end = [tileset.mouse.tile_x + tileset.selectorDim[0], tileset.mouse.tile_y + tileset.selectorDim[1]];
+                var end = [tileset.mouse.tile_x + tileset.selectorDim()[0], tileset.mouse.tile_y + tileset.selectorDim()[1]];
                 var tiles = [];
 
                 // Determine tiles to draw from left top corner to bottom right corner
@@ -158,11 +158,11 @@ PokeWorld.prototype = {
                     tiles.forEach(function(tile) {
 
                       // Verify coords are inbounds of pokemap
-                      if (tile.x + tileset.selectorDim[0]*x < self.pokemap.dim.width && tile.y + tileset.selectorDim[1]*y < self.pokemap.dim.height) {
+                      if (tile.x + tileset.selectorDim()[0]*x < self.pokemap.dim.width && tile.y + tileset.selectorDim()[1]*y < self.pokemap.dim.height) {
                         if (tileset.isTransparent(tile.id)) {
-                          self.pokemap.setTile([tile.id, tileset.background], tile.y + tileset.selectorDim[1]*y, tile.x + tileset.selectorDim[0]*x);
+                          self.pokemap.setTile([tile.id, tileset.background], tile.y + tileset.selectorDim()[1]*y, tile.x + tileset.selectorDim()[0]*x);
                         } else {
-                          self.pokemap.setTile(tile.id, tile.y + tileset.selectorDim[1]*y, tile.x + tileset.selectorDim[0]*x);
+                          self.pokemap.setTile(tile.id, tile.y + tileset.selectorDim()[1]*y, tile.x + tileset.selectorDim()[0]*x);
                         }
                       }
                     });
@@ -175,11 +175,11 @@ PokeWorld.prototype = {
                   for (var y = 0; y < pokeworld.multi.y; y++) {
 
                     // Verify coords are inbounds of pokemap
-                    if (pokeworld.mouse.hover_x + tileset.selectorDim[0]*x < self.pokemap.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim[1]*y < self.pokemap.dim.height) {
+                    if (pokeworld.mouse.hover_x + tileset.selectorDim()[0]*x < self.pokemap.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim()[1]*y < self.pokemap.dim.height) {
                       if (tileset.isTransparent(tileset.mouse.tileID)) {
-                        self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y + tileset.selectorDim[1]*y, self.mouse.tile_x + tileset.selectorDim[0]*x);
+                        self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y + tileset.selectorDim()[1]*y, self.mouse.tile_x + tileset.selectorDim()[0]*x);
                       } else {
-                        self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y + tileset.selectorDim[1]*y, self.mouse.tile_x + tileset.selectorDim[0]*x);
+                        self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y + tileset.selectorDim()[1]*y, self.mouse.tile_x + tileset.selectorDim()[0]*x);
                       }
                     }
                   }
@@ -228,7 +228,7 @@ PokeWorld.prototype = {
               if (e.which == 1) {
                 if (tileset.multi) {
                   var start = [tileset.mouse.tile_x, tileset.mouse.tile_y];
-                  var end = [tileset.mouse.tile_x + tileset.selectorDim[0], tileset.mouse.tile_y + tileset.selectorDim[1]];
+                  var end = [tileset.mouse.tile_x + tileset.selectorDim()[0], tileset.mouse.tile_y + tileset.selectorDim()[1]];
                   var tiles = [];
 
                   // Determine tiles to draw from left top corner to bottom right corner
@@ -246,11 +246,11 @@ PokeWorld.prototype = {
                       tiles.forEach(function(tile) {
 
                         // Verify coords are inbounds of pokemap
-                        if (tile.x + tileset.selectorDim[0]*x < self.pokemap.dim.width && tile.y + tileset.selectorDim[1]*y < self.pokemap.dim.height) {
+                        if (tile.x + tileset.selectorDim()[0]*x < self.pokemap.dim.width && tile.y + tileset.selectorDim()[1]*y < self.pokemap.dim.height) {
                           if (tileset.isTransparent(tile.id)) {
-                            self.pokemap.setTile([tile.id, tileset.background], tile.y + tileset.selectorDim[1]*y, tile.x + tileset.selectorDim[0]*x);
+                            self.pokemap.setTile([tile.id, tileset.background], tile.y + tileset.selectorDim()[1]*y, tile.x + tileset.selectorDim()[0]*x);
                           } else {
-                            self.pokemap.setTile(tile.id, tile.y + tileset.selectorDim[1]*y, tile.x + tileset.selectorDim[0]*x);
+                            self.pokemap.setTile(tile.id, tile.y + tileset.selectorDim()[1]*y, tile.x + tileset.selectorDim()[0]*x);
                           }
                         }
                       });
@@ -261,11 +261,11 @@ PokeWorld.prototype = {
                     for (var y = 0; y < pokeworld.multi.y; y++) {
 
                       // Verify coords are inbounds of pokemap
-                      if (pokeworld.mouse.hover_x + tileset.selectorDim[0]*x < self.pokemap.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim[1]*y < self.pokemap.dim.height) {
+                      if (pokeworld.mouse.hover_x + tileset.selectorDim()[0]*x < self.pokemap.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim()[1]*y < self.pokemap.dim.height) {
                         if (tileset.isTransparent(tileset.mouse.tileID)) {
-                          self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y + tileset.selectorDim[1]*y, self.mouse.tile_x + tileset.selectorDim[0]*x);
+                          self.pokemap.setTile([tileset.mouse.tileID, tileset.background], self.mouse.tile_y + tileset.selectorDim()[1]*y, self.mouse.tile_x + tileset.selectorDim()[0]*x);
                         } else {
-                          self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y + tileset.selectorDim[1]*y, self.mouse.tile_x + tileset.selectorDim[0]*x);
+                          self.pokemap.setTile(tileset.mouse.tileID, self.mouse.tile_y + tileset.selectorDim()[1]*y, self.mouse.tile_x + tileset.selectorDim()[0]*x);
                         }
                       }
                     }

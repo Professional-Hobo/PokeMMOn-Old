@@ -172,7 +172,7 @@ PokeMap.prototype = {
       // group tiles
       if (tileset.multi) {
         var start = [tileset.mouse.tile_x, tileset.mouse.tile_y];
-        var end = [tileset.mouse.tile_x + tileset.selectorDim[0], tileset.mouse.tile_y + tileset.selectorDim[1]];
+        var end = [tileset.mouse.tile_x + tileset.selectorDim()[0], tileset.mouse.tile_y + tileset.selectorDim()[1]];
         var tiles = [];
 
         // Determine tiles to draw from left top corner to bottom right corner
@@ -190,8 +190,8 @@ PokeMap.prototype = {
             tiles.forEach(function(tile) {
 
               // Verify coords are inbounds of pokemap
-              if (tile.x + tileset.selectorDim[0]*x < self.dim.width && tile.y + tileset.selectorDim[1]*y < self.dim.height) {
-                self.drawTileNew(tile.id, tile.x + tileset.selectorDim[0]*x, tile.y + tileset.selectorDim[1]*y);
+              if (tile.x + tileset.selectorDim()[0]*x < self.dim.width && tile.y + tileset.selectorDim()[1]*y < self.dim.height) {
+                self.drawTileNew(tile.id, tile.x + tileset.selectorDim()[0]*x, tile.y + tileset.selectorDim()[1]*y);
               }
             });
           }
@@ -201,8 +201,8 @@ PokeMap.prototype = {
           for (var y = 0; y < pokeworld.multi.y; y++) {
 
             // Verify coords are inbounds of pokemap
-            if (pokeworld.mouse.hover_x + tileset.selectorDim[0]*x < self.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim[1]*y < self.dim.height) {
-              self.drawTileNew(tileset.mouse.tileID, pokeworld.mouse.hover_x + tileset.selectorDim[0]*x, pokeworld.mouse.hover_y + tileset.selectorDim[1]*y);
+            if (pokeworld.mouse.hover_x + tileset.selectorDim()[0]*x < self.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim()[1]*y < self.dim.height) {
+              self.drawTileNew(tileset.mouse.tileID, pokeworld.mouse.hover_x + tileset.selectorDim()[0]*x, pokeworld.mouse.hover_y + tileset.selectorDim()[1]*y);
             }
           }
         }
