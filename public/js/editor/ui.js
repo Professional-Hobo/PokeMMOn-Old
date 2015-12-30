@@ -24,19 +24,21 @@ $(function() {
         });
 
         //
-        // 0-9 is mapped to different modes. Enables quick switching
-        // between modes by pressing 0-9
+        // 1-9 is mapped to different modes. Enables quick switching
+        // between modes by pressing 1-9
         //
         var modes = $('.header li[data-tab] a').toArray().map(function(e) {return $(e)});
 
         window.addEventListener('keydown', function(e) {
-            if(e.which >= 48 && e.which <= 57 && !$("input").is(":focus")) {
-                if(modes.length >= e.which - 49) {
+            if (((e.which >= 49 && e.which <= 57) || (e.which >= 97 && e.which <= 105)) && !$("input").is(":focus")) {
+                if (e.which >= 49 && e.which <= 57 && modes.length > e.which - 49) {
                     modes[(e.which - 49)].click();
+                } else if (e.which >= 97 && e.which <= 105 && modes.length > e.which - 97) {
+                    modes[(e.which - 97)].click();
                 } else {
                     modes[modes.length-1].click();
                 }
-            } 
+            }
         });
 
         //
@@ -55,7 +57,7 @@ $(function() {
 +                '</div>'
 +            '</div>'
 +        '</div>');
-        
+
         var body = $('body');
         var notifyBox = $('#notify').css('color', 'black');
         var notifyTitle = $('#notify .modal-title');
@@ -68,7 +70,7 @@ $(function() {
         };
 
         // bootstrap.min.js modal is bugged, so made my own
-        notifyBox.bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", 
+        notifyBox.bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd",
             function() {
                 if(!notifyBox.isVisible()) {
                     notifyBox.hide();
@@ -121,7 +123,7 @@ $(function() {
             console.log('---------- Notification -----------');
             console.log('Title: ' + title.replace(/(<([^>]+)>)/ig, ''));
             console.log('Message: ' + msg.replace(/(<([^>]+)>)/ig, ''));
-            
+
             // Appear!
             notifyBox.modal('show');
 
@@ -221,4 +223,3 @@ $(function() {
         });
     })();
 });
-
