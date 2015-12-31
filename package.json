@@ -23,6 +23,7 @@
     "hiredis": "~0.4.0",
     "image-size": "^0.3.5",
     "jade": "~1.9.2",
+    "kerberos": "0.0.17",
     "keypress": "~0.2.1",
     "lodash": "~3.9.3",
     "merge": "~1.2.0",
