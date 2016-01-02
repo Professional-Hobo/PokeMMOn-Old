@@ -103,12 +103,10 @@ Game.prototype.calcFps = function() {
     }
 };
 
-// Connects the game to the server and starts the update and render loops
+// Starts the update and render loops
 Game.prototype.start = function(username, model, direction, x, y, callback) {
     // Push player object as first entity
     this.player = new Player(username, model, direction, x, y, true);
-
-    this.connect();                     // Connects to the server
 
     this.startLogic();                  // Starts game logic loop
 
@@ -123,10 +121,6 @@ Game.prototype.pause = function() {
 
 Game.prototype.resume = function() {
     game.loop = requestAnimationFrame(this.render.bind(this));
-}
-
-Game.prototype.connect = function() {
-    this.socket = io(this.options.server);
 }
 
 Game.prototype.logic = function() {
