@@ -91,7 +91,8 @@ socket.on('preData', function(data) {
             tiles = tileData;
             // Load player location data first before starting game since game depends on player's initial spot
             game = new Game({
-                "server": server
+                "server": server,
+                "socket": socket
             });
             game.start(data.username, data.model, data.direction, data.x, data.y, function() {
                 //context.drawImage(background, (game.player.x - 17) * 16, (game.player.y - 17) * 16, (screen.width-(screen.width%16)), (screen.height-(screen.height%16)), 0, 0, (screen.width-(screen.width%16)), (screen.height-(screen.height%16)));
