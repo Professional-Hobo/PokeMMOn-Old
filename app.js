@@ -36,8 +36,7 @@ var sessionSettings = {
     store: new redisStore(),
     secret: settings.session.secret,
     cookie: {
-      path: '/',
-      domain: "." + settings.general.cookie_domain
+      path: '/'
     },
     resave: false,
     saveUninitialized: false

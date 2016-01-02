@@ -1,8 +1,8 @@
 {
     "general": {
         "name": "PokeMMOn",
-        "domain": "http://localhost",
-        "cookie_domain": "localhost",
+        "domain": "",
+        "cookie_domain": "",
         "LAN": false,
         "version": "0.0.1"
     },
