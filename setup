@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "=== PokeMMOn Assets & Sprites ==="
 mkdir public/assets
 cd public/assets

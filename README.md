@@ -2,21 +2,21 @@
 PokeMMOn
 ========
 
-Fetch Assets
-============
-Make sure you run ./setup.sh first in order to download assets and setup web/game servers.
-
-Database Setup
-==============
-Execute ./run and after it is finished initializing, quit the server.
-Next, navigate to models/Users.js and models/Server.js and uncomment `migrate: 'safe'`.
-
-The database should be properly set up now.
-
-Running
+Install
 =======
-Verify that your settings.json are correct.
-Run ./run from the root directory in order to run both the webserver and game server in a split tmux view.
+Run ./install if you are on a fresh Linux box running Ubuntu and want to have everything setup and ready to go out of the box.
+
+This script will install the necessary packages using apt-get, install the latest version of nodejs, and setup a Mongo PokeMMOn database and user.
+
+It'll then execute the setup script to download assets as well as the run script which actually launches the web and game servers.
+
+Setup
+=====
+Setup will fetch the necessary PokeMMOn assets and run npm install for the web and game server.
+
+Run
+===
+Run launches the web and game servers in a tmux session. Make sure that you have run install (if needed) and setup first before attempting to launch the game!
 
 Credits
 =======
