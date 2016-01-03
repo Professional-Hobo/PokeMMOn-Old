@@ -8,5 +8,5 @@ sudo apt-get install --yes nodejs
 sudo ln -s /usr/bin/nodejs /usr/bin/node
 mongo < mongoSetup.txt
 rm mongoSetup.txt
-./setup.sh
+./setup
 ./run
