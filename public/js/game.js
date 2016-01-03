@@ -20,7 +20,7 @@ function Game(options) {
     this.showFps = true;
 
     this.defaultDim = 512;
-    this.old = false;
+    this.mode = 3;
 }
 
 $(document).keydown(function(e) {
@@ -203,7 +203,10 @@ Game.prototype.renderTiles = function() {
     this.toRender = [0];
     this.tilesThing = [];
 
-    if (!this.old) {
+    if (this.mode === 1) {
+        //console.log(x, y, dim/16, dim/16, 0, 0, dim/16, dim/16);
+        context.drawImage(background, this.raw_x, this.raw_y, this.dim, this.dim, 0, 0, this.dim, this.dim);
+    } else if (this.mode === 2) {
         //console.log(x,y);
         for (var i = game.player.y-Math.floor(this.dim/2/16)-1, a = -1; i < 33+game.player.y-Math.floor(this.dim/2/16); i++, a++) {
             for (var j = game.player.x-Math.floor(this.dim/2/16)-1, b = -1; j < 33+game.player.x-Math.floor(this.dim/2/16); j++, b++) {
@@ -217,9 +220,8 @@ Game.prototype.renderTiles = function() {
                 context.drawImage(tileset, (tile.getLayer(2) % 16) * 16, Math.floor(tile.getLayer(2) / 16) * 16, 16, 16, 16*b-(this.player.x_diff*this.player.amt), 16*a-(this.player.y_diff*this.player.amt), 16, 16);
             }
         }
-    } else {
-        //console.log(x, y, dim/16, dim/16, 0, 0, dim/16, dim/16);
-        context.drawImage(background, this.raw_x, this.raw_y, this.dim, this.dim, 0, 0, this.dim, this.dim);
+    } else if (this.mode === 3) {
+        context.drawImage(mapCanvas, this.raw_x, this.raw_y, this.dim, this.dim, 0, 0, this.dim, this.dim);
     }
 
 };

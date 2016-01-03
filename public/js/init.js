@@ -32,6 +32,19 @@ $.get("editor/world/test world", function(data) {
     tileset = new Image();
     tileset.src = "img/editor/sets/all.png";
     tileset.onload = function() {
+        // Render initial view
+        mapCanvas = document.getElementById('mapSrc');
+        mapContext = mapCanvas.getContext('2d');
+
+        // Generates the map for the game canvas to reference
+        for (var i = 0; i < src.length; i++) {
+          for (var j = 0; j < src[0].length; j++) {
+            var tile = src[i][j];
+            mapContext.drawImage(tileset, (tile.getLayer(1) % 16) * 16, Math.floor(tile.getLayer(1) / 16) * 16, 16, 16, j*16, i*16, 16, 16);
+            mapContext.drawImage(tileset, (tile.getLayer(2) % 16) * 16, Math.floor(tile.getLayer(2) / 16) * 16, 16, 16, j*16, i*16, 16, 16);
+          }
+        }
+
         // Game is hidden until everything is loaded
         $("#game").hide();
         $(window).load(function() {
