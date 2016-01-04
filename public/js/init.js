@@ -4,6 +4,7 @@ var UP = 87;
 var DOWN = 83;
 var RIGHT = 68;
 var LEFT = 65;
+var size = 64;
 
 // Canvas
 var canvas = document.getElementById('game');
@@ -40,7 +41,7 @@ async.series([
             tileset.onload = function() {
                 // Generate all of the canvases
                 canvases = [];
-                grid = gridify(src);
+                grid = gridify(src, size);
 
                 for (var i = 0; i < grid.length; i++) {
                     canvases[i] = [];
@@ -48,10 +49,10 @@ async.series([
 
                         // Create new Canvas offscreen
                         canvases[i][j] = document.createElement("canvas");
-                        canvases[i][j].width=1024
-                        canvases[i][j].height=1024
-                        canvases[i][j].style.width="1024px"
-                        canvases[i][j].style.height="1024px"
+                        canvases[i][j].width=size*16
+                        canvases[i][j].height=size*16
+                        canvases[i][j].style.width=size*16 + "px"
+                        canvases[i][j].style.height=size*16 + "px"
                         gridContext = canvases[i][j].getContext('2d');
 
                         var slice = grid[i][j];
@@ -213,10 +214,10 @@ function gridify(matrix, size) {
   var size = size || 64;
 
   // Minimum size of a quadrant since viewport is 32 wide.
-  if (size < 16) size = 16;
+  //if (size < 16) size = 16;
 
   // Maximum size of a quadrant since largest supported viewport is 1,024px x 1,024px
-  else if (size > 64) size = 64;
+  //else if (size > 64) size = 64;
 
   // Get dimensions of map source
   var width = matrix[0].length;
