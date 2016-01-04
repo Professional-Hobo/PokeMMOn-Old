@@ -59,8 +59,6 @@ router.route('/world')
                 var info = {};
                 var size = 0;
 
-                files.splice(files.indexOf("README.md"), 1);
-
                 files.forEach(function(world) {
                     size = fs.statSync("worlds/" + world + "/map.json")["size"];
                     info[world] = {size: pretty(size)};
