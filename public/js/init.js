@@ -23,11 +23,12 @@ async.series([
     },
 
     function fetchWorld(callback){
-        $.get("editor/world/256 test", function(data) {
+        $.get("editor/world/test world", function(data) {
             map = data;
             dim = map.maps.default.info.dimensions;
             src = map.maps.default.tiles;
 
+            // Convert into Tile objects
             for (var i = 0; i < src.length; i++) {
               for (var j = 0; j < src[0].length; j++) {
                 src[i][j] = new Tile(src[i][j].layers);
@@ -37,22 +38,35 @@ async.series([
             tileset = new Image();
             tileset.src = "img/editor/sets/all.png";
             tileset.onload = function() {
+                // Generate all of the canvases
+                canvases = [];
+                grid = gridify(src);
 
-                // Render initial view
-                mapCanvas = document.getElementById('mapSrc');
-                mapContext = mapCanvas.getContext('2d');
+                for (var i = 0; i < grid.length; i++) {
+                    canvases[i] = [];
+                    for (var j = 0; j < grid[0].length; j++) {
 
-                // Generates the map for the game canvas to reference
-                for (var i = 0; i < src.length; i++) {
-                  for (var j = 0; j < src[0].length; j++) {
-                    var tile = src[i][j];
-                    mapContext.drawImage(tileset, (tile.getLayer(1) % 16) * 16, Math.floor(tile.getLayer(1) / 16) * 16, 16, 16, j*16, i*16, 16, 16);
-                    mapContext.drawImage(tileset, (tile.getLayer(2) % 16) * 16, Math.floor(tile.getLayer(2) / 16) * 16, 16, 16, j*16, i*16, 16, 16);
-                    if (i === (src.length-1) && j === (src[0].length-1)) {
-                        socket = io(server);
-                        callback(null);
+                        // Create new Canvas offscreen
+                        canvases[i][j] = document.createElement("canvas");
+                        canvases[i][j].width=1024
+                        canvases[i][j].height=1024
+                        canvases[i][j].style.width="1024px"
+                        canvases[i][j].style.height="1024px"
+                        gridContext = canvases[i][j].getContext('2d');
+
+                        var slice = grid[i][j];
+                        for (var k = 0; k < slice.length; k++) {
+                          for (var l = 0; l < slice[0].length; l++) {
+                            var tile = slice[k][l];
+                            gridContext.drawImage(tileset, (tile.getLayer(1) % 16) * 16, Math.floor(tile.getLayer(1) / 16) * 16, 16, 16, l*16, k*16, 16, 16);
+                            gridContext.drawImage(tileset, (tile.getLayer(2) % 16) * 16, Math.floor(tile.getLayer(2) / 16) * 16, 16, 16, l*16, k*16, 16, 16);
+                          }
+                        }
+                        if (i === grid.length-1 && j === grid.length-1) {
+                            socket = io(server);
+                            callback(null);
+                        }
                     }
-                  }
                 }
             };
         });
@@ -172,7 +186,7 @@ async.series([
 ],
 // optional callback
 function(err, results){
-    // results is now equal to ['one', 'two']
+    console.log("done!");
 });
 
 function resize() {
@@ -192,3 +206,62 @@ function resize() {
         .css('margin-top', "");
     }
 }
+
+// Seperate large source map into usable pieces of specified size
+function gridify(matrix, size) {
+  // Default size of 64 per quadrant
+  var size = size || 64;
+
+  // Minimum size of a quadrant since viewport is 32 wide.
+  if (size < 16) size = 16;
+
+  // Maximum size of a quadrant since largest supported viewport is 1,024px x 1,024px
+  else if (size > 64) size = 64;
+
+  // Get dimensions of map source
+  var width = matrix[0].length;
+  var height = matrix.length;
+
+  // Calculate how many matrices we will have
+  var widthGrids = Math.ceil(width/size);
+  var heightGrids = Math.ceil(width/size);
+  var grids = [];
+
+  // Calculate the areas of the matrix to slice
+  for (var i = 0; i < widthGrids; i++) {
+    grids[i] = [];
+
+    for (var j = 0; j < heightGrids; j++) {
+      //grids[i][j] = "X: " + j*size + ", Y: " + i*size + " => X: " + (j+1)*size + ", Y: " + (i+1)*size;
+      grids[i][j] = [[j*size, i*size], [(j+1)*size, (i+1)*size]];
+    }
+  }
+
+  // Actually slice using calculations from above loop
+  var sections = [];
+  for (var i = 0; i < grids.length; i++) {
+    sections[i] = [];
+
+    for (var j = 0; j < grids[0].length; j++) {
+      // Make a quadrant from 0,0 to 4,4
+      // map.slice(0, 4).map(function(grid) { return grid.slice(0, 4); });
+      sections[i][j] = src.slice(grids[i][j][0][0], grids[i][j][1][0]).map(function(grid) { return grid.slice(grids[i][j][0][1], grids[i][j][1][1]); });
+    }
+  }
+
+  return sections;
+}
+
+function getTile(x, y) {
+    if (Array.isArray(x)) {
+        y = x[1];
+        x = x[0];
+    }
+
+    if (src[x] !== undefined) {
+        if (src[x][y] !== undefined) {
+            return src[x][y];
+        }
+    }
+    return new Tile(0);
+};

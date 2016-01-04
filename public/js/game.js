@@ -129,7 +129,7 @@ Game.prototype.logic = function() {
 
 Game.prototype.drawFps = function() {
     context.save();
-    context.fillStyle = "rgba(0, 0, 0, 0.65)";
+    context.fillStyle = "rgba(0, 0, 0, 0.4)";
     context.fillRect(0, 0, 512, 512);
     //context.fillRect(0, 20, 300, 20);
     context.restore();
@@ -221,7 +221,11 @@ Game.prototype.renderTiles = function() {
             }
         }
     } else if (this.mode === 3) {
-        context.drawImage(mapCanvas, this.raw_x, this.raw_y, this.dim, this.dim, 0, 0, this.dim, this.dim);
+        for (var i = 0; i < canvases.length; i++) {
+            for (var j = 0; j < canvases[0].length; j++) {
+                context.drawImage(canvases[i][j], this.raw_x-1024*i, this.raw_y-1024*j, this.dim, this.dim, 0, 0, this.dim, this.dim);
+            }
+        }
     }
 
 };
