@@ -7,6 +7,7 @@ html(lang='en')
     meta(name='viewport', content='width=device-width, initial-scale=1.0, user-scalable=0')
   body
     server(hidden) #{server}
+    script(defer, src='js/async.min.js')
     script(defer, src='js/socket.io.js')
     script(defer, src='js/jquery-2.1.3.min.js')
     script(defer, src='js/nprogress.js')
@@ -21,7 +22,6 @@ html(lang='en')
     #content
       //img(src="img/logo.png")#logo
       canvas#game
-      canvas#mapSrc(width="1024" height="1024" style='display: none; width: 1024px; height: 1024px;')
     script(defer, src='js/init.js')
     script.
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

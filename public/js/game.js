@@ -129,7 +129,7 @@ Game.prototype.logic = function() {
 
 Game.prototype.drawFps = function() {
     context.save();
-    context.fillStyle = "rgba(0, 0, 0, 0.65)";
+    context.fillStyle = "rgba(0, 0, 0, 0.4)";
     context.fillRect(0, 0, 512, 512);
     //context.fillRect(0, 20, 300, 20);
     context.restore();
@@ -140,12 +140,8 @@ Game.prototype.drawFps = function() {
     context.fillText(fps + (fps % 1 != 0 ? "" : ".0") + " FPS | walkingFrame: " + zeroPad(this.player.walkingFrame, 10) + " | currentFrame: " + this.frame, 0, 15);
     context.fillText("Player: [" + this.player.x + ", " + this.player.y + "][" + this.x + ", " + this.y + "][" + this.player.amt + "]{" + this.player.direction + "}" , 0, 35);
     context.fillText("Origin coords: [" + this.raw_x + ", " + this.raw_y + "] [" + Math.round(this.raw_x/16) + ", " + Math.round(this.raw_y/16) + "]", 0, 55);
-    context.fillText("toRender sum: " + this.toRender.reduce(function(a, b) { return a + b; }) + " | contains negatives: " + (this.toRender.indexOf(-1) === 1) , 0, 75);
-    context.fillText("Clients connected: " + Object.keys(this.playerData).length, 0, 95);
-    context.fillText("Sx, Sy, Sw, Sh, Dx, Dy, Dw, Dh", 0, 115);
-    context.fillText(this.tilesThing[0], 0, 135);
-    context.fillText(this.tilesThing[1], 0, 155);
-    context.fillText(this.tilesThing[2], 0, 175);
+    context.fillText("Clients connected: " + Object.keys(this.playerData).length, 0, 75);
+    context.fillText("Total quadrants: " + (canvases.length*canvases[0].length) + " @ " + canvases[0][0].width + "px x " + canvases[0][0].height + "px", 0, 95);
 
     function zeroPad(nr,base){
       var  len = (String(base).length - String(nr).length)+1;
@@ -221,7 +217,11 @@ Game.prototype.renderTiles = function() {
             }
         }
     } else if (this.mode === 3) {
-        context.drawImage(mapCanvas, this.raw_x, this.raw_y, this.dim, this.dim, 0, 0, this.dim, this.dim);
+        for (var i = 0; i < canvases.length; i++) {
+            for (var j = 0; j < canvases[0].length; j++) {
+                context.drawImage(canvases[i][j], this.raw_x-size*16*i, this.raw_y-size*16*j, this.dim, this.dim, 0, 0, this.dim, this.dim);
+            }
+        }
     }
 
 };
