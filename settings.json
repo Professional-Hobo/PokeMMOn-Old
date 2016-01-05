@@ -20,9 +20,7 @@
         "port": 6379
     },
     "db": {
-        "adapter": "sails-postgresql",
         "host": "localhost",
-        "port": 5432,
         "user": "pokemmon",
         "password": "pokemmon",
         "database": "pokemmon"
