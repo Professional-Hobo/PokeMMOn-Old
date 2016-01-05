@@ -36,7 +36,7 @@ var userSchema = mongoose.Schema({
 
 userSchema.pre('save', function(next) {
     this.password = bcrypt.hashSync(this.password);
-    var models = ["male_1", "man_1", "female_1"];
+    var models = ["male_1", "female_1"];
     this.model = models[Math.floor(Math.random() * models.length)];
     next();
 });
