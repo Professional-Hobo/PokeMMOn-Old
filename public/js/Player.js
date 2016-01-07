@@ -129,7 +129,7 @@ Player.prototype.calcInterval = function calcInterval(callback) {
         }
     });
 
-    shuffle(zeros);
+    zeros = _.shuffle(zeros);
 
     for (var i = 0; i < fix; i++) {
         this.stages[zeros[i]] = 1;
@@ -175,7 +175,7 @@ Player.prototype.walk = function walk() {
         //context.drawImage(player, 272, 268);
         //context.drawImage(player, 160, 156);
         //return "Currently walking";
-        
+
     } else {
         if (this.walkingFrame > this.stages.length) {
             this.animationFrameStep = this.animationFrameStep == 2 ? 3 : 2;
@@ -214,9 +214,4 @@ Player.prototype.render = function render() {
         context.fillText(this.username,this.x*16-game.offsetX+this.model["offset_x"]+(this.x_diff*this.amt)-21,this.y*16-game.offsetY+this.model["offset_y"]+(this.y_diff*this.amt)-24);
         context.drawImage(this.sprite, this.x*16-game.offsetX+this.model["offset_x"]+(this.x_diff*this.amt)-16, this.y*16-game.offsetY+this.model["offset_y"]+(this.y_diff*this.amt)-16);
     }
-}
-
-function shuffle(o) {
-    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-    return o;
 }

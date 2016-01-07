@@ -266,3 +266,34 @@ function getTile(x, y) {
     }
     return new Tile(0);
 };
+
+$(document).keydown(function(e) {
+    // Only move if proper key is used
+    if (!game.freeze && _.includes([87, 65, 83, 68], e.which) && !game.player.walking) {
+        e.preventDefault();
+        game.player.move(e.which);
+    }
+
+    var elem = document.getElementById('game');
+    // Full screen
+    if (!game.freeze && e.which == 70) {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+          elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        }
+    }
+
+    if (e.which == 81) {
+        game.showFps = !game.showFps;
+    }
+});
+
+document.addEventListener("webkitfullscreenchange", function () {
+    game.isFullScreen = $("#game:-webkit-full-screen").length == 0 ? false : true;
+    resize();
+}, false);

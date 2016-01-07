@@ -1,260 +1,227 @@
-function Game(options) {
-    this.options = options;
+(function($) {
+    function Game(options) {
+        options = options || {};
 
-    this.oldTime;                   // Used to calculate deltaTime
-    this.deltaTime;                 // In milliseconds
+        this.server = options.server;
+        this.socket = options.socket;
 
-    this.fps = 60;                   // Used for utility to see the current fps
-    this.fps_time = 0;
-    this.fps_ticks = 0;
-    this.fps_delta = 500;          // The number of milliseconds to average frames over
-    this.frame = 0;
+        this.maxFps = options.maxFps ? options.maxFps : 60;
+        this.fps = 0;
+        this.framesPerUpdate = 0;
+        this.lastFpsUpdate = 0;
+        this.fpsInterval = options.fpsInterval ? options.fpsInterval : 500;
+        this.setFpsDecay(options.fpsDecay);
 
-    this.entities = [];
-    this.players = [];
+        this.delta = 0;
+        this.lastFrameTime = 0;
+        this.timestep = 1000/(this.maxFps);
+        this.panicLimit = 240;        // Once the number of timestep chunks to be recovered surpasses this, panic() will
+                                      // be called
 
-    this.playerData = $.parseJSON("{}");
+// ------------------------------------------------------------------------------------------------------------------ //
 
-    this.isFullScreen = false;
+        this.entities = [];
+        this.players = [];
 
-    this.showFps = true;
+        this.playerData = {};
 
-    this.defaultDim = 512;
-    this.mode = 3;
-}
+        this.isFullScreen = false;
 
-$(document).keydown(function(e) {
-    // Only move if proper key is used
-    if (!game.freeze && inArray(e.which, [87, 65, 83, 68]) && !game.player.walking) {
-        e.preventDefault();
-        game.player.move(e.which);
+        this.showFps = true;
+
+        this.dim = 512;
     }
 
-    var elem = document.getElementById('game');
-    // Full screen
-    if (!game.freeze && e.which == 70) {
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-          elem.msRequestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-          elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) {
-          elem.webkitRequestFullscreen();
-        }
+    Game.prototype.setFps = function(fps) {
+        this.maxFps = fps;
+        this.timestep = 1000/fps;
     }
 
-    if (e.which == 81) {
-        game.showFps = !game.showFps;
-    }
-});
-
-document.addEventListener("webkitfullscreenchange", function () {
-    game.isFullScreen = $("#game:-webkit-full-screen").length == 0 ? false : true;
-    resize();
-}, false);
-
-function inArray(value, array) {
-  return array.indexOf(value) > -1;
-}
-
-Game.prototype.updatePlayerPosses = function() {
-    // Remove players not in playerdata list
-    $.each(game.playerData, function(key) {
-        if (typeof game.players[key] == "undefined") {
-            delete(game.players[key]);
-        }
-    });
-
-    $.each(game.playerData, function(key, item) {
-        if (key == game.player.username) {
-            return true;
-        }
-        // If player object isn't in game.players array, add it
-        // If already in array, update info
-        if (!(key in game.players)) {
-            game.players[key] = new Player(key, item["model"], item["direction"], item["x"], item["y"])
+    Game.prototype.setFpsDecay = function(decay) {
+        if (decay > 1 || decay <= 0 || decay == undefined) {
+            this.fpsDecay = .40;
         } else {
-            // If previous coords are different from the new coords, run the walk animation
-            if (!game.players[key].walking && (game.players[key]["x"] != item["x"] || game.players[key]["y"] != item["y"])) {
-                game.players[key].move(item["direction"]);
+            this.fpsDecay = decay;
+        }
+    }
+
+    Game.prototype.updatePlayerPosses = function() {
+        // Remove players not in playerdata list
+        $.each(game.playerData, function(key) {
+            if (typeof game.players[key] == "undefined") {
+                delete(game.players[key]);
             }
-            game.players[key].setPos(item["x"], item["y"], item["direction"]);
-        }
-    });
-}
+        });
 
-
-// Averages the fps of the last "maxFrames" frames
-// Smoothness can be adjusted dynamically by adjusting maxFrames value
-// Call this every frame
-Game.prototype.calcFps = function() {
-    if (this.deltaTime == 0)
-        return;
-
-    this.fps_time += this.deltaTime;
-    this.fps_ticks++;
-    this.frame++;
-
-    if (this.fps_time >= this.fps_delta) {
-        this.fps = this.fps_ticks/this.fps_time * 1000;
-        this.fps_ticks = this.fps_time = 0;
-        $("#fps").html(Math.round(this.fps*100)/100 + " fps");
-    }
-};
-
-// Starts the update and render loops
-Game.prototype.start = function(username, model, direction, x, y, callback) {
-    // Push player object as first entity
-    this.player = new Player(username, model, direction, x, y, true);
-
-    this.startLogic();                  // Starts game logic loop
-
-    requestAnimationFrame(this.render.bind(this)); // Has an animation loop
-
-    callback();
-};
-
-Game.prototype.pause = function() {
-    cancelAnimationFrame(game.loop);
-}
-
-Game.prototype.resume = function() {
-    game.loop = requestAnimationFrame(this.render.bind(this));
-}
-
-Game.prototype.logic = function() {
-
-};
-
-Game.prototype.drawFps = function() {
-    context.save();
-    context.fillStyle = "rgba(0, 0, 0, 0.4)";
-    context.fillRect(0, 0, 512, 512);
-    //context.fillRect(0, 20, 300, 20);
-    context.restore();
-    context.font = "16px Courier";
-    context.fillStyle = 'yellow';
-
-    var fps = Math.round(game.fps*10)/10;
-    context.fillText(fps + (fps % 1 != 0 ? "" : ".0") + " FPS | walkingFrame: " + zeroPad(this.player.walkingFrame, 10) + " | currentFrame: " + this.frame, 0, 15);
-    context.fillText("Player: [" + this.player.x + ", " + this.player.y + "][" + this.x + ", " + this.y + "][" + this.player.amt + "]{" + this.player.direction + "}" , 0, 35);
-    context.fillText("Origin coords: [" + this.raw_x + ", " + this.raw_y + "] [" + Math.round(this.raw_x/16) + ", " + Math.round(this.raw_y/16) + "]", 0, 55);
-    context.fillText("Clients connected: " + Object.keys(this.playerData).length, 0, 75);
-    context.fillText("Total quadrants: " + (canvases.length*canvases[0].length) + " @ " + canvases[0][0].width + "px x " + canvases[0][0].height + "px", 0, 95);
-
-    function zeroPad(nr,base){
-      var  len = (String(base).length - String(nr).length)+1;
-      return len > 0? new Array(len).join('0')+nr : nr;
-    }
-};
-
-// Game rendering loop
-Game.prototype.render = function(time) {
-    if (!this.oldTime)
-        this.oldTime = time;
-
-    this.deltaTime = Math.min(1000, time - this.oldTime);
-    this.oldTime = time;
-
-    this.calcFps();             // Calculates the fps for utility.
-
-    // Render background first
-    var height = Math.floor(((game.isFullScreen) ? screen.height : window.innerHeight)/16)*16;
-    var width = Math.floor(((game.isFullScreen) ? screen.width : window.innerWidth)/16)*16;
-
-    this.dim = 512;
-    /*Math.min(height, width);
-    while (this.dim > this.defaultDim) {
-        this.dim-=16;
-    }*/
-    this.renderTiles();
-
-    // Player render
-    this.player.render();
-
-    // Other players render
-    for (key in this.players) {
-        if ((game.players[key].x-game.player.x > -19 && game.players[key].x-game.player.x < 17) && (game.players[key].y-game.player.y < 17 && game.players[key].y-game.player.y > -19)) {
-            game.players[key].render();
-        }
-    }
-
-    if (this.showFps) this.drawFps();
-
-    // TODO Rendering stuff goes here. All update data will be found in this.bufA
-    // Access delta time though this.time.deltaTime
-    // Do not put anything else anywhere else in this function except for where this comment is.
-
-    game.loop = requestAnimationFrame(this.render.bind(this));
-};
-
-Game.prototype.renderTiles = function() {
-    this.raw_x = (this.player.x-(this.dim/16/2))*16 + (this.player.x_diff*this.player.amt);
-    this.raw_y = (this.player.y-(this.dim/16/2))*16 + (this.player.y_diff*this.player.amt);
-    this.dim = this.dim;
-
-    this.x = Math.floor(this.raw_x/16)
-    this.y = Math.floor(this.raw_y/16)
-    this.toRender = [0];
-    this.tilesThing = [];
-
-    if (this.mode === 1) {
-        //console.log(x, y, dim/16, dim/16, 0, 0, dim/16, dim/16);
-        context.drawImage(background, this.raw_x, this.raw_y, this.dim, this.dim, 0, 0, this.dim, this.dim);
-    } else if (this.mode === 2) {
-        //console.log(x,y);
-        for (var i = game.player.y-Math.floor(this.dim/2/16)-1, a = -1; i < 33+game.player.y-Math.floor(this.dim/2/16); i++, a++) {
-            for (var j = game.player.x-Math.floor(this.dim/2/16)-1, b = -1; j < 33+game.player.x-Math.floor(this.dim/2/16); j++, b++) {
-                if (i === 0 && j === 0 && this.frame%60 === 0) {
-                    console.log(16*j+(this.player.x_diff*this.player.amt), 16*i+(this.player.y_diff*this.player.amt));
+        $.each(game.playerData, function(key, item) {
+            if (key == game.player.username) {
+                return true;
+            }
+            // If player object isn't in game.players array, add it
+            // If already in array, update info
+            if (!(key in game.players)) {
+                game.players[key] = new Player(key, item["model"], item["direction"], item["x"], item["y"])
+            } else {
+                // If previous coords are different from the new coords, run the walk animation
+                if (!game.players[key].walking && (game.players[key]["x"] != item["x"] || game.players[key]["y"] != item["y"])) {
+                    game.players[key].move(item["direction"]);
                 }
-                tile = this.getTile([i,j]);
-                this.toRender.push(tile.getLayer(1));
-                this.tilesThing.push(((tile.getLayer(2) % 16) * 16) + ", " +  (Math.floor(tile.getLayer(1) / 16) * 16) + ", " + 16 + ", " + 16 + ", " + (16*j+(this.player.x_diff*this.player.amt)) + ", " + (16*i+(this.player.y_diff*this.player.amt)) + ", 16, 16");
-                context.drawImage(tileset, (tile.getLayer(1) % 16) * 16, Math.floor(tile.getLayer(1) / 16) * 16, 16, 16, 16*b-(this.player.x_diff*this.player.amt), 16*a-(this.player.y_diff*this.player.amt), 16, 16);
-                context.drawImage(tileset, (tile.getLayer(2) % 16) * 16, Math.floor(tile.getLayer(2) / 16) * 16, 16, 16, 16*b-(this.player.x_diff*this.player.amt), 16*a-(this.player.y_diff*this.player.amt), 16, 16);
+                game.players[key].setPos(item["x"], item["y"], item["direction"]);
+            }
+        });
+    }
+
+    // Averages the fps of the last "fpsInterval" milliseconds
+    // Smoothness can be adjusted dynamically by adjusting fpsInterval and fpsDecay (use setFpsDecay(decay))
+    // Call this every frame
+    Game.prototype.calcFps = function(time) {
+        if (time > this.lastFpsUpdate + this.fpsInterval) {
+            this.fps = (this.fpsDecay * this.framesPerUpdate + (1 - this.fpsDecay) * this.fps * this.fpsInterval/1000) *
+                       1000/this.fpsInterval;
+            this.lastFpsUpdate = time;
+            this.framesPerUpdate = -1;
+        }
+
+        ++this.framesPerUpdate;
+    };
+
+    // Starts the update and render loops
+    Game.prototype.start = function(username, model, direction, x, y, callback) {
+        // Push player object as first entity
+        this.player = new Player(username, model, direction, x, y, true);
+
+        this.startLogic();                  // Starts game logic loop
+
+        requestAnimationFrame(this.render.bind(this)); // Has an animation loop
+
+        callback();
+    };
+
+    Game.prototype.pause = function() {
+        cancelAnimationFrame(this.loop);
+    }
+
+    Game.prototype.resume = function() {
+        this.loop = requestAnimationFrame(this.render.bind(this));
+    }
+
+    Game.prototype.drawFps = function() {
+        context.save();
+        context.fillStyle = "rgba(0, 0, 0, 0.4)";
+        context.fillRect(0, 0, 512, 512);
+        //context.fillRect(0, 20, 300, 20);
+        context.restore();
+        context.font = "16px Courier";
+        context.fillStyle = 'yellow';
+
+        var fps = Math.round(game.fps*10)/10;
+        context.fillText(fps + (fps % 1 != 0 ? "" : ".0") + " FPS | walkingFrame: " + zeroPad(this.player.walkingFrame, 10), 0, 15);
+        context.fillText("Player: [" + this.player.x + ", " + this.player.y + "][" + this.x + ", " + this.y + "][" + this.player.amt + "]{" + this.player.direction + "}" , 0, 35);
+        context.fillText("Origin coords: [" + this.raw_x + ", " + this.raw_y + "] [" + Math.round(this.raw_x/16) + ", " + Math.round(this.raw_y/16) + "]", 0, 55);
+        context.fillText("Clients connected: " + Object.keys(this.playerData).length, 0, 75);
+        context.fillText("Total quadrants: " + (canvases.length*canvases[0].length) + " @ " + canvases[0][0].width + "px x " + canvases[0][0].height + "px", 0, 95);
+
+        function zeroPad(nr,base){
+          var  len = (String(base).length - String(nr).length)+1;
+          return len > 0? new Array(len).join('0')+nr : nr;
+        }
+    };
+
+    Game.prototype.panic = function() {
+        this.delta = 0;
+    }
+
+    // Game rendering loop
+    Game.prototype.render = function(time) {
+        if (time - this.lastFrameTime < this.timestep) {
+            this.loop = requestAnimationFrame(this.render.bind(this));
+            return;
+        }
+
+        this.delta += time - this.lastFrameTime;
+        this.lastFrameTime = time - ((time - this.lastFrameTime) % this.timestep);
+
+        this.calcFps(time);
+
+        var numUpdateSteps = 0;
+        while (this.delta >= this.timestep) {
+            //update(timestep);  // calculate the positions of everything
+            this.delta -= this.timestep;
+            if (++numUpdateSteps >= this.panicLimit) {
+                this.panic();
+                break;
             }
         }
-    } else if (this.mode === 3) {
+
+        // render();    // draw everything to the positions indicated by the update function
+
+        // Render background first
+        this.renderTiles();
+
+        // Player render
+        this.player.render();
+
+        // Other players render
+        for (key in this.players) {
+            if ((game.players[key].x-game.player.x > -19 && game.players[key].x-game.player.x < 17) && (game.players[key].y-game.player.y < 17 && game.players[key].y-game.player.y > -19)) {
+                game.players[key].render();
+            }
+        }
+
+        if (this.showFps) this.drawFps();
+
+        this.loop = requestAnimationFrame(this.render.bind(this));
+    };
+
+    Game.prototype.renderTiles = function() {
+        this.raw_x = (this.player.x-(this.dim/16/2))*16 + (this.player.x_diff*this.player.amt);
+        this.raw_y = (this.player.y-(this.dim/16/2))*16 + (this.player.y_diff*this.player.amt);
+        this.dim = this.dim;
+
+        this.x = Math.floor(this.raw_x/16)
+        this.y = Math.floor(this.raw_y/16)
+        this.toRender = [0];
+        this.tilesThing = [];
+
         for (var i = 0; i < canvases.length; i++) {
             for (var j = 0; j < canvases[0].length; j++) {
                 context.drawImage(canvases[i][j], this.raw_x-size*16*i, this.raw_y-size*16*j, this.dim, this.dim, 0, 0, this.dim, this.dim);
             }
         }
-    }
+    };
 
-};
-
-Game.prototype.getTile = function(x, y) {
-    if (Array.isArray(x)) {
-        y = x[1];
-        x = x[0];
-    }
-
-    if (src[x] !== undefined) {
-        if (src[x][y] !== undefined) {
-            return src[x][y];
-        }
-    }
-    return new Tile(0);
-};
-
-Game.prototype.startLogic = function() {
-    var self = this;
-    this.logicLoop = setInterval(function() {
-        // Player logic
-        self.player.walk();
-
-        // Other players logic
-        for (key in self.players) {
-            // Don't render
-            //if ((self.players[key].x-self.player.x > -19 && self.players[key].x-self.player.x < 17) && (self.players[key].y-self.player.y < 17 && self.players[key].y-self.player.y > -19)) {
-                self.players[key].walk();
-            //}
+    Game.prototype.getTile = function(x, y) {
+        if (Array.isArray(x)) {
+            y = x[1];
+            x = x[0];
         }
 
-        // Update other players positions
-        self.updatePlayerPosses();
-    }, 1000/60);
-}
+        if (src[x] !== undefined) {
+            if (src[x][y] !== undefined) {
+                return src[x][y];
+            }
+        }
+        return new Tile(0);
+    };
+
+    Game.prototype.startLogic = function() {
+        var self = this;
+        this.logicLoop = setInterval(function() {
+            // Player logic
+            self.player.walk();
+
+            // Other players logic
+            for (key in self.players) {
+                // Don't render
+                //if ((self.players[key].x-self.player.x > -19 && self.players[key].x-self.player.x < 17) && (self.players[key].y-self.player.y < 17 && self.players[key].y-self.player.y > -19)) {
+                    self.players[key].walk();
+                //}
+            }
+
+            // Update other players positions
+            self.updatePlayerPosses();
+        }, 1000/60);
+    }
+
+    window.Game = Game;
+})(jQuery);
