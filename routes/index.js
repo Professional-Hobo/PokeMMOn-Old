@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
 // Play //
 router.get('/play', function(req, res, next) {
     if (req.session.loggedin) {
-        res.render('authenticated/play', { messages: req.flash('info'), server: settings.general.domain + ":" + settings.game.port });
+        res.render('authenticated/play', { messages: req.flash('info'), server: ":" + settings.game.port });
     } else {
         req.flash('info', "You must be logged in in order to access this resource.");
         res.redirect('/login');

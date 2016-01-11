@@ -42,10 +42,6 @@ var sessionSettings = {
     saveUninitialized: false
 };
 
-if (settings.general.LAN) {
-    delete sessionSettings.cookie.domain;
-}
-
 app.use(session(sessionSettings));
 
 // Flash messages
