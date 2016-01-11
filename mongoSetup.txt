@@ -1,5 +1,5 @@
 use pokemmon 
-db.addUser({
+db.createUser({
     user: "pokemmon",
     pwd: "pokemmon",
     roles: [ "readWrite", "dbAdmin" ]
