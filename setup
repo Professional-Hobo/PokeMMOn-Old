@@ -23,3 +23,5 @@ echo "Done with Web & Game Server's npm install"
 echo "Changes to settings.json and mongoSetup.txt will be ignored by git"
 git update-index --assume-unchanged settings.json
 git update-index --assume-unchanged mongoSetup.txt
+echo "Adding git config for world revisions"
+./gitSetup
