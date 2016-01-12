@@ -315,13 +315,6 @@ PokeMap.prototype = {
       }
     }
 
-    // Update the attributes of the canvas tag
-    //this.map.attr("width", this.dim.width*16);
-    //this.map.attr("height", this.dim.height*16);
-
-    // Render new resized map
-    //this.render();
-
     // Update dimensions viewer
     this.updateDim();
   },
