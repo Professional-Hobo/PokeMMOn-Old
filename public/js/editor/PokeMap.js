@@ -320,7 +320,7 @@ PokeMap.prototype = {
   },
 
   // Generate random map with random tiles
-  random: function() {
+  random: function(cb) {
 
     for (var h = 0; h < this.dim.height; h++) {
       //console.log("Generating random map: " + Math.ceil(h/this.dim.height*100) + "%");
@@ -333,6 +333,9 @@ PokeMap.prototype = {
         );
         this.tiles[h][w] = tile;
         pokeworld.maps[map].tiles[h][w] = tile;
+        if (h === this.dim.height-1 && w == this.dim.width-1) {
+          typeof cb === 'function' && cb();
+        }
       }
     }
   },

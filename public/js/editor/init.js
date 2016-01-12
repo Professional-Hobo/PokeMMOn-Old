@@ -1,3 +1,4 @@
+var score = 0;
 $(function() {
 
   async.series([
@@ -58,6 +59,7 @@ $(function() {
       // Start up render loop
       window.renderLoop = window.setInterval(function() {
         pokeworld.pokemap.renderAroundCenter();
+        score++;
       }, 1000/60);
 
       callback(null);
@@ -74,3 +76,27 @@ $(function() {
     pokeworld.pokemap.ctx.canvas.height = Math.floor($(".canvas-container").height()/16)*16-64;
   }
 });
+
+
+function benchmark() {
+  var total = 0;
+  score = 0;
+  var startTime = new Date().getTime();
+  pokeworld.pokemap.resize("right", 225);
+  pokeworld.pokemap.resize("down", 225);
+  pokeworld.pokemap.random(function() {
+      var y = window.setInterval(function() {
+          pokeworld.pokemap.offset.x -= Math.floor(Math.random() * 16)
+          pokeworld.pokemap.offset.x += Math.floor(Math.random() * 16)
+          pokeworld.pokemap.offset.y -= Math.floor(Math.random() * 16)
+          pokeworld.pokemap.offset.y += Math.floor(Math.random() * 16)
+          pokeworld.pokemap.random(function() {
+              if (++total === 100) {
+                  var diff = new Date().getTime() - startTime;
+                  clearInterval(y);
+                  UI.notify("Benchmark score", "Benchmark score is " + score/(diff/100000), 13371337)
+              }
+          })
+      });
+  });
+}
