@@ -7,7 +7,7 @@ curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
 sudo apt-get install --yes nodejs
 sudo ln -s /usr/bin/nodejs /usr/bin/node
 service mongodb start
+service redis-server start
 mongo < mongoSetup.txt
 rm mongoSetup.txt
 ./setup
-./run
