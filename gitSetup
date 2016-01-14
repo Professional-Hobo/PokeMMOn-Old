@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+process.chdir(__dirname + "/worlds");
+var spawnSync = require('child_process').spawnSync;
+
+spawnSync('git', ['config', 'user.email', 'PokeMMOn@professional-hobo.github.io']);
+spawnSync('git', ['config', 'user.name', 'PokeMMOn']);
