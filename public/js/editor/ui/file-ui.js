@@ -208,7 +208,7 @@ $(function() {
 
     // Delete map yes
     $("#deleteMapYes").click(function() {
-        delete pokeworld.currentMap();
+        delete pokeworld.maps[map];
         UI.notify("Deleted map successfully!", "Map \"" + map + "\" was deleted successfully!", delay);
 
         hideSection("deleteMapSection", function() {

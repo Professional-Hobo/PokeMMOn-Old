@@ -118,7 +118,7 @@ PokeWorld.prototype = {
             }
         });
 
-        $('#map')[0].addEventListener('mousedown', function(e) {
+        this.pokemap.map.addEventListener('mousedown', function(e) {
             self.mouse.down = true;
 
             if (self.mouseDifferent()) {
@@ -190,7 +190,7 @@ PokeWorld.prototype = {
             }
         });
 
-        $('#map')[0].addEventListener('mouseup', function(e) {
+        this.pokemap.map.addEventListener('mouseup', function(e) {
             self.mouse.down = false;
 
             if (!self.mouse.shift) {
@@ -200,7 +200,7 @@ PokeWorld.prototype = {
             }
         });
 
-        $('#map')[0].addEventListener('mousemove', function(e) {
+        this.pokemap.map.addEventListener('mousemove', function(e) {
 
             self.mouse.x = e.offsetX - self.pokemap.offset.x;
             self.mouse.y = e.offsetY - self.pokemap.offset.y
@@ -287,7 +287,7 @@ PokeWorld.prototype = {
             }
         });
 
-        $('#map')[0].addEventListener('mouseleave', function(e) {
+        this.pokemap.map.addEventListener('mouseleave', function(e) {
             self.mouse.down = false;
             self.mouse.right = false;
             self.mouse.inBounds = false;

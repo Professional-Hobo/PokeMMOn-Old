@@ -11,8 +11,8 @@ var PokeMap = function(tiles) {
         y: -this.pos[1] * 16
     };
 
-    this.map = $('#map');
-    this.ctx = $('#map')[0].getContext('2d');
+    this.map = document.getElementById('map')
+    this.ctx = this.map.getContext('2d');
 
     if (tiles === undefined) {
 
@@ -41,7 +41,7 @@ var PokeMap = function(tiles) {
     this.ctx.canvas.height = Math.floor($(".canvas-container").height() / 16) * 16 - 64;
 
     // Disable right click menu
-    $('#map')[0].oncontextmenu = function(e) {
+    this.map.oncontextmenu = function(e) {
         e.preventDefault();
     };
 };
@@ -271,7 +271,7 @@ PokeMap.prototype = {
                 }
 
                 // Update height of pokemap object
-                this.getHeight() += amount;
+                this.setHeight(this.getHeight() + amount);
                 pokeworld.currentMap().info.dimensions.height += amount;
             }
 
@@ -308,7 +308,7 @@ PokeMap.prototype = {
                 });
 
                 // Update width of pokemap object
-                this.getWidth() += amount;
+                this.setWidth(this.getWidth() + amount);
                 pokeworld.currentMap().info.dimensions.width += amount;
             }
         }
