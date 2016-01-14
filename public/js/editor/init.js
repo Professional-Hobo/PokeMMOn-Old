@@ -58,7 +58,7 @@ $(function() {
 
             // Start up render loop
             window.renderLoop = window.setInterval(function() {
-                pokeworld.pokemap.renderAroundCenter();
+                pokeworld.pokemap.render();
                 score++;
             }, 1000 / 60);
 

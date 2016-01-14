@@ -52,7 +52,7 @@ PokeMap.prototype = {
         this.tiles[x][y].clearLayers();
     },
 
-    drawTileNew: function(id, x, y) {
+    drawTile: function(id, x, y) {
         this.ctx.drawImage(tileset.tilesets.all.img, (id % 16) * 16, Math.floor(id / 16) * 16, 16, 16, x * 16 + this.offset.x, y * 16 + this.offset.y, 16, 16);
     },
 
@@ -62,17 +62,17 @@ PokeMap.prototype = {
 
         this.pos = [-x, -y];
 
-        this.renderAroundCenter();
+        this.render();
     },
 
     updatePlayerPosByOffset: function() {
         this.pos[0] = -Math.round(this.offset.x / 16);
         this.pos[1] = -Math.round(this.offset.y / 16);
 
-        this.renderAroundCenter();
+        this.render();
     },
 
-    renderAroundCenter: function() {
+    render: function() {
         var self = this;
         this.clear();
 
@@ -151,10 +151,10 @@ PokeMap.prototype = {
             var layers = self.tiles[tile[0]][tile[1]].layers;
             if (layers.length != 1) {
                 layers.forEach(function(layer) {
-                    self.drawTileNew(layer, tile[1], tile[0]);
+                    self.drawTile(layer, tile[1], tile[0]);
                 });
             } else {
-                self.drawTileNew(layers[0], tile[1], tile[0]);
+                self.drawTile(layers[0], tile[1], tile[0]);
             }
         });
 
@@ -189,7 +189,7 @@ PokeMap.prototype = {
 
                             // Verify coords are inbounds of pokemap
                             if (tile.x + tileset.selectorDim()[0] * x < self.dim.width && tile.y + tileset.selectorDim()[1] * y < self.dim.height) {
-                                self.drawTileNew(tile.id, tile.x + tileset.selectorDim()[0] * x, tile.y + tileset.selectorDim()[1] * y);
+                                self.drawTile(tile.id, tile.x + tileset.selectorDim()[0] * x, tile.y + tileset.selectorDim()[1] * y);
                             }
                         });
                     }
@@ -200,7 +200,7 @@ PokeMap.prototype = {
 
                         // Verify coords are inbounds of pokemap
                         if (pokeworld.mouse.hover_x + tileset.selectorDim()[0] * x < self.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim()[1] * y < self.dim.height) {
-                            self.drawTileNew(tileset.mouse.tileID, pokeworld.mouse.hover_x + tileset.selectorDim()[0] * x, pokeworld.mouse.hover_y + tileset.selectorDim()[1] * y);
+                            self.drawTile(tileset.mouse.tileID, pokeworld.mouse.hover_x + tileset.selectorDim()[0] * x, pokeworld.mouse.hover_y + tileset.selectorDim()[1] * y);
                         }
                     }
                 }

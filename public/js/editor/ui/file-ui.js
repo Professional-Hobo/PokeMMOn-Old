@@ -47,7 +47,7 @@ $(function() {
                     .attr("value", "")
                     .text("--- No revisions available ---"));
 
-            pokeworld.pokemap.renderAroundCenter();
+            pokeworld.pokemap.render();
 
         } else {
             $("#deleteWorld").prop("disabled", false);
@@ -168,7 +168,7 @@ $(function() {
                     pokeworld.populate(0)
                     pokeworld.pokemap.updateAttr();
                     pokeworld.pokemap.clear();
-                    pokeworld.pokemap.renderAroundCenter();
+                    pokeworld.pokemap.render();
 
                     // Reset map dropdown
                     $('#maps')
@@ -235,7 +235,7 @@ $(function() {
 
                     pokeworld.pokemap.updateAttr();
                     pokeworld.pokemap.clear();
-                    pokeworld.pokemap.renderAroundCenter();
+                    pokeworld.pokemap.render();
                 } else {
                     map = Object.keys(pokeworld.maps)[0]; // Load in first map
                     $("#maps").val(map);
@@ -337,7 +337,7 @@ $(function() {
 
             pokeworld.pokemap.updateAttr();
             pokeworld.pokemap.clear();
-            pokeworld.pokemap.renderAroundCenter();
+            pokeworld.pokemap.render();
 
             hideNewMap();
         });
@@ -590,7 +590,7 @@ $(function() {
         pokeworld.pokemap.dim.height = pokeworld.maps[map].info.dimensions.height;
 
         pokeworld.pokemap.updateAttr();
-        pokeworld.pokemap.renderAroundCenter();
+        pokeworld.pokemap.render();
 
         pokeworld.pokemap.updateDim();
     }
