@@ -338,12 +338,6 @@ PokeMap.prototype = {
         }
     },
 
-    // Update canvas width/height attributes
-    updateAttr: function() {
-        //this.map.attr("width", this.getWidth()*16);
-        //this.map.attr("height", this.getHeight()*16);
-    },
-
     updateDim: function() {
         $("#dim").html("Current map dim: " + this.getWidth() + "x" + this.getHeight());
     },

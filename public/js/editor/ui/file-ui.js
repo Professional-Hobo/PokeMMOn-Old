@@ -163,10 +163,9 @@ $(function() {
 
 
                     // Reset pokemap
-                    pokeworld.pokemap.dim.height = 25;
-                    pokeworld.pokemap.dim.width = 25;
+                    pokeworld.pokemap.setHeight(25);
+                    pokeworld.pokemap.setWidth(25);
                     pokeworld.populate(0)
-                    pokeworld.pokemap.updateAttr();
                     pokeworld.pokemap.clear();
                     pokeworld.pokemap.render();
 
@@ -209,7 +208,7 @@ $(function() {
 
     // Delete map yes
     $("#deleteMapYes").click(function() {
-        delete pokeworld.maps[map];
+        delete pokeworld.currentMap();
         UI.notify("Deleted map successfully!", "Map \"" + map + "\" was deleted successfully!", delay);
 
         hideSection("deleteMapSection", function() {
@@ -230,10 +229,9 @@ $(function() {
                     });
 
                     // Reset pokemap
-                    pokeworld.pokemap.dim.height = 25;
-                    pokeworld.pokemap.dim.width = 25;
+                    pokeworld.pokemap.setHeight(25);
+                    pokeworld.pokemap.setWidth(25);
 
-                    pokeworld.pokemap.updateAttr();
                     pokeworld.pokemap.clear();
                     pokeworld.pokemap.render();
                 } else {
@@ -322,20 +320,19 @@ $(function() {
             $("#maps").val(name); // Update map selection
 
             // Reset pokemap
-            pokeworld.pokemap.dim.height = 25;
-            pokeworld.pokemap.dim.width = 25;
+            pokeworld.pokemap.setHeight(25);
+            pokeworld.pokemap.setWidth(25);
 
             // Allocate space for the map tiles
-            pokeworld.maps[map].tiles = new Array(pokeworld.maps[map].info.dimensions.height);
-            for (var i = 0; i < pokeworld.maps[map].info.dimensions.width; i++) {
-                pokeworld.maps[map].tiles[i] = new Array();
+            pokeworld.currentMap().tiles = new Array(pokeworld.currentMap().info.dimensions.height);
+            for (var i = 0; i < pokeworld.currentMap().info.dimensions.width; i++) {
+                pokeworld.currentMap().tiles[i] = new Array();
             }
 
             pokeworld.populate(0) // Populate map tiles with grass
 
-            pokeworld.pokemap = new PokeMap(pokeworld.maps[map].tiles.slice()); // Send in the map tiles to pokemap
+            pokeworld.pokemap = new PokeMap(pokeworld.currentMap().tiles.slice()); // Send in the map tiles to pokemap
 
-            pokeworld.pokemap.updateAttr();
             pokeworld.pokemap.clear();
             pokeworld.pokemap.render();
 
@@ -353,11 +350,11 @@ $(function() {
         } else {
 
             // Update current map tile with pokemap data
-            pokeworld.maps[map].tiles = $.extend(true, [], pokeworld.pokemap.tiles);
+            pokeworld.currentMap().tiles = $.extend(true, [], pokeworld.pokemap.tiles);
 
             // Update width and height
-            pokeworld.maps[map].info.dimensions.width = pokeworld.pokemap.dim.width;
-            pokeworld.maps[map].info.dimensions.height = pokeworld.pokemap.dim.height;
+            pokeworld.currentMap().info.dimensions.width = pokeworld.pokemap.getWidth();
+            pokeworld.currentMap().info.dimensions.height = pokeworld.pokemap.getHeight();
 
             $.ajax("editor/world/" + worldName, {
                 method: "PUT",
@@ -579,17 +576,16 @@ $(function() {
     }
 
     function loadPokeMap() {
-        Object.keys(pokeworld.maps[map].tiles).forEach(function(xindex) {
-            Object.keys(pokeworld.maps[map].tiles[xindex]).forEach(function(yindex) {
-                pokeworld.maps[map].tiles[xindex][yindex] = new Tile(pokeworld.maps[map].tiles[xindex][yindex].layers);
+        Object.keys(pokeworld.currentMap().tiles).forEach(function(xindex) {
+            Object.keys(pokeworld.currentMap().tiles[xindex]).forEach(function(yindex) {
+                pokeworld.currentMap().tiles[xindex][yindex] = new Tile(pokeworld.currentMap().tiles[xindex][yindex].layers);
             });
         });
 
-        pokeworld.pokemap.tiles = $.extend(true, [], pokeworld.maps[map].tiles);
-        pokeworld.pokemap.dim.width = pokeworld.maps[map].info.dimensions.width;
-        pokeworld.pokemap.dim.height = pokeworld.maps[map].info.dimensions.height;
+        pokeworld.pokemap.tiles = $.extend(true, [], pokeworld.currentMap().tiles);
+        pokeworld.pokemap.setWidth(pokeworld.currentMap().info.dimensions.width);
+        pokeworld.pokemap.setHeight(pokeworld.currentMap().info.dimensions.height);
 
-        pokeworld.pokemap.updateAttr();
         pokeworld.pokemap.render();
 
         pokeworld.pokemap.updateDim();
