@@ -17,7 +17,7 @@ $(function() {
 
         // Disable delete/save buttons if no world selected
         // Index 0 is for "New World"
-        if ($("#worlds")[0].selectedIndex == 0) {
+        if ($("#worlds")[0].selectedIndex === 0) {
             $("#deleteWorld").prop("disabled", true);
             $("#renameWorld").prop("disabled", true);
 
@@ -65,7 +65,7 @@ $(function() {
         $(this).blur();
 
         // Disable delete/save buttons if no map selected
-        if ($("#maps")[0].selectedIndex == 0) {
+        if ($("#maps")[0].selectedIndex === 0) {
             $("#deleteMap").prop("disabled", true);
             $("#renameMap").prop("disabled", true);
             $("#saveWorld").prop("disabled", true);
@@ -216,7 +216,7 @@ $(function() {
             $("#deleteMapText").html("");
 
             updateMapList(function() {
-                if (Object.keys(pokeworld.maps).length == 0) {
+                if (Object.keys(pokeworld.maps).length === 0) {
                     map = null;
                     $("#maps").val("");
 
@@ -347,7 +347,7 @@ $(function() {
     $('#saveWorld').click(function() {
 
         // Check if new world
-        if ($("#worlds")[0].selectedIndex == 0) {
+        if ($("#worlds")[0].selectedIndex === 0) {
             showSection("newWorldSection");
             $("#newWorldInput").focus();
         } else {

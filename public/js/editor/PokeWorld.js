@@ -126,7 +126,7 @@ PokeWorld.prototype = {
             }
 
             // Left click
-            if (e.which == 1) {
+            if (e.which === 1) {
 
                 // group tiles
                 if (tileset.multi) {
@@ -218,7 +218,7 @@ PokeWorld.prototype = {
                 self.selectTile();
 
                 // Left click (drag)
-                if (e.which == 1) {
+                if (e.which === 1) {
                     if (tileset.multi) {
                         var start = [tileset.mouse.tile_x, tileset.mouse.tile_y];
                         var end = [tileset.mouse.tile_x + tileset.selectorDim()[0], tileset.mouse.tile_y + tileset.selectorDim()[1]];

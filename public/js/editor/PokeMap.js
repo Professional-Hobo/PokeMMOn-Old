@@ -211,7 +211,7 @@ PokeMap.prototype = {
 
     // Defines what tile at x/y is
     setTile: function(tile, x, y) {
-        if (typeof tile == "number") {
+        if (typeof tile === "number") {
             tile = [tile];
         }
         if (pokeworld.mouse.inBounds) {
@@ -239,7 +239,7 @@ PokeMap.prototype = {
     resize: function(direction, amount, tileObject) {
         var self = this;
 
-        if (direction == "up" || direction == "down") {
+        if (direction === "up" || direction === "down") {
 
             // Removing rows
             if (amount < 0) {
@@ -249,8 +249,8 @@ PokeMap.prototype = {
                 // This prevents getting into the negatives
                 amount = amount > this.getHeight() ? this.getHeight() : amount;
                 for (var i = 0; i < amount; i++) {
-                    this.tiles[direction == "up" ? "shift" : "pop"]();
-                    pokeworld.currentMap().tiles[direction == "up" ? "shift" : "pop"]()
+                    this.tiles[direction === "up" ? "shift" : "pop"]();
+                    pokeworld.currentMap().tiles[direction === "up" ? "shift" : "pop"]()
                 }
 
                 // Update height of pokemap object
@@ -266,8 +266,8 @@ PokeMap.prototype = {
                     var toAdd = Array.apply(null, Array(Math.abs(this.getWidth()))).map(function(x) {
                         return new Tile(0);
                     });
-                    this.tiles[direction == "up" ? "unshift" : "push"](toAdd.slice());
-                    pokeworld.currentMap().tiles[direction == "up" ? "unshift" : "push"](toAdd.slice());
+                    this.tiles[direction === "up" ? "unshift" : "push"](toAdd.slice());
+                    pokeworld.currentMap().tiles[direction === "up" ? "unshift" : "push"](toAdd.slice());
                 }
 
                 // Update height of pokemap object
@@ -275,7 +275,7 @@ PokeMap.prototype = {
                 pokeworld.currentMap().info.dimensions.height += amount;
             }
 
-        } else if (direction == "right" || direction == "left") {
+        } else if (direction === "right" || direction === "left") {
 
             // Removing cols
             if (amount < 0) {
@@ -287,8 +287,8 @@ PokeMap.prototype = {
 
                 Object.keys(this.tiles).forEach(function(index) {
                     for (var i = 0; i < amount; i++) {
-                        self.tiles[index][direction == "left" ? "shift" : "pop"]();
-                        pokeworld.currentMap().tiles[index][direction == "left" ? "shift" : "pop"]();
+                        self.tiles[index][direction === "left" ? "shift" : "pop"]();
+                        pokeworld.currentMap().tiles[index][direction === "left" ? "shift" : "pop"]();
                     }
                 });
 
@@ -302,8 +302,8 @@ PokeMap.prototype = {
 
                 Object.keys(this.tiles).forEach(function(index) {
                     for (var i = 0; i < amount; i++) {
-                        self.tiles[index][direction == "left" ? "unshift" : "push"](new Tile(0));
-                        pokeworld.currentMap().tiles[index][direction == "left" ? "unshift" : "push"](new Tile(0));
+                        self.tiles[index][direction === "left" ? "unshift" : "push"](new Tile(0));
+                        pokeworld.currentMap().tiles[index][direction === "left" ? "unshift" : "push"](new Tile(0));
                     }
                 });
 
@@ -331,7 +331,7 @@ PokeMap.prototype = {
                 );
                 this.tiles[h][w] = tile;
                 pokeworld.currentMap().tiles[h][w] = tile;
-                if (h === this.getHeight() - 1 && w == this.getWidth() - 1) {
+                if (h === this.getHeight() - 1 && w === this.getWidth() - 1) {
                     typeof cb === 'function' && cb();
                 }
             }
