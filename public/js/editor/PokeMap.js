@@ -1,4 +1,7 @@
 var PokeMap = function(tiles) {
+    var self = this;
+    this.tiles = tiles;
+
     this.dim = {
         width: 25,
         height: 25
@@ -14,24 +17,6 @@ var PokeMap = function(tiles) {
     this.map = document.getElementById('map')
     this.ctx = this.map.getContext('2d');
 
-    if (tiles === undefined) {
-
-        // Allocate tiles matrix
-        this.tiles = new Array(this.getHeight());
-        for (var i = 0; i < this.getHeight(); i++) {
-            this.tiles[i] = new Array(this.getWidth());
-        }
-
-        // Populate with default grass
-        for (var h = 0; h < this.getHeight(); h++) {
-            for (var w = 0; w < this.getWidth(); w++) {
-                this.tiles[h][w] = new Tile(0)
-            }
-        }
-    } else {
-        this.tiles = tiles;
-    }
-
     // Calculate dim from matrix dims
     this.setWidth(this.tiles[0].length);
     this.setHeight(this.tiles.length)
@@ -44,16 +29,48 @@ var PokeMap = function(tiles) {
     this.map.oncontextmenu = function(e) {
         e.preventDefault();
     };
+
+    this.genTiles(function() {
+        self.genCanvases(function() {
+            console.log("done");
+        });
+    });
 };
 
 PokeMap.prototype = {
+    genTiles: function(callback) {
+        if (this.tiles === undefined) {
+
+            // Allocate tiles matrix
+            this.tiles = new Array(this.getHeight());
+            for (var i = 0; i < this.getHeight(); i++) {
+                this.tiles[i] = new Array(this.getWidth());
+            }
+
+            // Populate with default grass
+            for (var h = 0; h < this.getHeight(); h++) {
+                for (var w = 0; w < this.getWidth(); w++) {
+                    this.tiles[h][w] = new Tile(0)
+
+                    if (h === this.getHeight() - 1 && w === this.getWidth() - 1) {
+                        typeof callback === 'function' && callback();
+                    }
+                }
+            }
+        } else {
+            typeof callback === 'function' && callback();
+        }
+    },
+
     // Deletes a tile (data only)
     deleteTile: function(x, y) {
         this.tiles[x][y].clearLayers();
+        this.genCanvases()
     },
 
     drawTile: function(id, x, y) {
         this.ctx.drawImage(tileset.tilesets.all.img, (id % 16) * 16, Math.floor(id / 16) * 16, 16, 16, x * 16 + this.offset.x, y * 16 + this.offset.y, 16, 16);
+        this.genCanvases()
     },
 
     updatePlayerPosByCoords: function(x, y) {
@@ -73,90 +90,12 @@ PokeMap.prototype = {
     },
 
     render: function() {
-        var self = this;
         this.clear();
-
-        var viewport_tile_width = this.getCanvasWidth() / 16;
-        var viewport_tile_height = this.getCanvasHeight() / 16;
-
-        half_width = this.getCanvasWidth() / 32;
-        half_height = this.getCanvasHeight() / 32;
-
-        render = [];
-
-        // Determine the tiles to render starting from top left corner
-        for (var a = this.pos[1]; a < this.pos[1] + viewport_tile_height; a++) {
-            for (var b = this.pos[0]; b < this.pos[0] + viewport_tile_width; b++) {
-                // Ignore negative tiles and ignore tiles larger than map
-                if ((a < 0 || b < 0) || (a >= this.getHeight() || b >= this.getWidth())) {
-                    continue;
-                } else {
-                    render.push([a, b]);
-                }
+        for (var i = 0; i < canvases.length; i++) {
+            for (var j = 0; j < canvases[0].length; j++) {
+                this.ctx.drawImage(canvases[i][j], this.offset.x+128*i, this.offset.y+128*j);
             }
         }
-
-        // Calculate min/max x/y
-        bounds = {
-            largest: {
-                x: Math.max.apply(null, render.map(function(item) {
-                    return item[1];
-                })),
-                y: Math.max.apply(null, render.map(function(item) {
-                    return item[0];
-                }))
-            },
-            smallest: {
-                x: Math.min.apply(null, render.map(function(item) {
-                    return item[1];
-                })),
-                y: Math.min.apply(null, render.map(function(item) {
-                    return item[0];
-                }))
-            }
-        };
-
-        // Push raw_padding
-        // Raw padding is not sanitized
-
-        // Top
-        start = [bounds.smallest.x - 1, bounds.smallest.y - 1];
-        end = [bounds.largest.x + 1, bounds.largest.y + 1];
-
-        raw_padding = [];
-
-        // Top and Bottom
-        for (var i = start[0]; i <= end[0]; i++) {
-            raw_padding.push([start[1], i]); // Top
-            raw_padding.push([end[1], i]); // Bottom
-        }
-
-        // Left and Right
-        for (var i = start[1]; i <= end[1]; i++) {
-            raw_padding.push([i, end[0]]); // Right
-            raw_padding.push([i, start[0]]); // Left
-        }
-
-        // Sanitize padding
-        padding = [];
-        raw_padding.forEach(function(coords) {
-            if (coords[0] >= 0 && coords[0] < self.tiles.length && coords[1] >= 0 && coords[1] < self.tiles[0].length) {
-                padding.push(coords);
-            }
-        });
-
-        render = render.concat(padding); // Add padding to rendering tiles
-
-        render.forEach(function(tile) {
-            var layers = self.tiles[tile[0]][tile[1]].layers;
-            if (layers.length != 1) {
-                layers.forEach(function(layer) {
-                    self.drawTile(layer, tile[1], tile[0]);
-                });
-            } else {
-                self.drawTile(layers[0], tile[1], tile[0]);
-            }
-        });
 
         // Hover for tile placement - Preview
         if (pokeworld.mouse.inBounds) {
@@ -214,10 +153,10 @@ PokeMap.prototype = {
         if (typeof tile === "number") {
             tile = [tile];
         }
-        if (pokeworld.mouse.inBounds) {
-            this.tiles[x][y].setLayers(tile.slice());
-            pokeworld.currentMap().tiles[x][y].setLayers(tile.slice());
-        }
+        this.tiles[x][y].setLayers(tile.slice());
+        pokeworld.currentMap().tiles[x][y].setLayers(tile.slice());
+
+        this.regenCanvas(Math.floor(y/8), Math.floor(x/8));
     },
 
     // New map
@@ -228,6 +167,7 @@ PokeMap.prototype = {
                 pokeworld.currentMap().tiles[h][w] = new Tile(tileObject) || new Tile();
             }
         }
+        this.genCanvases()
     },
 
     // Clear the canvas
@@ -254,7 +194,7 @@ PokeMap.prototype = {
                 }
 
                 // Update height of pokemap object
-                this.getHeight() -= amount;
+                this.setHeight(this.getHeight() - amount);
                 pokeworld.currentMap().info.dimensions.height -= amount;
 
                 // Adding rows
@@ -293,7 +233,7 @@ PokeMap.prototype = {
                 });
 
                 // Update width of pokemap object
-                this.getWidth() -= amount;
+                this.setWidth(this.getWidth() - amount);
                 pokeworld.currentMap().info.dimensions.width -= amount;
 
                 // Adding cols
@@ -319,7 +259,6 @@ PokeMap.prototype = {
 
     // Generate random map with random tiles
     random: function(cb) {
-
         for (var h = 0; h < this.getHeight(); h++) {
             //console.log("Generating random map: " + Math.ceil(h/this.getHeight()*100) + "%");
             for (var w = 0; w < this.getWidth(); w++) {
@@ -332,6 +271,7 @@ PokeMap.prototype = {
                 this.tiles[h][w] = tile;
                 pokeworld.currentMap().tiles[h][w] = tile;
                 if (h === this.getHeight() - 1 && w === this.getWidth() - 1) {
+                    this.genCanvases()
                     typeof cb === 'function' && cb();
                 }
             }
@@ -339,6 +279,7 @@ PokeMap.prototype = {
     },
 
     updateDim: function() {
+        this.genCanvases()
         $("#dim").html("Current map dim: " + this.getWidth() + "x" + this.getHeight());
     },
 
@@ -375,4 +316,93 @@ PokeMap.prototype = {
     setCanvasWidth: function(width) {
         this.ctx.canvas.width = width;
     },
+
+    genCanvases: function(callback) {
+        // Generate all of the canvases
+        canvases = [];
+        this.grid = this.gridify(this.tiles);
+
+        for (var i = 0; i < this.grid.length; i++) {
+            canvases[i] = [];
+            for (var j = 0; j < this.grid[0].length; j++) {
+
+                // Create new Canvas offscreen
+                canvases[i][j] = document.createElement("canvas");
+                canvases[i][j].width=128
+                canvases[i][j].height=128
+                canvases[i][j].style.width=128 + "px"
+                canvases[i][j].style.height=128 + "px"
+                gridContext = canvases[i][j].getContext('2d');
+
+                var slice = this.grid[i][j];
+                for (var k = 0; k < slice.length; k++) {
+                  for (var l = 0; l < slice[0].length; l++) {
+                    var tile = slice[k][l];
+                    gridContext.drawImage(tileset.image, (tile.getLayer(1) % 16) * 16, Math.floor(tile.getLayer(1) / 16) * 16, 16, 16, l*16, k*16, 16, 16);
+                    gridContext.drawImage(tileset.image, (tile.getLayer(2) % 16) * 16, Math.floor(tile.getLayer(2) / 16) * 16, 16, 16, l*16, k*16, 16, 16);
+                  }
+                }
+                if (i === this.grid.length-1 && j === this.grid.length-1) {
+                    typeof callback === 'function' && callback();
+                }
+            }
+        }
+    },
+
+    regenCanvas: function(x, y) {
+        gridContext = canvases[x][y].getContext('2d');
+
+        var slice = this.grid[x][y];
+        for (var k = 0; k < slice.length; k++) {
+          for (var l = 0; l < slice[0].length; l++) {
+            var tile = slice[k][l];
+            gridContext.drawImage(tileset.image, (tile.getLayer(1) % 16) * 16, Math.floor(tile.getLayer(1) / 16) * 16, 16, 16, l*16, k*16, 16, 16);
+            gridContext.drawImage(tileset.image, (tile.getLayer(2) % 16) * 16, Math.floor(tile.getLayer(2) / 16) * 16, 16, 16, l*16, k*16, 16, 16);
+          }
+        }
+    },
+
+    gridify: function(matrix, size) {
+      // Default size of 64 per quadrant
+      var size = size || 8;
+
+      // Minimum size of a quadrant since viewport is 32 wide.
+      if (size < 16) size = 8;
+
+      // Maximum size of a quadrant since largest supported viewport is 1,024px x 1,024px
+      else if (size > 64) size = 64;
+
+      // Get dimensions of map source
+      var width = matrix[0].length;
+      var height = matrix.length;
+
+      // Calculate how many matrices we will have
+      var widthGrids = Math.ceil(width/size);
+      var heightGrids = Math.ceil(height/size);
+      var grids = [];
+
+      // Calculate the areas of the matrix to slice
+      for (var i = 0; i < widthGrids; i++) {
+        grids[i] = [];
+
+        for (var j = 0; j < heightGrids; j++) {
+          //grids[i][j] = "X: " + j*size + ", Y: " + i*size + " => X: " + (j+1)*size + ", Y: " + (i+1)*size;
+          grids[i][j] = [[j*size, i*size], [(j+1)*size, (i+1)*size]];
+        }
+      }
+
+      // Actually slice using calculations from above loop
+      var sections = [];
+      for (var i = 0; i < grids.length; i++) {
+        sections[i] = [];
+
+        for (var j = 0; j < grids[0].length; j++) {
+          // Make a quadrant from 0,0 to 4,4
+          // map.slice(0, 4).map(function(grid) { return grid.slice(0, 4); });
+          sections[i][j] = matrix.slice(grids[i][j][0][0], grids[i][j][1][0]).map(function(grid) { return grid.slice(grids[i][j][0][1], grids[i][j][1][1]); });
+        }
+      }
+
+      return sections;
+    }
 };
