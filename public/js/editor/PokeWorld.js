@@ -208,11 +208,19 @@ PokeWorld.prototype = {
             self.mouse.hover_x = Math.floor(self.mouse.x / 16);
             self.mouse.hover_y = Math.floor(self.mouse.y / 16);
 
-            if ((self.mouse.hover_x >= bounds.smallest.x && self.mouse.hover_x <= bounds.largest.x) && (self.mouse.hover_y >= bounds.smallest.y && self.mouse.hover_y <= bounds.largest.y)) {
-                self.mouse.inBounds = true;
+            if (pokeworld.mouse.x <= pokeworld.pokemap.dim.width*16 && pokeworld.mouse.x >= 0 && pokeworld.mouse.y <= pokeworld.pokemap.dim.height*16 && pokeworld.mouse.y >= 0) {
+              self.mouse.inBounds = true;
             } else {
-                self.mouse.inBounds = false;
+
+              self.mouse.inBounds = false;
             }
+
+            //
+            // if ((self.mouse.hover_x >= bounds.smallest.x && self.mouse.hover_x <= bounds.largest.x) && (self.mouse.hover_y >= bounds.smallest.y && self.mouse.hover_y <= bounds.largest.y)) {
+            //     self.mouse.inBounds = true;
+            // } else {
+            //     self.mouse.inBounds = false;
+            // }
 
             if (self.mouse.down && self.mouseDifferent()) {
                 self.selectTile();

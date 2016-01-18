@@ -65,12 +65,12 @@ PokeMap.prototype = {
     // Deletes a tile (data only)
     deleteTile: function(x, y) {
         this.tiles[x][y].clearLayers();
-        this.genCanvases()
+        this.regenCanvas(Math.floor(x/16), Math.floor(y/16));
     },
 
     drawTile: function(id, x, y) {
         this.ctx.drawImage(tileset.tilesets.all.img, (id % 16) * 16, Math.floor(id / 16) * 16, 16, 16, x * 16 + this.offset.x, y * 16 + this.offset.y, 16, 16);
-        this.genCanvases()
+        this.regenCanvas(Math.floor(x/16), Math.floor(y/16));
     },
 
     updatePlayerPosByCoords: function(x, y) {
@@ -90,6 +90,7 @@ PokeMap.prototype = {
     },
 
     render: function() {
+        var self = this;
         this.clear();
         for (var i = 0; i < canvases.length; i++) {
             for (var j = 0; j < canvases[0].length; j++) {
@@ -127,9 +128,9 @@ PokeMap.prototype = {
                         tiles.forEach(function(tile) {
 
                             // Verify coords are inbounds of pokemap
-                            if (tile.x + tileset.selectorDim()[0] * x < self.dim.width && tile.y + tileset.selectorDim()[1] * y < self.dim.height) {
+                            //if (tile.x + tileset.selectorDim()[0] * x < self.dim.width && tile.y + tileset.selectorDim()[1] * y < self.dim.height) {
                                 self.drawTile(tile.id, tile.x + tileset.selectorDim()[0] * x, tile.y + tileset.selectorDim()[1] * y);
-                            }
+                            //}
                         });
                     }
                 }
@@ -138,9 +139,9 @@ PokeMap.prototype = {
                     for (var y = 0; y < pokeworld.multi.y; y++) {
 
                         // Verify coords are inbounds of pokemap
-                        if (pokeworld.mouse.hover_x + tileset.selectorDim()[0] * x < self.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim()[1] * y < self.dim.height) {
+                        //if (pokeworld.mouse.hover_x + tileset.selectorDim()[0] * x < self.dim.width && pokeworld.mouse.hover_y + tileset.selectorDim()[1] * y < self.dim.height) {
                             self.drawTile(tileset.mouse.tileID, pokeworld.mouse.hover_x + tileset.selectorDim()[0] * x, pokeworld.mouse.hover_y + tileset.selectorDim()[1] * y);
-                        }
+                        //}
                     }
                 }
             }
