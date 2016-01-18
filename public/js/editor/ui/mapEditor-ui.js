@@ -33,6 +33,7 @@ $(function() {
                 e.preventDefault();
                 e.shiftKey ? pokeworld.resizeMultiplier([1, 0]) : tileset.resizeTileSelector([1, 0])
             }
+            pokeworld.pokemap.renderPreview();
         }
     });
     $("#x, #y").change(function() {
