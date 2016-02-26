@@ -214,7 +214,7 @@ $(function() {
             global: false,
             success: function(data) {
                 data.forEach(function(e) {
-                    $.ajax(e, {
+                    $.ajax(e.slice(1), {
                         global: false,
                         dataType: 'script'
                     });
