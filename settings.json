@@ -1,7 +1,8 @@
 {
     "general": {
         "name": "PokeMMOn",
-        "version": "0.0.1"
+        "version": "0.0.1",
+        "behindReverseProxy": false
     },
     "webserver": {
         "port": "3000"

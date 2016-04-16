@@ -6,9 +6,13 @@ var User     = require('../models/User.js');
 
 var baseURL;
 router.get('*', function(req, res,next) {
-    var uri = req.headers.uri;
-    var path = req.originalUrl;
-    baseURL = uri.slice(0, uri.indexOf(path));
+    if (settings.behindReverseProxy) {
+        var uri = req.headers.uri;
+        var path = req.originalUrl;
+        baseURL = uri.slice(0, uri.indexOf(path));
+    } else {
+        baseURL = "";
+    }
     next();
 });
 

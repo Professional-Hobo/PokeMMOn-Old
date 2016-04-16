@@ -18,6 +18,17 @@ Run
 ===
 Run launches the web and game servers in a tmux session. Make sure that you have run install (if needed) and setup first before attempting to launch the game!
 
+Config
+======
+If you are running PokeMMOn behind a reverse proxy such as NGINX, make sure to include an extra header called `uri` that contains the `$request_uri`.
+
+```
+proxy_set_header uri $request_uri;
+```
+
+Also, make sure to change the `behindReverseProxy` setting to true in `settings.json`.
+This is required in order for Express to know all of the proper relative paths. If you are however just running off of localhost or an IP, you shouldn't have to change anything.
+
 Credits
 =======
 Pokemon Sprites are from http://www.pkparaiso.com/
