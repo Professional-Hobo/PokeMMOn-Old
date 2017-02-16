@@ -1,5 +1,5 @@
 $(function() {
-    window.UI = new (function() {
+    window.UI = new(function() {
         var self = this;
 
         //
@@ -7,16 +7,16 @@ $(function() {
         //
         var tabs = $('.sidebar .tab-container .tab').length;
         $('.sidebar .tab-container').width(tabs * 100 + '%');
-        $('.sidebar .tab-container .tab').width(100/tabs + '%');
+        $('.sidebar .tab-container .tab').width(100 / tabs + '%');
 
         //
         // Update Menu with current mode and enable mode change animations
         //
-        if(window.location.hash) {
-            $('.dropdown-toggle .mode').text($('a[href='+window.location.hash+']').text());
+        if (window.location.hash) {
+            $('.dropdown-toggle .mode').text($('a[href=' + window.location.hash + ']').text());
         }
         $('body').on('click', '.header .dropdown .dropdown-menu > *', function(e) {
-            var scale = -100/tabs * $(this).index();
+            var scale = -100 / tabs * $(this).index();
 
             $('.tab-container').css('transform', 'translateX(' + scale + '%)');
             $('.dropdown-toggle .mode').text($(this).text());
@@ -27,7 +27,9 @@ $(function() {
         // 1-9 is mapped to different modes. Enables quick switching
         // between modes by pressing 1-9
         //
-        var modes = $('.header li[data-tab] a').toArray().map(function(e) {return $(e)});
+        var modes = $('.header li[data-tab] a').toArray().map(function(e) {
+            return $(e)
+        });
 
         window.addEventListener('keydown', function(e) {
             if (((e.which >= 49 && e.which <= 57) || (e.which >= 97 && e.which <= 105)) && !$("input").is(":focus")) {
@@ -36,7 +38,7 @@ $(function() {
                 } else if (e.which >= 97 && e.which <= 105 && modes.length > e.which - 97) {
                     modes[(e.which - 97)].click();
                 } else {
-                    modes[modes.length-1].click();
+                    modes[modes.length - 1].click();
                 }
             }
         });
@@ -44,19 +46,7 @@ $(function() {
         //
         // Generates notification HTML
         //
-        $('body').append('<div id="notify" class="modal fade" data-backdrop="">'
-+                '<div class="modal-dialog">'
-+                    '<div class="modal-content">'
-+                        '<div class="modal-header">'
-+                            '<button type="button" class="close" data-dismiss="modal">'
-+                                '<span aria-hidden="true">&times;</span>'
-+                            '</button>'
-+                            '<h4 class="modal-title"></h4>'
-+                        '</div>'
-+                        '<div class="modal-body"></div>'
-+                '</div>'
-+            '</div>'
-+        '</div>');
+        $('body').append('<div id="notify" class="modal fade" data-backdrop="">' + '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header">' + '<button type="button" class="close" data-dismiss="modal">' + '<span aria-hidden="true">&times;</span>' + '</button>' + '<h4 class="modal-title"></h4>' + '</div>' + '<div class="modal-body"></div>' + '</div>' + '</div>' + '</div>');
 
         var body = $('body');
         var notifyBox = $('#notify').css('color', 'black');
@@ -72,26 +62,26 @@ $(function() {
         // bootstrap.min.js modal is bugged, so made my own
         notifyBox.bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd",
             function() {
-                if(!notifyBox.isVisible()) {
+                if (!notifyBox.isVisible()) {
                     notifyBox.hide();
                 }
             });
 
         var hiding;
         notifyBox.modal = function(action) {
-            if(action == 'hide') {
+            if (action == 'hide') {
                 notifyBox.removeClass('in');
                 body.removeClass('modal-open');
-            } else if(action == 'show') {
+            } else if (action == 'show') {
                 // Checks if mid-close animation
-                if(notifyBox.css('display') != 'none' && !notifyBox.isVisible() && !hiding) {
+                if (notifyBox.css('display') != 'none' && !notifyBox.isVisible() && !hiding) {
                     hiding = setTimeout(function() {
                         notifyBox.modal('show');
                     }, 25);
                 } else {
                     hiding = 0;
                     notifyBox.show();
-                    notifyBox.css('display');   // Hack needed to trigger transition
+                    notifyBox.css('display'); // Hack needed to trigger transition
                     notifyBox.addClass('in');
                     body.addClass('modal-open');
                 }
@@ -100,7 +90,7 @@ $(function() {
 
         // Hides notification if you click on the notification
         $('#notify .modal-content').on('click', function() {
-            if(notifyBox.isVisible()) {
+            if (notifyBox.isVisible()) {
                 notifyBox.modal('hide');
             }
         });
@@ -151,14 +141,14 @@ $(function() {
                 //Upload progress
                 xhr.upload.addEventListener("progress", function(e) {
                     if (e.lengthComputable) {
-                        loader.width(e.loaded/e.total * 100 + '%');
+                        loader.width(e.loaded / e.total * 100 + '%');
                     }
                 });
 
                 //Download progress
                 xhr.addEventListener("progress", function(e) {
                     if (e.lengthComputable) {
-                        loader.width(e.loaded/e.total * 100 + '%');
+                        loader.width(e.loaded / e.total * 100 + '%');
                     }
                 });
 
@@ -167,7 +157,7 @@ $(function() {
         });
 
         $(document).ajaxComplete(function() {
-            loader.fadeOut(400, function(){
+            loader.fadeOut(400, function() {
                 loader.width(0).show(0);
             });
         });
@@ -177,12 +167,12 @@ $(function() {
 
         $(document).ajaxSuccess(function(e, jqXHR, settings) {
             loader.css('width', '100%');
-            if(!settings.suppress)
+            if (!settings.suppress)
                 succeeded.push(settings.url);
         });
 
         $(document).ajaxError(function(e, jqXHR, settings, err) {
-            if(!settings.suppress)
+            if (!settings.suppress)
                 failed.push(settings.url)
         });
 
@@ -190,19 +180,19 @@ $(function() {
         $(document).ajaxStop(function() {
             var msg = '';
 
-            if(succeeded.length) {
+            if (succeeded.length) {
                 msg += 'Succeeded in loading:<br>' +
-                        '<ul><li>' + succeeded.join('</li><li>') + '</li></ul>';
+                    '<ul><li>' + succeeded.join('</li><li>') + '</li></ul>';
                 succeeded = [];
             }
 
-            if(failed.length) {
+            if (failed.length) {
                 msg += 'Failed to load:<br>' +
-                        '<ul><li>' + failed.join('</li><li>') + '</li></ul>';
+                    '<ul><li>' + failed.join('</li><li>') + '</li></ul>';
                 failed = [];
             }
 
-            if(msg.length) {
+            if (msg.length) {
                 self.notify('AJAX Status', msg);
             }
         });
